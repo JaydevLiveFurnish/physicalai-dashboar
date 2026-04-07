@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Callout } from "@/components/system/Callout";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 
@@ -19,6 +21,16 @@ export function SimReadyPage() {
           Upload meshes → topology repair → material validation → USD export with physics manifests.
         </p>
       </header>
+
+      <Callout variant="info" title="Roadmap capability">
+        <p>
+          SimReady batch processing isn’t wired in this dashboard yet. Join the waitlist below, or{" "}
+          <Link to="/environments/request-custom" className="font-medium text-[var(--text-primary-default)] underline underline-offset-2">
+            talk to us about custom pipelines
+          </Link>{" "}
+          for your org.
+        </p>
+      </Callout>
 
       <Card title="Pipeline">
         <ol className="list-decimal space-y-[var(--s-200)] pl-[var(--s-500)] text-[14px] text-[var(--text-default-body)]">

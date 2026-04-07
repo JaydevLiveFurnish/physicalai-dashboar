@@ -1,5 +1,6 @@
 import { useEffect, useId, type ReactNode } from "react";
-import { tx } from "@/components/layout/motion";
+import { tx, txOverlayBackdrop, txOverlayPanel } from "@/components/layout/motion";
+import { usePresence } from "@/hooks/usePresence";
 
 type CenterModalProps = {
   open: boolean;
@@ -12,42 +13,49 @@ type CenterModalProps = {
 
 export function CenterModal({ open, title, onClose, children, size = "md" }: CenterModalProps) {
   const titleId = useId();
+  const { mounted, show } = usePresence(open);
 
   useEffect(() => {
-    if (!open) return;
+    if (!mounted) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prev;
     };
-  }, [open]);
+  }, [mounted]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!mounted || !show) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+  }, [mounted, show, onClose]);
 
-  if (!open) return null;
+  if (!mounted) return null;
 
   const maxW = size === "lg" ? "max-w-[560px]" : "max-w-[440px]";
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center p-[var(--s-400)]">
+    <div
+      className={`fixed inset-0 z-[80] flex items-center justify-center p-[var(--s-400)] ${show ? "" : "pointer-events-none"}`}
+    >
       <button
         type="button"
         aria-label="Close dialog"
-        className={`absolute inset-0 bg-[var(--grey-900)]/35 backdrop-blur-sm transition-opacity duration-250 ease-out ${tx}`}
+        className={`absolute inset-0 bg-[var(--grey-900)]/40 backdrop-blur-sm ${txOverlayBackdrop} ${tx} ${
+          show ? "opacity-100" : "opacity-0"
+        }`}
         onClick={onClose}
       />
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className={`relative z-[81] w-full ${maxW} rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] shadow-xl ${tx}`}
+        className={`relative z-[81] w-full ${maxW} rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] shadow-xl ${txOverlayPanel} ${
+          show ? "translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-[0.98] opacity-0"
+        } ${show ? "" : "pointer-events-none"}`}
       >
         <div className="flex items-start justify-between gap-[var(--s-300)] border-b border-[var(--border-default-secondary)] px-[var(--s-500)] py-[var(--s-400)]">
           <h2 id={titleId} className="text-[18px] font-semibold leading-tight text-[var(--text-default-heading)]">

@@ -34,6 +34,31 @@
     }
   }
 
+  /** Route / full-screen view enter */
+  .animate-page-in {
+    animation: page-in 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes page-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes page-in-reduced {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   .text-page-title {
     font-weight: 600;
     color: var(--text-default-heading);
@@ -74,6 +99,16 @@
     .text-page-title-hero {
       font-size: 2rem;
       line-height: 2.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-page-in {
+      animation: page-in-reduced 200ms ease both;
+    }
+
+    .animate-menu-in {
+      animation: page-in-reduced 200ms ease both;
     }
   }
 }

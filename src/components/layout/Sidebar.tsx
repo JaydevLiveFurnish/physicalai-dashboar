@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { tx, txSidebarSlide } from "./motion";
 
 /** Sidebar chrome — screenshot ~#121212 */
@@ -47,7 +47,14 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
       )}
     >
       <div className="flex shrink-0 items-center justify-between px-[var(--s-400)] pb-[var(--s-200)] pt-[max(var(--s-400),env(safe-area-inset-top))] md:justify-start md:pb-0 md:pt-[var(--s-500)]">
-        <img src="/logos/Horizontal.svg" alt="imagine.io" className="h-8 w-auto" />
+        <Link
+          to="/"
+          onClick={afterNav}
+          className={`rounded-br200 outline-none ring-offset-2 ring-offset-[#121212] focus-visible:ring-2 focus-visible:ring-[var(--papaya-500)] ${tx}`}
+          aria-label="Home"
+        >
+          <img src="/logos/Horizontal.svg" alt="imagine.io" className="h-8 w-auto" />
+        </Link>
         <button
           type="button"
           aria-label="Close menu"

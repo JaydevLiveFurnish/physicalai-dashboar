@@ -1,12 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import { Callout } from "@/components/system/Callout";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Link } from "react-router-dom";
 import { tx } from "@/components/layout/motion";
+import type { AccessTier } from "@/lib/access";
 
 export function AccountPage() {
-  const { user, signOut } = useAuth();
+  const { user, signOut, accessTier, setAccessTier } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = () => {
@@ -24,6 +26,28 @@ export function AccountPage() {
           Organization access
         </h1>
       </header>
+
+      <Card title="Product access (demo)">
+        <Callout variant="info" title="How this works">
+          <p className="text-[14px]">
+            <strong>Explore</strong> — browse catalog, docs, and previews; no cluster credentials or artifact exports.{" "}
+            <strong>Standard</strong> — intermediate demo tier (same gating as Explore for provisioned paths in this build).{" "}
+            <strong>Full</strong> — API keys, batch jobs, and export pipelines on this mock device.
+          </p>
+        </Callout>
+        <label className="mt-[var(--s-400)] flex max-w-md flex-col gap-[var(--s-200)] text-[12px] uppercase tracking-[var(--text-caption-ls)] text-[var(--text-default-body)]">
+          Access mode
+          <select
+            value={accessTier}
+            onChange={(e) => setAccessTier(e.target.value as AccessTier)}
+            className="rounded-br100 border border-[var(--border-default-secondary)] px-[var(--s-300)] py-[var(--s-200)] text-[14px] normal-case text-[var(--text-default-heading)]"
+          >
+            <option value="explore">Explore — read-first, no credentials</option>
+            <option value="standard">Standard — demo tier (intermediate)</option>
+            <option value="full">Full — API + batch + exports</option>
+          </select>
+        </label>
+      </Card>
 
       <div className="grid gap-[var(--s-400)] md:grid-cols-2">
         <Card title="User">

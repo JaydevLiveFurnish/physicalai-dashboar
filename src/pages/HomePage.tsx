@@ -1,9 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { fetchActivity, fetchSystemOverview } from "@/lib/mockApi";
+import { Callout } from "@/components/system/Callout";
+import { ErrorPanel } from "@/components/system/ErrorPanel";
 import { Card } from "@/components/ui/Card";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { PreviewModeBadge } from "@/components/kitchen/PreviewModeBadge";
 import { useAuth } from "@/context/AuthContext";
+import { ACCESS_COPY, canUseFeature } from "@/lib/access";
 
 const tx = "transition-[color,background-color,box-shadow,transform] duration-250 ease-out";
 
@@ -13,7 +17,10 @@ function firstName(name: string | undefined) {
 }
 
 export function HomePage() {
-  const { user } = useAuth();
+  const { user, accessTier } = useAuth();
+  const fullExportAccess = canUseFeature(accessTier, "full_export");
+  const batchAccess = canUseFeature(accessTier, "batch_submit");
+  const apiKeysAllowed = canUseFeature(accessTier, "api_keys_write");
   const overview = useQuery({ queryKey: ["overview"], queryFn: fetchSystemOverview });
   const activity = useQuery({ queryKey: ["activity"], queryFn: fetchActivity });
 
@@ -42,9 +49,10 @@ export function HomePage() {
 
   if (overview.isError || !overview.data) {
     return (
-      <Card title="Dashboard">
-        <p className="text-[14px] text-[var(--text-error-default)]">Failed to load dashboard.</p>
-      </Card>
+      <ErrorPanel
+        message="We couldn’t load the system overview. Check your connection and try again."
+        onRetry={() => overview.refetch()}
+      />
     );
   }
 
@@ -55,6 +63,29 @@ export function HomePage() {
           Welcome back, {welcome}
         </h1>
       </header>
+
+      {accessTier !== "full" ? (
+        <Callout variant="info" title="Product window">
+          <p>{ACCESS_COPY.exploreBanner}</p>
+          <p className="mt-[var(--s-200)] text-[13px]">
+            Choose <strong>Full</strong> under Account for mock API credentials, batch jobs, and export pipelines on this
+            device.
+          </p>
+        </Callout>
+      ) : null}
+
+      {activity.isError ? (
+        <Callout variant="warning" title="Activity feed unavailable">
+          Recent downloads couldn’t be loaded.{" "}
+          <button
+            type="button"
+            className="font-medium text-[var(--text-primary-default)] underline underline-offset-2"
+            onClick={() => activity.refetch()}
+          >
+            Retry
+          </button>
+        </Callout>
+      ) : null}
 
       <div className="grid gap-[var(--s-500)] lg:grid-cols-[1fr_minmax(260px,340px)] lg:items-start lg:gap-[var(--s-600)]">
         <div className="space-y-[var(--s-500)]">
@@ -67,7 +98,10 @@ export function HomePage() {
                 <span className="material-symbols-outlined text-[24px]">layers</span>
               </span>
               <div className="min-w-0 flex-1">
-                <h2 className="text-[18px] font-semibold text-[var(--text-default-heading)]">Kitchen Environment</h2>
+                <div className="flex flex-wrap items-center gap-[var(--s-300)]">
+                  <h2 className="text-[18px] font-semibold text-[var(--text-default-heading)]">Kitchen Environment</h2>
+                  {!fullExportAccess ? <PreviewModeBadge /> : null}
+                </div>
                 <p className="mt-[var(--s-200)] text-[14px] leading-[20px] text-[var(--text-default-body)]">
                   Configure, generate, and download physics-ready kitchen environments for robotic manipulation training.
                 </p>
@@ -111,6 +145,11 @@ export function HomePage() {
                   inventory_2
                 </span>
                 Batch variations
+                {!batchAccess ? (
+                  <span className="material-symbols-outlined text-[16px] text-[var(--text-default-placeholder)]" title="Running jobs requires Full access" aria-hidden>
+                    lock
+                  </span>
+                ) : null}
               </Link>
               <Link
                 to="/api"
@@ -120,6 +159,15 @@ export function HomePage() {
                   code
                 </span>
                 API documentation
+                {!apiKeysAllowed ? (
+                  <span
+                    className="material-symbols-outlined text-[16px] text-[var(--text-default-placeholder)]"
+                    title="Issuing keys requires Full access"
+                    aria-hidden
+                  >
+                    lock
+                  </span>
+                ) : null}
               </Link>
             </div>
           </section>

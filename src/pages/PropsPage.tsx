@@ -2,14 +2,21 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchAssets, fetchPropById } from "@/lib/mockApi";
+import { ExportAccessModal } from "@/components/access/ExportAccessModal";
+import { ErrorPanel } from "@/components/system/ErrorPanel";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { CenterModal } from "@/components/ui/CenterModal";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { useAuth } from "@/context/AuthContext";
+import { canUseFeature } from "@/lib/access";
 import type { PropAsset, PropTagKind } from "@/types";
 
 const txInteract =
   "transition-[color,background-color,border-color,box-shadow,transform] duration-250 ease-out";
+
+const txBtn =
+  "inline-flex items-center justify-center gap-[var(--s-200)] transition-[color,background-color,opacity] duration-250 ease-out";
 
 function tagClasses(kind: PropTagKind) {
   if (kind === "navigation") return "text-[#2563eb]";
@@ -28,6 +35,9 @@ function tagLabel(kind: PropTagKind) {
 }
 
 export function PropsPage() {
+  const { accessTier } = useAuth();
+  const fullExport = canUseFeature(accessTier, "full_export");
+  const [exportModalOpen, setExportModalOpen] = useState(false);
   const [searchParams] = useSearchParams();
   const [q, setQ] = useState(() => searchParams.get("q") ?? "");
 
@@ -62,7 +72,8 @@ export function PropsPage() {
           </p>
           <h1 className="text-page-title mt-[var(--s-200)]">Props</h1>
           <p className="mt-[var(--s-200)] max-w-[720px] text-[14px] text-[var(--text-default-body)]">
-            Scanned objects with collision proxies, articulation metadata, and material bindings.
+            Kitchen-native props — cabinetry, island, brass hardware, prep tools — with collision proxies and material
+            bindings.
           </p>
         </div>
         <button
@@ -132,7 +143,9 @@ export function PropsPage() {
         </div>
       </Card>
 
-      {list.isLoading ? (
+      {list.isError ? (
+        <ErrorPanel message="Props couldn’t be loaded." onRetry={() => list.refetch()} />
+      ) : list.isLoading ? (
         <div className="grid gap-[var(--s-400)] sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
           {Array.from({ length: 10 }).map((_, i) => (
             <Skeleton key={i} className="h-52" />
@@ -159,11 +172,17 @@ export function PropsPage() {
         {detail.isLoading ? (
           <Skeleton className="h-40 w-full" />
         ) : selected ? (
-          <PropDetail asset={selected} />
+          <PropDetail
+            asset={selected}
+            exportAllowed={fullExport}
+            onGatedExport={() => setExportModalOpen(true)}
+          />
         ) : (
           <p className="text-[14px] text-[var(--text-error-default)]">Asset not found.</p>
         )}
       </CenterModal>
+
+      <ExportAccessModal open={exportModalOpen} onClose={() => setExportModalOpen(false)} />
     </div>
   );
 }
@@ -203,7 +222,23 @@ function PropCard({ asset, onOpen }: { asset: PropAsset; onOpen: () => void }) {
   );
 }
 
-function PropDetail({ asset }: { asset: PropAsset }) {
+function PropDetail({
+  asset,
+  exportAllowed,
+  onGatedExport,
+}: {
+  asset: PropAsset;
+  exportAllowed: boolean;
+  onGatedExport: () => void;
+}) {
+  const run = (fn: () => void) => {
+    if (!exportAllowed) {
+      onGatedExport();
+      return;
+    }
+    fn();
+  };
+
   const dims = `${asset.dimensionsMm.w} × ${asset.dimensionsMm.h} × ${asset.dimensionsMm.d} mm`;
   return (
     <div className="space-y-[var(--s-500)]">
@@ -251,27 +286,53 @@ function PropDetail({ asset }: { asset: PropAsset }) {
       <div className="space-y-[var(--s-300)]">
         <Button
           variant="primary"
-          className="w-full"
-          onClick={() => {
-            alert("Download queued: SimReady USD — mock");
-          }}
+          className={`w-full ${txBtn}`}
+          aria-haspopup={!exportAllowed ? "dialog" : undefined}
+          onClick={() =>
+            run(() => {
+              alert("Download queued: SimReady USD — mock");
+            })
+          }
         >
+          {!exportAllowed ? (
+            <span className="material-symbols-outlined text-[20px]" aria-hidden>
+              lock
+            </span>
+          ) : null}
           Download SimReady USD
         </Button>
         <Button
           variant="secondary"
-          className="w-full border-[var(--border-primary-default)] text-[var(--text-primary-default)] hover:bg-[var(--surface-primary-default-subtle)]"
-          onClick={() => {
-            alert("Download queued: GLB — mock");
-          }}
+          className={`w-full border-[var(--border-primary-default)] text-[var(--text-primary-default)] hover:bg-[var(--surface-primary-default-subtle)] ${txBtn}`}
+          aria-haspopup={!exportAllowed ? "dialog" : undefined}
+          onClick={() =>
+            run(() => {
+              alert("Download queued: GLB — mock");
+            })
+          }
         >
+          {!exportAllowed ? (
+            <span className="material-symbols-outlined text-[20px]" aria-hidden>
+              lock
+            </span>
+          ) : null}
           Download GLB
         </Button>
         <button
           type="button"
-          className={`w-full text-center text-[14px] font-medium text-[var(--text-primary-default)] underline underline-offset-4 ${txInteract}`}
-          onClick={() => alert("Metadata JSON — mock")}
+          className={`inline-flex w-full items-center justify-center gap-[var(--s-200)] text-center text-[14px] font-medium text-[var(--text-primary-default)] underline underline-offset-4 ${txInteract}`}
+          aria-haspopup={!exportAllowed ? "dialog" : undefined}
+          onClick={() =>
+            run(() => {
+              alert("Metadata JSON — mock");
+            })
+          }
         >
+          {!exportAllowed ? (
+            <span className="material-symbols-outlined text-[18px]" aria-hidden>
+              lock
+            </span>
+          ) : null}
           Download metadata
         </button>
       </div>

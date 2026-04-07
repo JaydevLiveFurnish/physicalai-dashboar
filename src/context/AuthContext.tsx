@@ -3,9 +3,11 @@ import {
   useCallback,
   useContext,
   useMemo,
+  useState,
   useSyncExternalStore,
   type ReactNode,
 } from "react";
+import { readAccessTier, writeAccessTier, type AccessTier } from "@/lib/access";
 
 const STORAGE_KEY = "imagine.auth.session";
 const SIGNED_OUT_KEY = "imagine.auth.signedOut";
@@ -90,6 +92,9 @@ function displayNameFromEmail(email: string) {
 type AuthContextValue = {
   user: AuthUser | null;
   isAuthenticated: boolean;
+  /** Product window: explore / standard vs full (API keys, batch jobs, export pipelines). */
+  accessTier: AccessTier;
+  setAccessTier: (tier: AccessTier) => void;
   signIn: (email: string, password: string) => Promise<void>;
   /** One-click demo return after sign-out (showcase flow). */
   restoreSession: () => void;
@@ -100,6 +105,12 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const user = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [accessTier, setAccessTierState] = useState<AccessTier>(() => readAccessTier());
+
+  const setAccessTier = useCallback((tier: AccessTier) => {
+    writeAccessTier(tier);
+    setAccessTierState(tier);
+  }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
     const trimmed = email.trim().toLowerCase();
@@ -130,11 +141,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => ({
       user,
       isAuthenticated: Boolean(user),
+      accessTier,
+      setAccessTier,
       signIn,
       restoreSession,
       signOut,
     }),
-    [user, signIn, restoreSession, signOut],
+    [user, accessTier, setAccessTier, signIn, restoreSession, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

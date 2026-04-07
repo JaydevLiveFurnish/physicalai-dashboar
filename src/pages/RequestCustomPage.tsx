@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Callout } from "@/components/system/Callout";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 
@@ -22,7 +23,12 @@ export function RequestCustomPage() {
 
       <Card title="Intake">
         {submitted ? (
-          <p className="text-[14px] text-[var(--text-success-default)]">Ticket created (mock).</p>
+          <Callout variant="success" title="Request received">
+            <p>
+              Your intake details were recorded for this demo session. In production, our team follows up with scoping and
+              access next steps.
+            </p>
+          </Callout>
         ) : (
           <form
             className="space-y-[var(--s-300)]"

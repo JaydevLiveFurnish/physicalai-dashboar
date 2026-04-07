@@ -1,12 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { fetchEnvironments } from "@/lib/mockApi";
+import { EmptyState } from "@/components/system/EmptyState";
+import { ErrorPanel } from "@/components/system/ErrorPanel";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { Badge } from "@/components/ui/Badge";
+import { PreviewModeBadge } from "@/components/kitchen/PreviewModeBadge";
+import { useAuth } from "@/context/AuthContext";
+import { canUseFeature } from "@/lib/access";
 
 export function EnvironmentLibraryPage() {
+  const { accessTier } = useAuth();
+  const fullExport = canUseFeature(accessTier, "full_export");
+  const batchAccess = canUseFeature(accessTier, "batch_submit");
   const envs = useQuery({ queryKey: ["environments"], queryFn: fetchEnvironments });
 
   return (
@@ -23,17 +31,32 @@ export function EnvironmentLibraryPage() {
         </p>
       </header>
 
-      {envs.isLoading ? (
+      {envs.isError ? (
+        <ErrorPanel message="Environments couldn’t be loaded." onRetry={() => envs.refetch()} />
+      ) : envs.isLoading ? (
         <div className="grid gap-[var(--s-400)] md:grid-cols-2">
           <Skeleton className="h-48" />
           <Skeleton className="h-48" />
         </div>
+      ) : !envs.data?.length ? (
+        <EmptyState
+          title="No environments"
+          description="There are no environments to show yet. Check back after your workspace is provisioned."
+          action={
+            <Link to="/environments/request-custom">
+              <Button variant="primary">Request custom environment</Button>
+            </Link>
+          }
+        />
       ) : (
         <div className="grid gap-[var(--s-400)] md:grid-cols-2">
           {envs.data?.map((e) => (
             <Card key={e.id}>
-              <div className="mb-[var(--s-300)] flex items-start justify-between gap-[var(--s-300)]">
-                <h2 className="text-[18px] font-semibold">{e.name}</h2>
+              <div className="mb-[var(--s-300)] flex flex-wrap items-start justify-between gap-[var(--s-300)]">
+                <div className="flex min-w-0 flex-wrap items-center gap-[var(--s-200)]">
+                  <h2 className="text-[18px] font-semibold">{e.name}</h2>
+                  {e.id === "env-kitchen-v2" && !fullExport ? <PreviewModeBadge /> : null}
+                </div>
                 {e.status === "active" ? (
                   <Badge variant="success">active</Badge>
                 ) : (
@@ -65,7 +88,14 @@ export function EnvironmentLibraryPage() {
                   </Link>
                 ) : null}
                 <Link to="/batch">
-                  <Button variant="secondary">Batch generation</Button>
+                  <Button variant="secondary" className="inline-flex items-center gap-[var(--s-200)]">
+                    {!batchAccess ? (
+                      <span className="material-symbols-outlined text-[18px]" aria-hidden>
+                        lock
+                      </span>
+                    ) : null}
+                    Batch generation
+                  </Button>
                 </Link>
               </div>
             </Card>

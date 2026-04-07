@@ -1,14 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { fetchMaterialById, fetchMaterials } from "@/lib/mockApi";
+import { ExportAccessModal } from "@/components/access/ExportAccessModal";
+import { EmptyState } from "@/components/system/EmptyState";
+import { ErrorPanel } from "@/components/system/ErrorPanel";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { CenterModal } from "@/components/ui/CenterModal";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { useAuth } from "@/context/AuthContext";
+import { canUseFeature } from "@/lib/access";
 import type { MaterialRecord } from "@/types";
 
 const txInteract =
   "transition-[color,background-color,border-color,box-shadow,transform] duration-250 ease-out";
+
+const txBtn =
+  "inline-flex items-center justify-center gap-[var(--s-200)] transition-[color,background-color,opacity] duration-250 ease-out";
 
 function formatLine(m: MaterialRecord) {
   const us = m.staticFriction.toFixed(2);
@@ -18,6 +26,9 @@ function formatLine(m: MaterialRecord) {
 }
 
 export function MaterialsPage() {
+  const { accessTier } = useAuth();
+  const fullExport = canUseFeature(accessTier, "full_export");
+  const [exportModalOpen, setExportModalOpen] = useState(false);
   const [q, setQ] = useState("");
   const [type, setType] = useState("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -39,16 +50,39 @@ export function MaterialsPage() {
           </p>
           <h1 className="text-page-title mt-[var(--s-200)]">Materials</h1>
           <p className="mt-[var(--s-200)] max-w-[720px] text-[14px] text-[var(--text-default-body)]">
-            Physics presets: friction, restitution, density. Used by collision and grip simulation.
+            Surfaces from the Kitchen environment: macro-style previews (wood grain, quartz, subway tile, brass). Physics
+            presets drive collision and grip simulation.
           </p>
         </div>
-        <button
-          type="button"
-          className={`inline-flex items-center gap-[var(--s-200)] self-start rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-400)] py-[var(--s-200)] text-[14px] font-medium text-[var(--text-default-heading)] hover:bg-[var(--surface-page-secondary)] ${txInteract}`}
-        >
-          <span className="material-symbols-outlined text-[20px] text-[var(--text-default-body)]">tune</span>
-          Filters
-        </button>
+        <div className="flex flex-wrap gap-[var(--s-200)] self-start">
+          <button
+            type="button"
+            className={`inline-flex items-center gap-[var(--s-200)] rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-400)] py-[var(--s-200)] text-[14px] font-medium text-[var(--text-default-heading)] hover:bg-[var(--surface-page-secondary)] ${txInteract}`}
+          >
+            <span className="material-symbols-outlined text-[20px] text-[var(--text-default-body)]">tune</span>
+            Filters
+          </button>
+          <Button
+            variant="secondary"
+            type="button"
+            className={txBtn}
+            aria-haspopup={!fullExport ? "dialog" : undefined}
+            onClick={() => {
+              if (!fullExport) {
+                setExportModalOpen(true);
+                return;
+              }
+              alert("Bulk export queued: material library manifest — mock");
+            }}
+          >
+            {!fullExport ? (
+              <span className="material-symbols-outlined text-[18px]" aria-hidden>
+                lock
+              </span>
+            ) : null}
+            Bulk export library
+          </Button>
+        </div>
       </header>
 
       <Card>
@@ -79,12 +113,19 @@ export function MaterialsPage() {
         </div>
       </Card>
 
-      {list.isLoading ? (
+      {list.isError ? (
+        <ErrorPanel message="Materials couldn’t be loaded." onRetry={() => list.refetch()} />
+      ) : list.isLoading ? (
         <div className="grid gap-[var(--s-400)] sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
           {Array.from({ length: 12 }).map((_, i) => (
             <Skeleton key={i} className="h-40" />
           ))}
         </div>
+      ) : list.data?.length === 0 ? (
+        <EmptyState
+          title="No materials match"
+          description="Try clearing search or type filters to see the full library."
+        />
       ) : (
         <div className="grid gap-[var(--s-400)] sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
           {list.data?.map((m) => (
@@ -102,11 +143,17 @@ export function MaterialsPage() {
         {detail.isLoading ? (
           <Skeleton className="h-40 w-full" />
         ) : selected ? (
-          <MaterialDetail material={selected} />
+          <MaterialDetail
+            material={selected}
+            exportAllowed={fullExport}
+            onGatedExport={() => setExportModalOpen(true)}
+          />
         ) : (
           <p className="text-[14px] text-[var(--text-error-default)]">Material not found.</p>
         )}
       </CenterModal>
+
+      <ExportAccessModal open={exportModalOpen} onClose={() => setExportModalOpen(false)} />
     </div>
   );
 }
@@ -122,7 +169,7 @@ function MaterialCard({ material, onOpen }: { material: MaterialRecord; onOpen: 
         <img
           src={material.thumbnailUrl}
           alt=""
-          className="h-[88px] w-full rounded-t-[var(--br-200)] object-cover"
+          className="h-[104px] w-full rounded-t-[var(--br-200)] object-cover object-center"
         />
       ) : null}
       <div className="space-y-[var(--s-200)] p-[var(--s-300)]">
@@ -135,7 +182,23 @@ function MaterialCard({ material, onOpen }: { material: MaterialRecord; onOpen: 
   );
 }
 
-function MaterialDetail({ material }: { material: MaterialRecord }) {
+function MaterialDetail({
+  material,
+  exportAllowed,
+  onGatedExport,
+}: {
+  material: MaterialRecord;
+  exportAllowed: boolean;
+  onGatedExport: () => void;
+}) {
+  const run = (fn: () => void) => {
+    if (!exportAllowed) {
+      onGatedExport();
+      return;
+    }
+    fn();
+  };
+
   return (
     <div className="space-y-[var(--s-500)]">
       <div>
@@ -164,16 +227,36 @@ function MaterialDetail({ material }: { material: MaterialRecord }) {
       <div className="space-y-[var(--s-300)]">
         <Button
           variant="primary"
-          className="w-full"
-          onClick={() => alert("Download queued: Material USD — mock")}
+          className={`w-full ${txBtn}`}
+          aria-haspopup={!exportAllowed ? "dialog" : undefined}
+          onClick={() =>
+            run(() => {
+              alert("Download queued: Material USD — mock");
+            })
+          }
         >
+          {!exportAllowed ? (
+            <span className="material-symbols-outlined text-[20px]" aria-hidden>
+              lock
+            </span>
+          ) : null}
           Download material USD
         </Button>
         <Button
           variant="secondary"
-          className="w-full border-[var(--border-primary-default)] text-[var(--text-primary-default)] hover:bg-[var(--surface-primary-default-subtle)]"
-          onClick={() => alert("Download queued: PBR textures — mock")}
+          className={`w-full border-[var(--border-primary-default)] text-[var(--text-primary-default)] hover:bg-[var(--surface-primary-default-subtle)] ${txBtn}`}
+          aria-haspopup={!exportAllowed ? "dialog" : undefined}
+          onClick={() =>
+            run(() => {
+              alert("Download queued: PBR textures — mock");
+            })
+          }
         >
+          {!exportAllowed ? (
+            <span className="material-symbols-outlined text-[20px]" aria-hidden>
+              lock
+            </span>
+          ) : null}
           Download PBR textures
         </Button>
       </div>

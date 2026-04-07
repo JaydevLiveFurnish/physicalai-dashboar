@@ -1,18 +1,30 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { createApiKey, fetchApiKeys, revokeApiKey } from "@/lib/mockApi";
+import { ApiAccessModal } from "@/components/access/ApiAccessModal";
+import { Callout } from "@/components/system/Callout";
+import { ErrorPanel } from "@/components/system/ErrorPanel";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { useAuth } from "@/context/AuthContext";
+import { ACCESS_COPY, canUseFeature } from "@/lib/access";
 
 const BASE = "https://api.imagine.io/physical-ai/v1";
 
+const txBtn =
+  "inline-flex items-center justify-center gap-[var(--s-200)] transition-[color,background-color,opacity] duration-250 ease-out";
+
 export function ApiDocsPage() {
+  const { accessTier } = useAuth();
   const qc = useQueryClient();
   const keys = useQuery({ queryKey: ["apiKeys"], queryFn: fetchApiKeys });
+  const keysWrite = canUseFeature(accessTier, "api_keys_write");
   const [label, setLabel] = useState("");
   const [newSecret, setNewSecret] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [apiModalOpen, setApiModalOpen] = useState(false);
 
   const create = useMutation({
     mutationFn: () => createApiKey(label || "unnamed"),
@@ -43,27 +55,68 @@ export function ApiDocsPage() {
         </p>
       </header>
 
+      {!keysWrite ? (
+        <Callout variant="info" title="Reference without credentials">
+          <p>{ACCESS_COPY.apiKeysGated}</p>
+          <p className="mt-[var(--s-300)] text-[13px]">
+            Use <strong>Generate key</strong> or <strong>Revoke</strong> to review access requirements — or{" "}
+            <Link to="/account" className="font-medium text-[var(--text-primary-default)] underline underline-offset-2">
+              enable Full
+            </Link>{" "}
+            on this device for the mock control plane.
+          </p>
+        </Callout>
+      ) : null}
+
       <div className="grid gap-[var(--s-400)] lg:grid-cols-2">
         <Card title="Keys">
+          {keys.isError ? (
+            <ErrorPanel message="Could not load API keys." onRetry={() => keys.refetch()} />
+          ) : null}
           {keys.isLoading ? <Skeleton className="h-24" /> : null}
-          <ul className="space-y-[var(--s-200)] text-[13px]">
-            {keys.data?.map((k) => (
-              <li
-                key={k.id}
-                className="flex flex-col gap-[var(--s-200)] border-b border-[var(--border-default-secondary)] py-[var(--s-300)] last:border-0 sm:flex-row sm:items-center sm:justify-between sm:gap-[var(--s-300)] sm:py-[var(--s-200)]"
-              >
-                <div className="min-w-0">
-                  <div className="font-medium">{k.label}</div>
-                  <div className="break-all font-mono text-[12px] text-[var(--text-default-body)]">
-                    {k.prefix}••••••••
-                  </div>
-                </div>
-                <Button variant="secondary" className="w-full shrink-0 sm:w-auto" onClick={() => revoke.mutate(k.id)}>
-                  Revoke
-                </Button>
-              </li>
-            ))}
-          </ul>
+          {!keys.isLoading && !keys.isError ? (
+            keys.data?.length === 0 ? (
+              <p className="text-[14px] text-[var(--text-default-body)]">
+                No keys on file. Issue one below to exercise the mock rotation path.
+              </p>
+            ) : (
+              <ul className="space-y-[var(--s-200)] text-[13px]">
+                {keys.data?.map((k) => (
+                  <li
+                    key={k.id}
+                    className="flex flex-col gap-[var(--s-200)] border-b border-[var(--border-default-secondary)] py-[var(--s-300)] last:border-0 sm:flex-row sm:items-center sm:justify-between sm:gap-[var(--s-300)] sm:py-[var(--s-200)]"
+                  >
+                    <div className="min-w-0">
+                      <div className="font-medium">{k.label}</div>
+                      <div className="break-all font-mono text-[12px] text-[var(--text-default-body)]">
+                        {k.prefix}••••••••
+                      </div>
+                    </div>
+                    <Button
+                      variant="secondary"
+                      className={`w-full shrink-0 sm:w-auto ${txBtn}`}
+                      disabled={revoke.isPending}
+                      aria-haspopup={!keysWrite ? "dialog" : undefined}
+                      onClick={() => {
+                        if (!keysWrite) {
+                          setApiModalOpen(true);
+                          return;
+                        }
+                        revoke.mutate(k.id);
+                      }}
+                    >
+                      {!keysWrite ? (
+                        <span className="material-symbols-outlined text-[18px]" aria-hidden>
+                          lock
+                        </span>
+                      ) : null}
+                      Revoke
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            )
+          ) : null}
           <div className="mt-[var(--s-400)] flex flex-col gap-[var(--s-200)] sm:flex-row sm:items-end">
             <label className="flex flex-1 flex-col gap-[var(--s-100)] text-[12px] uppercase text-[var(--text-default-body)]">
               Label
@@ -73,8 +126,25 @@ export function ApiDocsPage() {
                 className="rounded-br100 border border-[var(--border-default-secondary)] px-[var(--s-300)] py-[var(--s-200)] text-[14px]"
               />
             </label>
-            <Button variant="primary" onClick={() => create.mutate()} disabled={create.isPending}>
-              Generate key
+            <Button
+              variant="primary"
+              className={txBtn}
+              disabled={create.isPending}
+              aria-haspopup={!keysWrite ? "dialog" : undefined}
+              onClick={() => {
+                if (!keysWrite) {
+                  setApiModalOpen(true);
+                  return;
+                }
+                create.mutate();
+              }}
+            >
+              {!keysWrite ? (
+                <span className="material-symbols-outlined text-[20px]" aria-hidden>
+                  lock
+                </span>
+              ) : null}
+              {create.isPending ? "Issuing…" : "Generate key"}
             </Button>
           </div>
           {error ? <p className="text-[13px] text-[var(--text-error-default)]">{error}</p> : null}
@@ -116,6 +186,8 @@ r.raise_for_status()
 print(r.json())`}
         </pre>
       </Card>
+
+      <ApiAccessModal open={apiModalOpen} onClose={() => setApiModalOpen(false)} />
     </div>
   );
 }

@@ -1,11 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { defaultKitchenValues, KITCHEN_PARAMETER_GROUPS } from "@/kitchen/params";
 import type { KitchenParamKey } from "@/kitchen/params";
 import { fetchJobs, runBatchJob } from "@/lib/mockApi";
+import { BatchGenerationAccessModal } from "@/components/batch/BatchGenerationAccessModal";
+import { PreviewModeBadge } from "@/components/kitchen/PreviewModeBadge";
+import { Callout } from "@/components/system/Callout";
+import { ErrorPanel } from "@/components/system/ErrorPanel";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { useAuth } from "@/context/AuthContext";
+import { ACCESS_COPY, canUseFeature } from "@/lib/access";
 
 const ALL_KEYS = Object.keys(defaultKitchenValues()) as KitchenParamKey[];
 
@@ -37,8 +44,11 @@ const PREVIEW_RULES = [
 ];
 
 export function BatchGenerationPage() {
+  const { accessTier } = useAuth();
   const qc = useQueryClient();
   const [selections, setSelections] = useState<Record<KitchenParamKey, string[]>>(initialSelections);
+  const [accessModalOpen, setAccessModalOpen] = useState(false);
+  const batchAllowed = canUseFeature(accessTier, "batch_submit");
 
   const jobs = useQuery({
     queryKey: ["jobs"],
@@ -77,13 +87,32 @@ export function BatchGenerationPage() {
         <p className="text-[12px] font-medium uppercase tracking-[var(--text-caption-ls)] text-[var(--text-default-body)]">
           Generation
         </p>
-        <h1 className="text-page-title mt-[var(--s-200)]">
-          Batch generation
-        </h1>
+        <div className="mt-[var(--s-200)] flex flex-wrap items-center gap-[var(--s-300)]">
+          <h1 className="text-page-title">Batch generation</h1>
+          {!batchAllowed ? (
+            <PreviewModeBadge
+              label="Workflow preview"
+              title="Inspect parameters, combinations, and validation. Running batch jobs requires Full access."
+            />
+          ) : null}
+        </div>
         <p className="mt-[var(--s-200)] max-w-[720px] text-[14px] text-[var(--text-default-body)]">
           Controlled combinatorial expansion. Invalid regions are blocked before queueing.
         </p>
       </header>
+
+      {!batchAllowed ? (
+        <Callout variant="info" title="Explore the workflow">
+          <p>{ACCESS_COPY.batchGated}</p>
+          <p className="mt-[var(--s-300)] text-[13px]">
+            Use <strong>Run batch job</strong> to see what&apos;s required — or{" "}
+            <Link to="/account" className="font-medium text-[var(--text-primary-default)] underline underline-offset-2">
+              switch to Full
+            </Link>{" "}
+            under Account for the mock queue on this device.
+          </p>
+        </Callout>
+      ) : null}
 
       <div className="grid gap-[var(--s-400)] lg:grid-cols-[minmax(0,1fr)_360px]">
         <div className="space-y-[var(--s-300)]">
@@ -149,12 +178,42 @@ export function BatchGenerationPage() {
             ) : null}
             <Button
               variant="primary"
-              className="mt-[var(--s-400)] w-full"
+              className="mt-[var(--s-400)] inline-flex w-full items-center justify-center gap-[var(--s-200)]"
               disabled={mutation.isPending || Boolean(brokenRules.length)}
-              onClick={() => mutation.mutate()}
+              aria-haspopup={!batchAllowed ? "dialog" : undefined}
+              onClick={() => {
+                if (!batchAllowed) {
+                  setAccessModalOpen(true);
+                  return;
+                }
+                mutation.reset();
+                mutation.mutate();
+              }}
             >
+              {!batchAllowed ? (
+                <span className="material-symbols-outlined text-[20px]" aria-hidden>
+                  lock
+                </span>
+              ) : null}
               {mutation.isPending ? "Queueing…" : "Run batch job"}
             </Button>
+            {!batchAllowed ? (
+              <p className="mt-[var(--s-200)] text-[12px] text-[var(--text-default-body)]">
+                Validation still applies. Choose <strong>Run batch job</strong> to review access requirements.
+              </p>
+            ) : null}
+            {mutation.isError ? (
+              <p className="mt-[var(--s-300)] text-[13px] text-[var(--text-error-default)]" role="alert">
+                Could not queue the job.{" "}
+                <button
+                  type="button"
+                  className="font-medium underline underline-offset-2"
+                  onClick={() => mutation.reset()}
+                >
+                  Dismiss
+                </button>
+              </p>
+            ) : null}
             {mutation.data ? (
               <p className="mt-[var(--s-300)] font-mono text-[12px] text-[var(--text-default-body)]">
                 job {mutation.data.jobId} · valid {mutation.data.validCombinations.toLocaleString()}
@@ -164,8 +223,36 @@ export function BatchGenerationPage() {
           </Card>
 
           <Card title="Job queue">
-            {jobs.isLoading ? (
-              <Skeleton className="h-24" />
+            {jobs.isError ? (
+              <ErrorPanel message="Could not load the job queue." onRetry={() => jobs.refetch()} />
+            ) : jobs.isLoading ? (
+              <div className="space-y-[var(--s-300)]" aria-busy="true" aria-live="polite">
+                <p className="text-[12px] text-[var(--text-default-body)]">Loading queue…</p>
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+              </div>
+            ) : jobs.data?.length === 0 ? (
+              <div className="rounded-br100 border border-dashed border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-400)] py-[var(--s-500)] text-center">
+                <span
+                  className="material-symbols-outlined mx-auto mb-[var(--s-200)] block text-[28px] text-[var(--text-default-placeholder)]"
+                  aria-hidden
+                >
+                  inventory_2
+                </span>
+                <p className="text-[14px] font-medium text-[var(--text-default-heading)]">No jobs yet</p>
+                <p className="mt-[var(--s-200)] text-[13px] leading-[20px] text-[var(--text-default-body)]">
+                  Queued batch runs appear here with status and progress.
+                </p>
+                {!batchAllowed ? (
+                  <p className="mt-[var(--s-300)] text-[12px] text-[var(--text-default-body)]">
+                    Full access is required to enqueue jobs on this demo.
+                  </p>
+                ) : (
+                  <p className="mt-[var(--s-300)] text-[12px] text-[var(--text-default-body)]">
+                    Run a job from the combinatorics card when validation passes.
+                  </p>
+                )}
+              </div>
             ) : (
               <ul className="space-y-[var(--s-200)] text-[13px]">
                 {jobs.data?.map((j) => (
@@ -190,6 +277,8 @@ export function BatchGenerationPage() {
           </Card>
         </div>
       </div>
+
+      <BatchGenerationAccessModal open={accessModalOpen} onClose={() => setAccessModalOpen(false)} />
     </div>
   );
 }

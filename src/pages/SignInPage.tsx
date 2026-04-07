@@ -47,7 +47,7 @@ export function SignInPage() {
   };
 
   return (
-    <div className="flex min-h-[100dvh] flex-col bg-[#121212] pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
+    <div className="animate-page-in flex min-h-[100dvh] flex-col bg-[#121212] pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
       <div className="mx-auto flex w-full max-w-[420px] flex-1 flex-col justify-center px-[var(--s-400)] py-[var(--s-600)]">
         <div className="mb-[var(--s-600)] text-center">
           <img src="/logos/Horizontal Light.svg" alt="imagine.io" className="mx-auto h-9 w-auto" />

@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
+import { usePresence } from "@/hooks/usePresence";
+import { txOverlayBackdrop } from "./motion";
 import { AppTopBar } from "./AppTopBar";
+import { PageTransition } from "./PageTransition";
 import { Sidebar } from "./Sidebar";
-
-const backdropTx = "transition-opacity duration-250 ease-out";
 
 export function AppShell() {
   const location = useLocation();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const { mounted: backdropMounted, show: backdropShow } = usePresence(mobileNavOpen);
 
   useEffect(() => {
     setMobileNavOpen(false);
@@ -23,23 +25,25 @@ export function AppShell() {
   }, [mobileNavOpen]);
 
   useEffect(() => {
-    if (!mobileNavOpen) return;
+    if (!backdropMounted) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prev;
     };
-  }, [mobileNavOpen]);
+  }, [backdropMounted]);
 
   return (
     <div className="min-h-[100dvh] bg-[var(--surface-page)]">
       <Sidebar mobileOpen={mobileNavOpen} onClose={() => setMobileNavOpen(false)} />
 
-      {mobileNavOpen ? (
+      {backdropMounted ? (
         <button
           type="button"
           aria-label="Close menu"
-          className={`fixed inset-0 z-40 bg-[#0a0a0a]/65 backdrop-blur-[3px] ${backdropTx} md:hidden`}
+          className={`fixed inset-0 z-40 bg-[#0a0a0a]/65 backdrop-blur-[3px] md:hidden ${txOverlayBackdrop} ${
+            backdropShow ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
           onClick={() => setMobileNavOpen(false)}
         />
       ) : null}
@@ -48,7 +52,9 @@ export function AppShell() {
         <AppTopBar onOpenNav={() => setMobileNavOpen(true)} navOpen={mobileNavOpen} />
 
         <main className="mx-auto w-full max-w-[1200px] flex-1 px-[var(--s-300)] pb-[max(var(--s-500),env(safe-area-inset-bottom))] pt-[calc(3.5rem+env(safe-area-inset-top)+var(--s-400))] sm:px-[var(--s-400)] md:px-[var(--s-600)] md:pb-[var(--s-500)] md:pt-[calc(3.5rem+env(safe-area-inset-top)+var(--s-500))]">
-          <Outlet />
+          <PageTransition>
+            <Outlet />
+          </PageTransition>
         </main>
       </div>
     </div>

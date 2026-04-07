@@ -1,7 +1,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { tx } from "./motion";
+import { usePresence } from "@/hooks/usePresence";
+import { tx, txOverlayPanel } from "./motion";
 
 type AppTopBarProps = {
   onOpenNav: () => void;
@@ -14,6 +15,7 @@ export function AppTopBar({ onOpenNav, navOpen }: AppTopBarProps) {
   const location = useLocation();
   const [query, setQuery] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const { mounted: menuMounted, show: menuShow } = usePresence(menuOpen);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
 
@@ -126,12 +128,14 @@ export function AppTopBar({ onOpenNav, navOpen }: AppTopBarProps) {
             </span>
           </button>
 
-          {menuOpen ? (
+          {menuMounted ? (
             <div
               id={`${menuId}-menu`}
               role="menu"
               aria-labelledby={`${menuId}-trigger`}
-              className={`animate-menu-in absolute right-0 top-[calc(100%+6px)] z-50 min-w-[220px] overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] py-[var(--s-100)] shadow-lg ${tx}`}
+              className={`absolute right-0 top-[calc(100%+6px)] z-50 min-w-[220px] overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] py-[var(--s-100)] shadow-lg ${txOverlayPanel} ${
+                menuShow ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-1 opacity-0"
+              }`}
             >
               <Link
                 role="menuitem"

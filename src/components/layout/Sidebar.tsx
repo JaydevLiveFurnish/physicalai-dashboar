@@ -317,6 +317,35 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
           )}
         </NavLink>
 
+        <NavLink
+          to="/api"
+          onClick={afterNav}
+          className={({ isActive }) =>
+            cn(
+              tx,
+              "group flex items-center gap-[var(--s-300)] px-[var(--s-300)] text-[14px]",
+              navRow,
+              isActive
+                ? "bg-[#1e1e1e] text-[var(--papaya-500)] shadow-[inset_3px_0_0_0_var(--papaya-500)]"
+                : cn(muted, "hover:bg-[#1a1a1a] hover:text-[#b0b0b0]"),
+            )
+          }
+        >
+          {({ isActive }) => (
+            <>
+              <span
+                className={cn(
+                  "material-symbols-outlined text-[20px] transition-colors duration-250 ease-out",
+                  isActive ? "text-[var(--papaya-500)]" : "text-[#888888] group-hover:text-[#b0b0b0]",
+                )}
+              >
+                code
+              </span>
+              API
+            </>
+          )}
+        </NavLink>
+
         {/* Footer nav */}
         <div className="mt-auto flex flex-col gap-[2px] border-t border-[#2a2a2a] pt-[var(--s-500)]">
           <button
@@ -343,34 +372,6 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
             <span className="h-2.5 w-2.5 rounded-full bg-[#10b981]" />
           </button>
 
-          <NavLink
-            to="/api"
-            onClick={afterNav}
-            className={({ isActive }) =>
-              cn(
-                tx,
-                "group flex items-center gap-[var(--s-300)] px-[var(--s-300)] text-[14px]",
-                navRow,
-                isActive
-                  ? "bg-[#1e1e1e] text-[var(--papaya-500)] shadow-[inset_3px_0_0_0_var(--papaya-500)]"
-                  : cn(muted, "hover:bg-[#1a1a1a] hover:text-[#b0b0b0]"),
-              )
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <span
-                  className={cn(
-                    "material-symbols-outlined text-[20px] transition-colors duration-250 ease-out",
-                    isActive ? "text-[var(--papaya-500)]" : "text-[#888888] group-hover:text-[#b0b0b0]",
-                  )}
-                >
-                  code
-                </span>
-                API
-              </>
-            )}
-          </NavLink>
           <NavLink
             to="/account"
             onClick={afterNav}

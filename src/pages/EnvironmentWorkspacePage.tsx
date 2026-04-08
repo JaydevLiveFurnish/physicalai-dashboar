@@ -249,9 +249,9 @@ export function EnvironmentWorkspacePage() {
         </div>
         {meta.status !== "live" ? (
           <div className="absolute inset-0 z-10 flex items-center justify-center rounded-br200 bg-[var(--surface-default)]/68 backdrop-blur-md">
-            <div className="mx-[var(--s-300)] w-full max-w-[520px] rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] p-[var(--s-500)] shadow-lg">
-              <p className="text-[34px] font-semibold leading-tight text-[var(--text-default-heading)]">Full Access Required</p>
-              <div className="mt-[var(--s-300)] space-y-[var(--s-300)] text-left text-[18px] leading-[30px] text-[var(--text-default-body)]">
+            <div className="mx-[var(--s-300)] w-full max-w-[560px] rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-500)] py-[calc(var(--s-500)+var(--s-100))] shadow-lg sm:px-[calc(var(--s-500)+var(--s-100))]">
+              <p className="text-[26px] font-semibold leading-[1.2] tracking-[-0.01em] text-[var(--text-default-heading)]">Full Access Required</p>
+              <div className="mt-[var(--s-300)] space-y-[var(--s-300)] text-left text-[16px] leading-[27px] text-[var(--text-default-body)]">
                 <p>{meta.name} environments are available with full platform access.</p>
                 <p>Contact our team to enable access.</p>
               </div>

@@ -8,13 +8,21 @@
   }
 
   body {
-    @apply font-sans antialiased;
+    @apply antialiased;
     margin: 0;
+    font-family: var(--font), ui-sans-serif, system-ui, sans-serif;
     background: var(--surface-page);
     color: var(--text-default-heading);
     font-size: var(--text-body-size);
     line-height: var(--text-body-lh);
     -webkit-tap-highlight-color: rgba(236, 78, 11, 0.12);
+  }
+
+  /** Content links: visible focus for keyboard users (Prism accent). */
+  main a:focus-visible {
+    outline: 2px solid var(--border-primary-default);
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 }
 
@@ -102,6 +110,19 @@
     }
   }
 
+  @keyframes kitchen-cube-spin {
+    from {
+      transform: rotateX(-18deg) rotateY(0deg);
+    }
+    to {
+      transform: rotateX(-18deg) rotateY(360deg);
+    }
+  }
+
+  .animate-kitchen-cube {
+    animation: kitchen-cube-spin 14s linear infinite;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .animate-page-in {
       animation: page-in-reduced 200ms ease both;
@@ -109,6 +130,10 @@
 
     .animate-menu-in {
       animation: page-in-reduced 200ms ease both;
+    }
+
+    .animate-kitchen-cube {
+      animation: none;
     }
   }
 }

@@ -9,10 +9,10 @@ type PreviewModeBadgeProps = {
   title?: string;
 };
 
-/** Explore-tier pill: browse and preview; exports and jobs need Full. */
+/** Explore access tier — generation, exports, and keys require full access. */
 export function PreviewModeBadge({
   className = "",
-  label = "Explore",
+  label = "Explore access",
   title = FULL_ACCESS_TOOLTIP,
 }: PreviewModeBadgeProps) {
   return (

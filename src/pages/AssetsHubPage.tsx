@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchAssets, fetchMaterialById, fetchMaterials, fetchPropById } from "@/lib/mockApi";
+import { assetKindPill } from "@/lib/prismSurfaces";
 import { AssetLibraryTabs } from "@/components/assets/AssetLibraryTabs";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ErrorPanel } from "@/components/system/ErrorPanel";
@@ -96,9 +97,7 @@ export function AssetsHubPage() {
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-[var(--surface-page-secondary)]">
               <span
                 className={`absolute left-[var(--s-300)] top-[var(--s-300)] z-[1] rounded-br100 px-[var(--s-200)] py-[3px] text-[10px] font-bold leading-tight tracking-wide ${
-                  item.kind === "prop"
-                    ? "border border-[#fed7aa] bg-[#fff7ed] text-[#c2410c]"
-                    : "border border-[#bfdbfe] bg-[#eff6ff] text-[#1d4ed8]"
+                  item.kind === "prop" ? assetKindPill.prop : assetKindPill.material
                 }`}
               >
                 {item.kind === "prop" ? "Prop" : "Material"}

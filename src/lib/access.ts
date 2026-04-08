@@ -9,9 +9,8 @@ export const ACCESS_STORAGE_KEY = "imagine.dashboard.accessTier";
 
 export type GatedFeature = "api_keys_write" | "batch_submit" | "full_export";
 
-/** Single tooltip for locks and Explore badges */
-export const FULL_ACCESS_TOOLTIP =
-  "Batch queueing, exports, and API keys require Full access. Switch under Account.";
+/** Single tooltip for locks and disabled gated actions */
+export const FULL_ACCESS_TOOLTIP = "Requires full access";
 
 export function readAccessTier(): AccessTier {
   try {
@@ -53,11 +52,12 @@ export function canUseFeature(tier: AccessTier, feature: GatedFeature): boolean 
 }
 
 export const ACCESS_COPY = {
-  apiKeysGated: "HTTP reference below is always available. Issuing or revoking keys requires Full access.",
+  apiKeysGated:
+    "API keys enable programmatic access to scene generation and exports. Issuing keys requires full access.",
   apiModalIntro:
     "Provisioning enables workspace-scoped credentials for authenticated requests to the Physical AI HTTP API.",
   exportModalIntro: "Export entitlements unlock artifact retrieval from generation and asset pipelines:",
   batchGated:
-    "You can select parameter ranges and review validation. Queueing jobs requires Full access.",
+    "You can select parameters and review combinations. Running batch jobs requires full access.",
   batchModalIntro: "Full access enables your workspace to run variation jobs on the cluster, including:",
 } as const;

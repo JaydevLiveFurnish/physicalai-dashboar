@@ -42,7 +42,7 @@ export function AppShell() {
         <button
           type="button"
           aria-label="Close menu"
-          className={`fixed inset-0 z-40 bg-[#0a0a0a]/65 backdrop-blur-[3px] md:hidden ${txOverlayBackdrop} ${
+          className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-[3px] md:hidden ${txOverlayBackdrop} ${
             backdropShow ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
           onClick={() => setMobileNavOpen(false)}

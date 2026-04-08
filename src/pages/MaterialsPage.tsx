@@ -14,6 +14,7 @@ import { CenterModal } from "@/components/ui/CenterModal";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { useAuth } from "@/context/AuthContext";
 import { canUseFeature } from "@/lib/access";
+import { materialTypeWash } from "@/lib/prismSurfaces";
 import type { MaterialRecord } from "@/types";
 
 const txInteract =
@@ -32,17 +33,6 @@ function materialFrictionLine(m: MaterialRecord) {
 function categoryLabel(m: MaterialRecord) {
   if (m.categoryLabel) return m.categoryLabel;
   return m.type.charAt(0).toUpperCase() + m.type.slice(1);
-}
-
-function materialPreviewAccent(type: string) {
-  if (type === "wood") return "bg-[#fefce8]";
-  if (type === "metal") return "bg-[#f8fafc]";
-  if (type === "glass") return "bg-[#ecfeff]";
-  if (type === "stone") return "bg-[#fafaf9]";
-  if (type === "tile") return "bg-[#fff7ed]";
-  if (type === "plastic") return "bg-[#f5f3ff]";
-  if (type === "fabric") return "bg-[#fdf4ff]";
-  return "bg-[#fefce8]";
 }
 
 function useMaterialSearchParams() {
@@ -215,7 +205,7 @@ export function MaterialsPage() {
 }
 
 function MaterialCard({ material, onOpen }: { material: MaterialRecord; onOpen: () => void }) {
-  const accent = materialPreviewAccent(material.type);
+  const accent = materialTypeWash(material.type);
   return (
     <button
       type="button"

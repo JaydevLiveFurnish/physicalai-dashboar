@@ -13,6 +13,7 @@ import { CenterModal } from "@/components/ui/CenterModal";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { useAuth } from "@/context/AuthContext";
 import { canUseFeature } from "@/lib/access";
+import { propTagHeroWash, propTagPill } from "@/lib/prismSurfaces";
 import type { PropAsset, PropTagKind, SimReadyTier } from "@/types";
 
 const txInteract =
@@ -44,18 +45,6 @@ const PROP_SHELF_CATEGORY: Record<string, string> = {
 
 function shelfCategory(slug: string) {
   return PROP_SHELF_CATEGORY[slug] ?? slug.charAt(0).toUpperCase() + slug.slice(1);
-}
-
-function tagHeroClass(kind: PropTagKind) {
-  if (kind === "manipulation") return "bg-[#fff1f2]";
-  if (kind === "articulated") return "bg-[#fffbeb]";
-  return "bg-[#eff6ff]";
-}
-
-function tagPillClass(kind: PropTagKind) {
-  if (kind === "manipulation") return "border border-[#fed7aa] bg-[#fff7ed] text-[#c2410c]";
-  if (kind === "articulated") return "border border-[#fde68a] bg-[#fffbeb] text-[#b45309]";
-  return "border border-[#bfdbfe] bg-[#eff6ff] text-[#1d4ed8]";
 }
 
 function simReadyLabel(t: SimReadyTier) {
@@ -258,9 +247,9 @@ function PropCard({ asset, onOpen }: { asset: PropAsset; onOpen: () => void }) {
       onClick={onOpen}
       className={`flex flex-col overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] text-left shadow-sm hover:shadow-md active:scale-[0.99] ${txInteract}`}
     >
-      <div className={`relative aspect-[4/3] w-full overflow-hidden ${tagHeroClass(asset.tag)}`}>
+      <div className={`relative aspect-[4/3] w-full overflow-hidden ${propTagHeroWash[asset.tag]}`}>
         <span
-          className={`absolute left-[var(--s-300)] top-[var(--s-300)] z-[1] rounded-br100 px-[var(--s-200)] py-[3px] text-[10px] font-bold leading-tight tracking-wide ${tagPillClass(asset.tag)}`}
+          className={`absolute left-[var(--s-300)] top-[var(--s-300)] z-[1] rounded-br100 px-[var(--s-200)] py-[3px] text-[10px] font-bold leading-tight tracking-wide ${propTagPill[asset.tag]}`}
         >
           {tagLabel(asset.tag)}
         </span>
@@ -312,7 +301,7 @@ function PropDetail({
       <div className="space-y-[var(--s-400)]">
         <div>
           <div className="flex items-center gap-[var(--s-200)]">
-            <span className="rounded-br100 border border-[#fed7aa] bg-[#fff7ed] px-[var(--s-200)] py-[3px] text-[12px] font-semibold text-[#c2410c]">
+            <span className={`rounded-br100 px-[var(--s-200)] py-[3px] text-[12px] font-semibold ${propTagPill[asset.tag]}`}>
               {tagLabel(asset.tag)}
             </span>
             <span className="text-[12px] font-medium uppercase tracking-[0.08em] text-[var(--text-default-placeholder)]">

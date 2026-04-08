@@ -27,7 +27,7 @@ export function Drawer({
     >
       <button
         type="button"
-        className={`h-full min-h-0 flex-1 cursor-default bg-[#0a0a0a]/50 backdrop-blur-[2px] ${txOverlayBackdrop} ${
+        className={`h-full min-h-0 flex-1 cursor-default bg-black/55 backdrop-blur-[2px] ${txOverlayBackdrop} ${
           show ? "opacity-100" : "opacity-0"
         }`}
         onClick={onClose}

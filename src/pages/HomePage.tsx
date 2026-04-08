@@ -8,7 +8,8 @@ import { ErrorPanel } from "@/components/system/ErrorPanel";
 import { Card } from "@/components/ui/Card";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { useAuth } from "@/context/AuthContext";
-import { canUseFeature } from "@/lib/access";
+import { canUseFeature, FULL_ACCESS_TOOLTIP } from "@/lib/access";
+import { Button } from "@/components/ui/Button";
 
 const tx = "transition-[color,background-color,box-shadow,transform] duration-250 ease-out";
 const teaserShell =
@@ -24,12 +25,12 @@ function daypartGreeting() {
 export function HomePage() {
   const { accessTier } = useAuth();
   const batchAccess = canUseFeature(accessTier, "batch_submit");
+  const exportAccess = canUseFeature(accessTier, "full_export");
   const overview = useQuery({ queryKey: ["overview"], queryFn: fetchSystemOverview });
   const activity = useQuery({ queryKey: ["activity"], queryFn: fetchActivity });
   const [talkOpen, setTalkOpen] = useState(false);
 
   const greeting = daypartGreeting();
-  const paramCount = overview.data?.environments.parameterCount ?? 13;
 
   const downloadActivity = activity.data?.filter((a) => a.kind === "download") ?? [];
 
@@ -85,7 +86,7 @@ export function HomePage() {
         <h2 className="text-[18px] font-semibold text-[var(--text-default-heading)]">Environments</h2>
         <div className="grid gap-[var(--s-300)] sm:grid-cols-2 xl:grid-cols-5">
           {[
-            { name: "Kitchen", href: "/environments/kitchen/batch", img: "/assets/environments/kitchen.jpg", live: true },
+            { name: "Kitchen", href: "/environments/kitchen/configure", img: "/assets/environments/kitchen.jpg", live: true },
             {
               name: "Living Room",
               href: "/environments/living-room/batch",
@@ -115,10 +116,13 @@ export function HomePage() {
               <span className="material-symbols-outlined text-[34px] text-[var(--text-primary-default)]">add_circle</span>
             </div>
             <div className="absolute inset-x-[var(--s-200)] bottom-[var(--s-200)] z-[1]">
-              <p className="text-[16px] font-semibold text-[var(--text-default-heading)]">Request New</p>
+              <p className="text-[16px] font-semibold text-[var(--text-default-heading)]">Request New Environment</p>
               <p className="mt-[var(--s-100)] text-[12px] text-[var(--text-default-body)]">
-                Ask the team to add a new scene.
+                Request a custom environment for your use case
               </p>
+              <span className="mt-[var(--s-200)] inline-flex text-[13px] font-medium text-[var(--text-primary-default)]">
+                Talk to Team
+              </span>
             </div>
           </button>
         </div>
@@ -138,8 +142,8 @@ export function HomePage() {
                 <h2 className="text-[18px] font-semibold text-[var(--text-default-heading)]">
                   Recent Project
                 </h2>
-                <p className="mt-[var(--s-100)] text-[14px] font-medium text-[var(--text-default-heading)]">Kitchen</p>
-                <p className="mt-[var(--s-100)] text-[12px] text-[var(--text-default-body)]">Last modified: Today, 12:55 PM</p>
+                <p className="mt-[var(--s-100)] text-[14px] font-medium text-[var(--text-default-heading)]">Kitchen Scene</p>
+                <p className="mt-[var(--s-100)] text-[12px] text-[var(--text-default-body)]">Last updated: 2 hours ago</p>
               </div>
             </div>
 
@@ -148,8 +152,7 @@ export function HomePage() {
                 [
                   { value: "35", label: "Models" },
                   { value: "18", label: "Articulated" },
-                  { value: "24+", label: "Joints" },
-                  { value: String(paramCount), label: "Parameters" },
+                  { value: "13", label: "Parameters" },
                 ] as const
               ).map((s) => (
                 <div key={s.label} className="min-w-[72px]">
@@ -163,7 +166,7 @@ export function HomePage() {
 
             <div className="mt-[var(--s-500)] space-y-[var(--s-200)] border-t border-[var(--border-default-secondary)] pt-[var(--s-500)]">
               <Link
-                to="/environments/kitchen/batch"
+                to="/environments/kitchen/configure"
                 className={`flex w-full items-center justify-between rounded-br100 bg-[var(--surface-primary-default)] px-[var(--s-300)] py-[var(--s-300)] text-[15px] font-medium text-[var(--text-on-color-body)] hover:bg-[var(--surface-primary-default-hover)] ${tx}`}
               >
                 <span className="inline-flex items-center gap-[var(--s-200)]">
@@ -176,42 +179,80 @@ export function HomePage() {
                   arrow_forward
                 </span>
               </Link>
-              <Link
-                to="/environments/kitchen/batch"
-                className={`flex w-full items-center justify-between rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-300)] text-[15px] text-[var(--text-default-heading)] hover:bg-[var(--surface-default)] ${tx}`}
-              >
-                <span className="inline-flex items-center gap-[var(--s-200)]">
-                  <span className="material-symbols-outlined text-[20px] text-[var(--text-default-body)]" aria-hidden>
-                    dashboard
+              {batchAccess ? (
+                <Link
+                  to="/environments/kitchen/batch"
+                  className={`flex w-full items-center justify-between rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-300)] text-[15px] text-[var(--text-default-heading)] hover:bg-[var(--surface-default)] ${tx}`}
+                >
+                  <span className="inline-flex items-center gap-[var(--s-200)]">
+                    <span className="material-symbols-outlined text-[20px] text-[var(--text-default-body)]" aria-hidden>
+                      dashboard
+                    </span>
+                    Batch Variations
                   </span>
-                  Batch Variations
-                  {!batchAccess ? (
+                  <span className="material-symbols-outlined text-[20px] text-[var(--text-default-placeholder)]" aria-hidden>
+                    arrow_forward
+                  </span>
+                </Link>
+              ) : (
+                <Button
+                  variant="secondary"
+                  className="w-full justify-between opacity-60"
+                  disabled
+                  title={FULL_ACCESS_TOOLTIP}
+                  type="button"
+                >
+                  <span className="inline-flex items-center gap-[var(--s-200)]">
+                    <span className="material-symbols-outlined text-[20px] text-[var(--text-default-body)]" aria-hidden>
+                      dashboard
+                    </span>
+                    Batch Variations
                     <span className="material-symbols-outlined text-[16px] text-[var(--text-default-placeholder)]" aria-hidden>
                       lock
                     </span>
-                  ) : null}
-                </span>
-                <span className="material-symbols-outlined text-[20px] text-[var(--text-default-placeholder)]" aria-hidden>
-                  arrow_forward
-                </span>
-              </Link>
-              <Link
-                to="/environments/kitchen/downloads"
-                className={`flex w-full items-center justify-between rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-300)] text-[15px] text-[var(--text-default-heading)] hover:bg-[var(--surface-default)] ${tx}`}
-              >
-                <span className="inline-flex items-center gap-[var(--s-200)]">
-                  <span className="material-symbols-outlined text-[20px] text-[var(--text-default-body)]" aria-hidden>
-                    ios_share
                   </span>
-                  Export Scene
-                  <span className="material-symbols-outlined text-[16px] text-[var(--text-default-placeholder)]" aria-hidden>
-                    lock
+                  <span className="material-symbols-outlined text-[20px] text-[var(--text-default-placeholder)]" aria-hidden>
+                    arrow_forward
                   </span>
-                </span>
-                <span className="material-symbols-outlined text-[20px] text-[var(--text-default-placeholder)]" aria-hidden>
-                  arrow_forward
-                </span>
-              </Link>
+                </Button>
+              )}
+              {exportAccess ? (
+                <Link
+                  to="/environments/kitchen/downloads"
+                  className={`flex w-full items-center justify-between rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-300)] text-[15px] text-[var(--text-default-heading)] hover:bg-[var(--surface-default)] ${tx}`}
+                >
+                  <span className="inline-flex items-center gap-[var(--s-200)]">
+                    <span className="material-symbols-outlined text-[20px] text-[var(--text-default-body)]" aria-hidden>
+                      ios_share
+                    </span>
+                    Export Scene
+                  </span>
+                  <span className="material-symbols-outlined text-[20px] text-[var(--text-default-placeholder)]" aria-hidden>
+                    arrow_forward
+                  </span>
+                </Link>
+              ) : (
+                <Button
+                  variant="secondary"
+                  className="w-full justify-between opacity-60"
+                  disabled
+                  title={FULL_ACCESS_TOOLTIP}
+                  type="button"
+                >
+                  <span className="inline-flex items-center gap-[var(--s-200)]">
+                    <span className="material-symbols-outlined text-[20px] text-[var(--text-default-body)]" aria-hidden>
+                      ios_share
+                    </span>
+                    Export Scene
+                    <span className="material-symbols-outlined text-[16px] text-[var(--text-default-placeholder)]" aria-hidden>
+                      lock
+                    </span>
+                  </span>
+                  <span className="material-symbols-outlined text-[20px] text-[var(--text-default-placeholder)]" aria-hidden>
+                    arrow_forward
+                  </span>
+                </Button>
+              )}
             </div>
           </section>
 
@@ -227,7 +268,7 @@ export function HomePage() {
                     Start by configuring a scene or generating your first environment.
                   </p>
                   <Link
-                    to="/environments/kitchen/batch"
+                    to="/environments/kitchen/configure"
                     className={`inline-flex items-center text-[14px] font-medium text-[var(--text-primary-default)] hover:text-[var(--text-default-body)] ${tx}`}
                   >
                     Configure Kitchen
@@ -291,11 +332,11 @@ export function HomePage() {
           </footer>
         </div>
 
-        <aside className="flex flex-col gap-[var(--s-400)] lg:sticky lg:top-[calc(3.5rem+var(--s-400)+env(safe-area-inset-top))]">
-          <Card className="p-[var(--s-400)] sm:p-[var(--s-500)]">
+        <aside className="flex flex-col gap-[var(--s-300)] lg:sticky lg:top-[calc(3.5rem+var(--s-400)+env(safe-area-inset-top))]">
+          <Card className="p-[var(--s-300)] sm:p-[var(--s-400)]">
             <div>
-              <h2 className="text-[16px] font-semibold text-[var(--text-default-heading)]">Library</h2>
-              <div className="mt-[var(--s-300)] grid gap-[var(--s-200)] text-[14px]">
+              <h2 className="text-[15px] font-semibold text-[var(--text-default-heading)]">Asset Library</h2>
+              <div className="mt-[var(--s-200)] grid gap-[var(--s-100)] text-[13px]">
                 <p className="flex items-center justify-between text-[var(--text-default-body)]">
                   <span>Props</span>
                   <span className="font-medium text-[var(--text-default-heading)]">{overview.data.assets.propsCount.toLocaleString()}</span>
@@ -308,9 +349,9 @@ export function HomePage() {
 
               <Link
                 to="/assets"
-                className={`mt-[var(--s-400)] inline-flex items-center text-[14px] font-medium text-[var(--text-primary-default)] hover:text-[var(--text-default-body)] ${tx}`}
+                className={`mt-[var(--s-300)] inline-flex items-center text-[13px] font-medium text-[var(--text-primary-default)] hover:text-[var(--text-default-body)] ${tx}`}
               >
-                Browse Library
+                Browse Assets
               </Link>
             </div>
           </Card>

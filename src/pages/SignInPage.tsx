@@ -47,7 +47,7 @@ export function SignInPage() {
   };
 
   return (
-    <div className="animate-page-in flex min-h-[100dvh] flex-col bg-[#121212] pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
+    <div className="animate-page-in flex min-h-[100dvh] flex-col bg-[var(--dark)] pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
       <div className="mx-auto flex w-full max-w-[420px] flex-1 flex-col justify-center px-[var(--s-400)] py-[var(--s-600)]">
         <div className="mb-[var(--s-600)] text-center">
           <img src="/logos/Horizontal Light.svg" alt="imagine.io" className="mx-auto h-9 w-auto" />
@@ -58,7 +58,7 @@ export function SignInPage() {
 
         {state.signedOut ? (
           <div
-            className={`mb-[var(--s-400)] rounded-br200 border border-[var(--grey-700)] bg-[#1a1a1a] px-[var(--s-400)] py-[var(--s-300)] text-[14px] text-[var(--grey-100)] ${tx}`}
+            className={`mb-[var(--s-400)] rounded-br200 border border-[var(--grey-700)] bg-[var(--grey-900)] px-[var(--s-400)] py-[var(--s-300)] text-[14px] text-[var(--grey-100)] ${tx}`}
             role="status"
           >
             You’ve been signed out. Use the button below to return to the dashboard.
@@ -66,7 +66,7 @@ export function SignInPage() {
         ) : null}
 
         <div
-          className={`rounded-br200 border border-[var(--grey-700)] bg-[#1a1a1a] p-[var(--s-500)] shadow-sm ${tx}`}
+          className={`rounded-br200 border border-[var(--grey-700)] bg-[var(--grey-900)] p-[var(--s-500)] shadow-sm ${tx}`}
         >
           <h1 className="text-[18px] font-semibold text-white">Sign in</h1>
           <p className="mt-[var(--s-200)] text-[13px] leading-[18px] text-[var(--grey-400)]">
@@ -94,7 +94,7 @@ export function SignInPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className={`rounded-br100 border border-[var(--grey-700)] bg-[#121212] px-[var(--s-300)] py-[var(--s-200)] text-[14px] normal-case text-white placeholder:text-[var(--grey-500)] focus:border-[var(--border-primary-default)] focus:outline-none focus:ring-2 focus:ring-[var(--papaya-600)]/40 ${txField}`}
+                className={`rounded-br100 border border-[var(--grey-700)] bg-[var(--dark)] px-[var(--s-300)] py-[var(--s-200)] text-[14px] normal-case text-white placeholder:text-[var(--grey-500)] focus:border-[var(--border-primary-default)] focus:outline-none focus:ring-2 focus:ring-[var(--papaya-600)]/40 ${txField}`}
                 placeholder="you@company.com"
               />
             </label>
@@ -107,7 +107,7 @@ export function SignInPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className={`rounded-br100 border border-[var(--grey-700)] bg-[#121212] px-[var(--s-300)] py-[var(--s-200)] text-[14px] normal-case text-white placeholder:text-[var(--grey-500)] focus:border-[var(--border-primary-default)] focus:outline-none focus:ring-2 focus:ring-[var(--papaya-600)]/40 ${txField}`}
+                className={`rounded-br100 border border-[var(--grey-700)] bg-[var(--dark)] px-[var(--s-300)] py-[var(--s-200)] text-[14px] normal-case text-white placeholder:text-[var(--grey-500)] focus:border-[var(--border-primary-default)] focus:outline-none focus:ring-2 focus:ring-[var(--papaya-600)]/40 ${txField}`}
                 placeholder="••••••••"
               />
             </label>

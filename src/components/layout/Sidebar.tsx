@@ -19,7 +19,7 @@ const navRow =
 const envItems = [
   {
     label: "Kitchen",
-    to: "/environments/kitchen/batch",
+    to: "/environments/kitchen/configure",
     dot: "bg-[var(--green-500)]",
     thumbnail: "/assets/environments/kitchen.jpg",
   },

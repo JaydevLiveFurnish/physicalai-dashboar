@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { createApiKey, fetchApiKeys, revokeApiKey } from "@/lib/mockApi";
 import { ApiAccessModal } from "@/components/access/ApiAccessModal";
+import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ErrorPanel } from "@/components/system/ErrorPanel";
 import { Card } from "@/components/ui/Card";
@@ -27,6 +28,7 @@ export function ApiDocsPage() {
   const [newSecret, setNewSecret] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [apiModalOpen, setApiModalOpen] = useState(false);
+  const [talkOpen, setTalkOpen] = useState(false);
 
   const create = useMutation({
     mutationFn: () => createApiKey("generated"),
@@ -51,18 +53,12 @@ export function ApiDocsPage() {
     <div className="space-y-[var(--s-500)]">
       <PageHeader
         title="API Keys"
-        description={
-          <>
-            Manage your API keys for programmatic access to the Imagine.io platform. Include the key in the{" "}
-            <span className="font-mono text-[13px] text-[var(--text-default-heading)]">Authorization</span> header as
-            a Bearer token.
-          </>
-        }
+        description="API keys enable programmatic access to scene generation and exports. Send the key in the Authorization header as a Bearer token."
         actions={
           keysWrite ? (
             <Button
               variant="primary"
-              className={`shrink-0 bg-[#f97316] hover:bg-[#ea580c] ${txBtn}`}
+              className={`shrink-0 ${txBtn}`}
               disabled={create.isPending}
               onClick={() => create.mutate()}
             >
@@ -77,12 +73,12 @@ export function ApiDocsPage() {
               className={`shrink-0 border-[var(--border-primary-default)] text-[var(--text-primary-default)] ${txBtn}`}
               type="button"
               title={FULL_ACCESS_TOOLTIP}
-              onClick={() => setApiModalOpen(true)}
+              disabled
             >
               <span className="material-symbols-outlined text-[20px]" aria-hidden>
                 lock
               </span>
-              Full Access Required
+              Generate New Key
             </Button>
           )
         }
@@ -90,14 +86,18 @@ export function ApiDocsPage() {
 
       <section className="space-y-[var(--s-300)]">
         {!keysWrite ? (
-          <div className="rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] p-[var(--s-500)]">
-            <div className="flex flex-col items-center gap-[var(--s-300)] text-center">
-              <p className="max-w-[48ch] text-[14px] leading-[22px] text-[var(--text-default-body)]">
-                API key management is available with Full platform access.
-              </p>
-              <Button variant="primary" type="button" onClick={() => setApiModalOpen(true)}>
-                Request access
-              </Button>
+          <div className="rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] p-[var(--s-400)]">
+            <div className="flex flex-col gap-[var(--s-200)] text-[14px] leading-[22px] text-[var(--text-default-body)]">
+              <p className="text-[12px] text-[var(--text-default-placeholder)]">Requires full access</p>
+              <p>Issuing and revoking keys is not available in Explore access.</p>
+              <div className="flex flex-wrap gap-[var(--s-300)] pt-[var(--s-100)]">
+                <Button variant="primary" type="button" onClick={() => setTalkOpen(true)}>
+                  Talk to Team
+                </Button>
+                <Button variant="secondary" type="button" onClick={() => setApiModalOpen(true)}>
+                  Learn more
+                </Button>
+              </div>
             </div>
           </div>
         ) : (
@@ -233,6 +233,7 @@ print(r.json())`}
       </Card>
 
       <ApiAccessModal open={apiModalOpen} onClose={() => setApiModalOpen(false)} />
+      <TalkToTeamModal open={talkOpen} onClose={() => setTalkOpen(false)} context="api" />
     </div>
   );
 }

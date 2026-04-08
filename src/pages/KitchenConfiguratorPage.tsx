@@ -1,9 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import { defaultKitchenValues, KITCHEN_PARAMETER_GROUPS } from "@/kitchen/params";
 import type { KitchenParamKey } from "@/kitchen/params";
 import { generateScene } from "@/lib/mockApi";
-import { PageHeader } from "@/components/layout/PageHeader";
+import { KitchenScenePreview } from "@/components/kitchen/KitchenScenePreview";
 import { PreviewModeBadge } from "@/components/kitchen/PreviewModeBadge";
 import { ExportAccessModal } from "@/components/access/ExportAccessModal";
 import { Card } from "@/components/ui/Card";
@@ -14,6 +15,26 @@ import type { SceneGenerationResult } from "@/types";
 
 const txBtn =
   "inline-flex items-center justify-center gap-[var(--s-200)] transition-[color,background-color,opacity,transform] duration-250 ease-out";
+
+const tabClass = ({ isActive }: { isActive: boolean }) =>
+  [
+    "inline-flex items-center border-b-2 px-[var(--s-200)] py-[var(--s-200)] text-[13px] font-medium transition-colors",
+    isActive
+      ? "border-[var(--papaya-500)] text-[var(--text-default-heading)]"
+      : "border-transparent text-[var(--text-default-body)] hover:text-[var(--text-default-heading)]",
+  ].join(" ");
+
+const labelClass =
+  "text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--text-default-placeholder)]";
+
+const selectClass =
+  "mt-[var(--s-100)] w-full rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-300)] py-[var(--s-200)] text-[14px] text-[var(--text-default-heading)]";
+
+function formatIslandLabel(value: string) {
+  if (value === "true") return "Standard Island";
+  if (value === "false") return "No island";
+  return value;
+}
 
 export function KitchenConfiguratorPage() {
   const { accessTier } = useAuth();
@@ -56,45 +77,88 @@ export function KitchenConfiguratorPage() {
   };
 
   return (
-    <div className="space-y-[var(--s-400)]">
-      <PageHeader
-        title="Kitchen configurator"
-        titleAfter={!fullExport ? <PreviewModeBadge title={FULL_ACCESS_TOOLTIP} /> : null}
-        description="Geometry parameters update the preview. Scene conditions are emitted as metadata."
-      />
+    <div className="space-y-[var(--s-400)] pb-[var(--s-500)]">
+      <nav
+        className="flex flex-wrap items-center gap-x-[var(--s-200)] gap-y-[var(--s-100)] text-[13px] text-[var(--text-default-body)]"
+        aria-label="Breadcrumb"
+      >
+        <Link to="/" className="transition-colors hover:text-[var(--text-default-heading)]">
+          Dashboard
+        </Link>
+        <span className="text-[var(--text-default-placeholder)]" aria-hidden>
+          /
+        </span>
+        <Link to="/environments" className="transition-colors hover:text-[var(--text-default-heading)]">
+          Environments
+        </Link>
+        <span className="text-[var(--text-default-placeholder)]" aria-hidden>
+          /
+        </span>
+        <Link to="/environments/kitchen/configure" className="transition-colors hover:text-[var(--text-default-heading)]">
+          Kitchen
+        </Link>
+        <span className="text-[var(--text-default-placeholder)]" aria-hidden>
+          /
+        </span>
+        <span className="text-[var(--text-default-heading)]">Configure</span>
+      </nav>
 
-      <div className="grid gap-[var(--s-400)] lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
-        <Card>
-          <div className="mb-[var(--s-300)] flex flex-wrap items-center justify-between gap-[var(--s-200)]">
-            <h2 className="text-[14px] font-semibold text-[var(--text-default-heading)]">Preview</h2>
-            {!fullExport ? <PreviewModeBadge title={FULL_ACCESS_TOOLTIP} /> : null}
-          </div>
-          <div className="flex aspect-[16/10] items-center justify-center rounded-br100 border border-dashed border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] text-[13px] text-[var(--text-default-body)]">
-            Viewport placeholder (WebGL / USD stage)
-          </div>
-          <p className="mt-[var(--s-300)] text-[12px] text-[var(--text-default-body)]">
-            Uses resolved mesh graph; lighting and clutter may not affect collision hulls in real time.
-          </p>
-        </Card>
+      <header className="space-y-[var(--s-300)]">
+        <div className="flex flex-wrap items-center gap-[var(--s-300)]">
+          <h1 className="text-page-title">Kitchen Environment</h1>
+          {!fullExport ? <PreviewModeBadge title={FULL_ACCESS_TOOLTIP} /> : null}
+        </div>
+        <p className="max-w-[52rem] text-[14px] leading-[22px] text-[var(--text-default-body)]">
+          35 physics-ready models · 18 articulated assets · 24+ joints
+        </p>
+        <nav className="border-b border-[var(--border-default-secondary)]" aria-label="Kitchen sections">
+          <ul className="flex flex-wrap gap-[var(--s-200)]">
+            <li>
+              <NavLink to="/environments/kitchen/configure" end className={tabClass}>
+                Configure
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/environments/kitchen/batch" className={tabClass}>
+                Batch Variations
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/environments/kitchen/api" className={tabClass}>
+                API
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
+      </header>
 
-        <div className="space-y-[var(--s-300)]">
+      <p className="text-[13px] text-[var(--text-default-body)]">
+        Only geometry parameters update the preview. Scene conditions are applied during generation.
+      </p>
+
+      <div className="grid gap-[var(--s-500)] lg:grid-cols-[minmax(0,1fr)_minmax(300px,420px)] lg:items-start">
+        <div className="lg:sticky lg:top-[calc(3.5rem+var(--s-400)+env(safe-area-inset-top))] lg:self-start">
+          <KitchenScenePreview values={values} />
+        </div>
+
+        <div className="space-y-[var(--s-300)] lg:max-h-[calc(100dvh-13rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-[var(--s-100)]">
           {(Object.entries(KITCHEN_PARAMETER_GROUPS) as [string, Record<string, readonly string[]>][]).map(
             ([group, params]) => (
-              <Card key={group} title={group}>
-                <div className="space-y-[var(--s-300)]">
+              <Card key={group} title={group.toUpperCase()}>
+                <div className="space-y-[var(--s-400)]">
                   {Object.entries(params).map(([key, opts]) => {
                     const k = key as KitchenParamKey;
                     return (
-                      <label key={key} className="flex flex-col gap-[var(--s-100)] text-[12px] text-[var(--text-default-body)]">
-                        {key}
+                      <label key={key} className="block">
+                        <span className={labelClass}>{key}</span>
                         <select
                           value={values[k]}
                           onChange={(e) => setValues((prev) => ({ ...prev, [k]: e.target.value }))}
-                          className="rounded-br100 border border-[var(--border-default-secondary)] px-[var(--s-300)] py-[var(--s-200)] text-[14px] text-[var(--text-default-heading)]"
+                          className={selectClass}
                         >
                           {opts.map((o) => (
                             <option key={o} value={o}>
-                              {o}
+                              {k === "Island" ? formatIslandLabel(o) : o}
                             </option>
                           ))}
                         </select>
@@ -131,7 +195,12 @@ export function KitchenConfiguratorPage() {
             {devOpen ? (
               <div className="mt-[var(--s-200)] rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] p-[var(--s-300)]">
                 <p className="text-[12px] text-[var(--text-default-body)]">Inject pipeline error (testing)</p>
-                <Button variant="secondary" className="mt-[var(--s-200)]" disabled={mutation.isPending} onClick={() => mutation.mutate({ fail: true })}>
+                <Button
+                  variant="secondary"
+                  className="mt-[var(--s-200)]"
+                  disabled={mutation.isPending}
+                  onClick={() => mutation.mutate({ fail: true })}
+                >
                   Simulate failure
                 </Button>
               </div>
@@ -140,7 +209,7 @@ export function KitchenConfiguratorPage() {
 
           <Card title="Exports">
             <p className="text-[13px] leading-[18px] text-[var(--text-default-body)]">
-              After a successful preview, download the USD stage or the full package. Requires Full access.
+              After a successful preview, download the USD stage or the full package. Requires full access.
             </p>
             <div className="mt-[var(--s-400)] flex flex-col gap-[var(--s-300)]">
               <Button
@@ -173,7 +242,7 @@ export function KitchenConfiguratorPage() {
                 Generate a preview first to enable exports.
               </p>
             ) : !fullExport ? (
-              <p className="mt-[var(--s-300)] text-[12px] text-[var(--text-default-body)]">Locked (Full access required)</p>
+              <p className="mt-[var(--s-300)] text-[12px] text-[var(--text-default-body)]">Requires full access</p>
             ) : null}
           </Card>
         </div>

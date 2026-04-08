@@ -14,7 +14,7 @@ const txPrimaryCta =
   "inline-flex items-center justify-center gap-[var(--s-200)] rounded-br100 bg-[var(--surface-primary-default)] px-[var(--s-400)] py-[var(--s-200)] text-[14px] font-medium text-[var(--text-on-color-body)] transition-[background-color,opacity,transform] duration-250 ease-out hover:bg-[var(--surface-primary-default-hover)] active:scale-[0.99]";
 
 function environmentPath(id: string): string {
-  if (id === "env-kitchen-v2") return "/environments/kitchen/batch";
+  if (id === "env-kitchen-v2") return "/environments/kitchen/configure";
   if (id.startsWith("env-living")) return "/environments/living-room/batch";
   if (id.startsWith("env-warehouse")) return "/environments/warehouse/batch";
   if (id.startsWith("env-retail")) return "/environments/retail-store/batch";
@@ -48,7 +48,7 @@ export function EnvironmentCatalogCards({
           e.catalogDescription ??
           (isActive
             ? "Configure parameters, generate scenes, and export SimReady assets."
-            : "We are building this environment. Get notified when it is ready.");
+            : "Not available in Explore access.");
         const eyebrow = e.catalogEyebrow;
         const icon = e.catalogIcon ?? "view_in_ar";
         const thumbnailUrl = e.catalogThumbnailUrl;
@@ -112,7 +112,7 @@ export function EnvironmentCatalogCards({
                 </Link>
                 {!isActive ? (
                   <p className="mt-[var(--s-200)] text-[12px] text-[var(--text-default-body)]">
-                    Full access required.
+                    Not available in Explore access.
                   </p>
                 ) : null}
               </div>

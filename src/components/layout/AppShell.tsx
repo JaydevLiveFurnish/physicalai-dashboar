@@ -8,12 +8,7 @@ import { Sidebar } from "./Sidebar";
 
 export function AppShell() {
   const location = useLocation();
-  const fullBleedContent =
-    location.pathname.startsWith("/assets/props") ||
-    location.pathname.startsWith("/assets/materials");
-  const contentWidthClass = fullBleedContent
-    ? "w-full max-w-none"
-    : "mx-auto w-full max-w-[1200px]";
+  const contentWidthClass = "mx-auto w-full max-w-[1250px]";
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { mounted: backdropMounted, show: backdropShow } = usePresence(mobileNavOpen);
 

@@ -12,19 +12,21 @@ const tx = "transition-[color,background-color,box-shadow,transform] duration-25
 const teaserShell =
   "group relative overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)]";
 
-function firstName(name: string | undefined) {
-  if (!name?.trim()) return "there";
-  return name.trim().split(/\s+/)[0] ?? "there";
+function daypartGreeting() {
+  const h = new Date().getHours();
+  if (h < 12) return "Good morning";
+  if (h < 18) return "Good afternoon";
+  return "Good evening";
 }
 
 export function HomePage() {
-  const { user, accessTier } = useAuth();
+  const { accessTier } = useAuth();
   const batchAccess = canUseFeature(accessTier, "batch_submit");
   const apiKeysAllowed = canUseFeature(accessTier, "api_keys_write");
   const overview = useQuery({ queryKey: ["overview"], queryFn: fetchSystemOverview });
   const activity = useQuery({ queryKey: ["activity"], queryFn: fetchActivity });
 
-  const welcome = firstName(user?.name);
+  const greeting = daypartGreeting();
   const paramCount = overview.data?.environments.parameterCount ?? 13;
 
   const downloadActivity = activity.data?.filter((a) => a.kind === "download") ?? [];
@@ -60,7 +62,7 @@ export function HomePage() {
     <div className="space-y-[var(--s-600)] pb-[var(--s-400)]">
       <header>
         <h1 className="text-[clamp(1.5rem,2.5vw,1.75rem)] font-semibold leading-tight text-[var(--text-default-heading)]">
-          Welcome back, {welcome}
+          {greeting}
         </h1>
       </header>
 
@@ -76,55 +78,6 @@ export function HomePage() {
           </button>
         </Callout>
       ) : null}
-
-      <section className="space-y-[var(--s-300)]">
-        <h2 className="text-[18px] font-semibold text-[var(--text-default-heading)]">Explore libraries</h2>
-        <div className="grid gap-[var(--s-400)] md:grid-cols-3">
-          <Link to="/assets" className={teaserShell}>
-            <img
-              src="/assets/Props/Base Cabinet 600mm.png"
-              alt="All assets"
-              className="h-[180px] w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/15" />
-            <div className="absolute inset-x-[var(--s-300)] bottom-[var(--s-300)] z-[1]">
-              <p className="text-[12px] font-medium uppercase tracking-[0.08em] text-white/80">All</p>
-              <p className="mt-[var(--s-100)] text-[24px] font-semibold leading-tight text-white">Assets</p>
-              <p className="mt-[var(--s-100)] text-[13px] text-white/85">
-                Open combined view with Props and Materials cards.
-              </p>
-            </div>
-          </Link>
-
-          <Link to="/assets/props" className={teaserShell}>
-            <img
-              src="/assets/Props/Dining Chair.png"
-              alt="Props library"
-              className="h-[180px] w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-black/10" />
-            <div className="absolute inset-x-[var(--s-300)] bottom-[var(--s-300)] z-[1]">
-              <p className="text-[12px] font-medium uppercase tracking-[0.08em] text-white/80">Library</p>
-              <p className="mt-[var(--s-100)] text-[24px] font-semibold leading-tight text-white">Props</p>
-              <p className="mt-[var(--s-100)] text-[13px] text-white/85">Collision-ready objects for manipulation and navigation.</p>
-            </div>
-          </Link>
-
-          <Link to="/assets/materials" className={teaserShell}>
-            <img
-              src="/assets/Materials/Carrara Marble.png"
-              alt="Materials library"
-              className="h-[180px] w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-black/10" />
-            <div className="absolute inset-x-[var(--s-300)] bottom-[var(--s-300)] z-[1]">
-              <p className="text-[12px] font-medium uppercase tracking-[0.08em] text-white/80">Library</p>
-              <p className="mt-[var(--s-100)] text-[24px] font-semibold leading-tight text-white">Materials</p>
-              <p className="mt-[var(--s-100)] text-[13px] text-white/85">Physics and PBR surface presets for reliable simulation.</p>
-            </div>
-          </Link>
-        </div>
-      </section>
 
       <section className="space-y-[var(--s-300)]">
         <h2 className="text-[18px] font-semibold text-[var(--text-default-heading)]">Environments</h2>
@@ -166,10 +119,10 @@ export function HomePage() {
               </span>
               <div className="min-w-0 flex-1">
                 <h2 className="text-[18px] font-semibold text-[var(--text-default-heading)]">
-                  Kitchen
+                  Kitchen Environment
                 </h2>
                 <p className="mt-[var(--s-200)] text-[14px] leading-[20px] text-[var(--text-default-body)]">
-                  Parameterized kitchen scenes for manipulation and sim validation.
+                  Configure, generate, and download physics-ready kitchen environments for robotic manipulation training.
                 </p>
               </div>
             </div>
@@ -192,52 +145,58 @@ export function HomePage() {
               ))}
             </div>
 
-            <Link
-              to="/environments/kitchen/configure"
-              className={`mt-[var(--s-500)] flex w-full items-center justify-center gap-[var(--s-200)] rounded-none bg-[var(--surface-primary-default)] px-[var(--s-400)] py-[var(--s-300)] text-[15px] font-medium text-[var(--text-on-color-body)] hover:bg-[var(--surface-primary-default-hover)] active:scale-[0.99] ${tx}`}
-            >
-              Configure
-              <span className="material-symbols-outlined text-[20px]" aria-hidden>
-                arrow_forward
-              </span>
-            </Link>
-
-            <div className="mt-[var(--s-400)] flex flex-wrap gap-x-[var(--s-500)] gap-y-[var(--s-200)] text-[13px]">
+            <div className="mt-[var(--s-500)] space-y-[var(--s-200)] border-t border-[var(--border-default-secondary)] pt-[var(--s-500)]">
               <Link
-                to="/batch"
-                className={`inline-flex items-center gap-[var(--s-200)] text-[var(--text-default-body)] hover:text-[var(--text-default-heading)] ${tx}`}
+                to="/environments/kitchen/batch"
+                className={`flex w-full items-center justify-between rounded-br100 bg-[var(--surface-primary-default)] px-[var(--s-300)] py-[var(--s-300)] text-[15px] font-medium text-[var(--text-on-color-body)] hover:bg-[var(--surface-primary-default-hover)] ${tx}`}
               >
-                <span className="material-symbols-outlined text-[18px] text-[var(--text-default-placeholder)]">
-                  inventory_2
-                </span>
-                Batch variations
-                {!batchAccess ? (
-                  <span
-                    className="material-symbols-outlined text-[16px] text-[var(--text-default-placeholder)]"
-                    title="Locked (Full access required)"
-                    aria-hidden
-                  >
-                    lock
+                <span className="inline-flex items-center gap-[var(--s-200)]">
+                  <span className="material-symbols-outlined text-[20px]" aria-hidden>
+                    tune
                   </span>
-                ) : null}
+                  Configure Environment
+                </span>
+                <span className="material-symbols-outlined text-[20px]" aria-hidden>
+                  arrow_forward
+                </span>
               </Link>
               <Link
-                to="/api"
-                className={`inline-flex items-center gap-[var(--s-200)] text-[var(--text-default-body)] hover:text-[var(--text-default-heading)] ${tx}`}
+                to="/environments/kitchen/batch"
+                className={`flex w-full items-center justify-between rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-300)] text-[15px] text-[var(--text-default-heading)] hover:bg-[var(--surface-default)] ${tx}`}
               >
-                <span className="material-symbols-outlined text-[18px] text-[var(--text-default-placeholder)]">
-                  code
-                </span>
-                API keys
-                {!apiKeysAllowed ? (
-                  <span
-                    className="material-symbols-outlined text-[16px] text-[var(--text-default-placeholder)]"
-                    title="Locked (Full access required)"
-                    aria-hidden
-                  >
-                    lock
+                <span className="inline-flex items-center gap-[var(--s-200)]">
+                  <span className="material-symbols-outlined text-[20px] text-[var(--text-default-body)]" aria-hidden>
+                    dashboard
                   </span>
-                ) : null}
+                  Batch Variations
+                  {!batchAccess ? (
+                    <span className="material-symbols-outlined text-[16px] text-[var(--text-default-placeholder)]" aria-hidden>
+                      lock
+                    </span>
+                  ) : null}
+                </span>
+                <span className="material-symbols-outlined text-[20px] text-[var(--text-default-placeholder)]" aria-hidden>
+                  arrow_forward
+                </span>
+              </Link>
+              <Link
+                to="/environments/kitchen/api"
+                className={`flex w-full items-center justify-between rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-300)] text-[15px] text-[var(--text-default-heading)] hover:bg-[var(--surface-default)] ${tx}`}
+              >
+                <span className="inline-flex items-center gap-[var(--s-200)]">
+                  <span className="material-symbols-outlined text-[20px] text-[var(--text-default-body)]" aria-hidden>
+                    code
+                  </span>
+                  API Documentation
+                  {!apiKeysAllowed ? (
+                    <span className="material-symbols-outlined text-[16px] text-[var(--text-default-placeholder)]" aria-hidden>
+                      lock
+                    </span>
+                  ) : null}
+                </span>
+                <span className="material-symbols-outlined text-[20px] text-[var(--text-default-placeholder)]" aria-hidden>
+                  arrow_forward
+                </span>
               </Link>
             </div>
           </section>
@@ -251,7 +210,7 @@ export function HomePage() {
                 <p className="text-[14px] leading-[22px] text-[var(--text-default-body)]">
                   No downloads yet. Configure your first kitchen environment to get started.{" "}
                   <Link
-                    to="/environments/kitchen/configure"
+                    to="/environments/kitchen/batch"
                     className="font-medium text-[var(--text-primary-default)] underline-offset-2 hover:underline"
                   >
                     Configure kitchen
@@ -278,14 +237,14 @@ export function HomePage() {
             </p>
             <ul className="mt-[var(--s-300)] flex flex-wrap gap-x-[var(--s-500)] gap-y-[var(--s-200)] text-[13px] font-medium">
               <li>
-                <Link to="/api" className={`text-[var(--text-primary-default)] underline-offset-2 hover:underline ${tx}`}>
+                <Link to="/api" className={`text-[var(--text-primary-default)] hover:text-[var(--text-default-body)] ${tx}`}>
                   API
                 </Link>
               </li>
               <li>
                 <Link
                   to="/assets/props"
-                  className={`text-[var(--text-primary-default)] underline-offset-2 hover:underline ${tx}`}
+                  className={`text-[var(--text-primary-default)] hover:text-[var(--text-default-body)] ${tx}`}
                 >
                   Props Library
                 </Link>
@@ -293,20 +252,20 @@ export function HomePage() {
               <li>
                 <Link
                   to="/assets/materials"
-                  className={`text-[var(--text-primary-default)] underline-offset-2 hover:underline ${tx}`}
+                  className={`text-[var(--text-primary-default)] hover:text-[var(--text-default-body)] ${tx}`}
                 >
                   Materials
                 </Link>
               </li>
               <li>
-                <Link to="/api" className={`text-[var(--text-primary-default)] underline-offset-2 hover:underline ${tx}`}>
+                <Link to="/api" className={`text-[var(--text-primary-default)] hover:text-[var(--text-default-body)] ${tx}`}>
                   API Keys
                 </Link>
               </li>
               <li>
                 <Link
                   to="/account"
-                  className={`text-[var(--text-primary-default)] underline-offset-2 hover:underline ${tx}`}
+                  className={`text-[var(--text-primary-default)] hover:text-[var(--text-default-body)] ${tx}`}
                 >
                   Account
                 </Link>
@@ -326,37 +285,57 @@ export function HomePage() {
               <div className="mt-[var(--s-300)] space-y-[var(--s-300)]">
                 <Link
                   to="/assets/props"
-                  className={`flex items-center justify-between border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-300)] hover:bg-[var(--surface-default)] ${tx}`}
+                  className={`group flex items-center justify-between gap-[var(--s-200)] border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-300)] hover:bg-[var(--surface-default)] ${tx}`}
                 >
-                  <span className="min-w-0">
-                    <span className="block text-[13px] font-medium text-[var(--text-default-heading)]">Props</span>
-                    <span className="text-[12px] text-[var(--text-default-body)]">
-                      {overview.data.assets.propsCount.toLocaleString()} items
+                  <span className="flex min-w-0 items-center gap-[var(--s-200)]">
+                    <img
+                      src="/assets/Props/Dining Chair.png"
+                      alt=""
+                      className="h-12 w-12 shrink-0 rounded-br100 object-cover"
+                      aria-hidden
+                    />
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-medium text-[var(--text-default-heading)]">Props</span>
+                      <span className="text-[12px] text-[var(--text-default-body)]">
+                        {overview.data.assets.propsCount.toLocaleString()} items
+                      </span>
                     </span>
                   </span>
-                  <span className="material-symbols-outlined text-[18px] text-[var(--text-default-body)]">arrow_forward</span>
+                  <span className="material-symbols-outlined text-[18px] text-[var(--text-default-body)] transition-transform duration-250 group-hover:translate-x-0.5">
+                    arrow_forward
+                  </span>
                 </Link>
 
                 <Link
                   to="/assets/materials"
-                  className={`flex items-center justify-between border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-300)] hover:bg-[var(--surface-default)] ${tx}`}
+                  className={`group flex items-center justify-between gap-[var(--s-200)] border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-300)] hover:bg-[var(--surface-default)] ${tx}`}
                 >
-                  <span className="min-w-0">
-                    <span className="block text-[13px] font-medium text-[var(--text-default-heading)]">Materials</span>
-                    <span className="text-[12px] text-[var(--text-default-body)]">
-                      {overview.data.assets.materialsCount.toLocaleString()} items
+                  <span className="flex min-w-0 items-center gap-[var(--s-200)]">
+                    <img
+                      src="/assets/Materials/Carrara Marble.png"
+                      alt=""
+                      className="h-12 w-12 shrink-0 rounded-br100 object-cover"
+                      aria-hidden
+                    />
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-medium text-[var(--text-default-heading)]">Materials</span>
+                      <span className="text-[12px] text-[var(--text-default-body)]">
+                        {overview.data.assets.materialsCount.toLocaleString()} items
+                      </span>
                     </span>
                   </span>
-                  <span className="material-symbols-outlined text-[18px] text-[var(--text-default-body)]">arrow_forward</span>
+                  <span className="material-symbols-outlined text-[18px] text-[var(--text-default-body)] transition-transform duration-250 group-hover:translate-x-0.5">
+                    arrow_forward
+                  </span>
                 </Link>
+
               </div>
 
               <Link
                 to="/assets"
-                className={`mt-[var(--s-400)] inline-flex items-center gap-0.5 text-[14px] font-medium text-[var(--text-primary-default)] hover:underline ${tx}`}
+                className={`mt-[var(--s-400)] inline-flex items-center text-[14px] font-medium text-[var(--text-primary-default)] hover:text-[var(--text-default-body)] ${tx}`}
               >
                 Open assets summary
-                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
               </Link>
             </div>
           </Card>
@@ -376,10 +355,9 @@ export function HomePage() {
                 </p>
                 <Link
                   to="/simready"
-                  className={`mt-[var(--s-400)] inline-flex items-center gap-0.5 text-[14px] font-medium text-[var(--text-primary-default)] hover:underline ${tx}`}
+                  className={`mt-[var(--s-400)] inline-flex items-center text-[14px] font-medium text-[var(--text-primary-default)] hover:text-[var(--text-default-body)] ${tx}`}
                 >
                   Learn more
-                  <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
                 </Link>
               </div>
             </div>

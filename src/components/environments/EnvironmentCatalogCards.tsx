@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/Badge";
 import { PreviewModeBadge } from "@/components/kitchen/PreviewModeBadge";
-import { tx } from "@/components/layout/motion";
 import type { EnvironmentEntity } from "@/types";
 import { canUseFeature } from "@/lib/access";
 import type { AccessTier } from "@/lib/access";
@@ -14,7 +13,7 @@ const heroActive =
   "relative flex min-h-[140px] shrink-0 items-center justify-center bg-[color-mix(in_srgb,var(--papaya-500)_12%,var(--surface-page-secondary))] md:min-h-[160px]";
 
 const txPrimaryCta =
-  "inline-flex items-center justify-center gap-[var(--s-200)] rounded-br100 bg-[var(--surface-primary-default)] px-[var(--s-400)] py-[var(--s-200)] text-[14px] font-medium text-[var(--text-on-color-body)] transition-[background-color,opacity,transform] duration-250 ease-out hover:bg-[var(--surface-primary-default-hover)] active:scale-[0.99]";
+  "inline-flex min-h-[48px] w-full items-center justify-center gap-[var(--s-200)] rounded-br100 bg-[var(--surface-primary-default)] px-[var(--s-500)] py-[var(--s-300)] text-[18px] font-semibold text-[var(--text-on-color-body)] transition-[background-color,opacity,transform] duration-250 ease-out hover:bg-[var(--surface-primary-default-hover)] active:scale-[0.99]";
 
 function environmentPath(id: string): string {
   if (id === "env-kitchen-v2") return "/environments/kitchen/batch";
@@ -70,7 +69,16 @@ export function EnvironmentCatalogCards({
                 </>
               ) : null}
               <div className="absolute left-[var(--s-300)] top-[var(--s-300)] z-[1]">
-                {isActive ? <Badge variant="live">Live</Badge> : <Badge variant="warning">In progress</Badge>}
+                {isActive ? (
+                  <Badge variant="live">Live</Badge>
+                ) : (
+                  <span className="inline-flex items-center gap-[6px] rounded-full bg-[#f5efd2] px-[10px] py-[4px] text-[12px] font-semibold uppercase tracking-[0.02em] text-[#60511d]">
+                    <span className="material-symbols-outlined text-[14px]" aria-hidden>
+                      lock
+                    </span>
+                    Locked
+                  </span>
+                )}
               </div>
               {isActive && !thumbnailUrl ? (
                 <span
@@ -107,7 +115,7 @@ export function EnvironmentCatalogCards({
                 </Link>
                 {!isActive ? (
                   <p className="mt-[var(--s-200)] text-[12px] text-[var(--text-default-body)]">
-                    Workspace is available while this environment is being finalized.
+                    Full access required.
                   </p>
                 ) : null}
               </div>

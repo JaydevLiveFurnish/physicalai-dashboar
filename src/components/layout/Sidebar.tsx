@@ -20,25 +20,21 @@ const envItems = [
   {
     label: "Kitchen",
     to: "/environments/kitchen/batch",
-    dot: "bg-[var(--green-500)]",
     thumbnail: "/assets/environments/kitchen.jpg",
   },
   {
     label: "Living Room",
     to: "/environments/living-room/batch",
-    dot: "bg-[#eab308]",
     thumbnail: "/assets/environments/livingroom.png",
   },
   {
     label: "Warehouse",
     to: "/environments/warehouse/batch",
-    dot: "bg-[#eab308]",
     thumbnail: "/assets/environments/warehouse.png",
   },
   {
     label: "Retail Store",
     to: "/environments/retail-store/batch",
-    dot: "bg-[#eab308]",
     thumbnail: "/assets/environments/store.png",
   },
 ] as const;
@@ -230,7 +226,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                   environmentsNavActive ? "text-[var(--papaya-500)]" : "text-[#888888] group-hover:text-[#b0b0b0]",
                 )}
               >
-                layers
+                public
               </span>
               <span className="min-w-0 flex-1 truncate">Environments</span>
             </Link>
@@ -274,7 +270,6 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                     />
                     <span className="truncate">{item.label}</span>
                   </span>
-                  <span className={cn("h-2.5 w-2.5 shrink-0 rounded-full", item.dot)} />
                 </NavLink>
               ))}
               <button
@@ -317,7 +312,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
               >
                 auto_awesome
               </span>
-              <span>SimReady</span>
+              <span>SimReady Generation</span>
             </span>
           )}
         </NavLink>

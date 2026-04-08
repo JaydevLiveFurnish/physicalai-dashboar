@@ -5,6 +5,7 @@ import { fetchAssets, fetchPropById } from "@/lib/mockApi";
 import { AssetLibraryTabs } from "@/components/assets/AssetLibraryTabs";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ExportAccessModal } from "@/components/access/ExportAccessModal";
+import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
 import { ErrorPanel } from "@/components/system/ErrorPanel";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -19,11 +20,6 @@ const txInteract =
 
 const txBtn =
   "inline-flex items-center justify-center gap-[var(--s-200)] transition-[color,background-color,opacity] duration-250 ease-out";
-
-function tagClasses(kind: PropTagKind) {
-  if (kind === "navigation") return "text-[#2563eb]";
-  return "text-[var(--text-primary-default)]";
-}
 
 function tagLabel(kind: PropTagKind) {
   switch (kind) {
@@ -94,7 +90,8 @@ export function PropsPage() {
   const { accessTier } = useAuth();
   const fullExport = canUseFeature(accessTier, "full_export");
   const [exportModalOpen, setExportModalOpen] = useState(false);
-  const [filtersOpen, setFiltersOpen] = useState(true);
+  const [talkOpen, setTalkOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const { q, category, simReady, articulation, setParam } = useAssetSearchParams();
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -129,15 +126,28 @@ export function PropsPage() {
         title="Props"
         description="Kitchen-native props — cabinetry, island, brass hardware, prep tools — with collision proxies and material bindings."
         actions={
-          <button
-            type="button"
-            aria-expanded={filtersOpen}
-            onClick={() => setFiltersOpen((o) => !o)}
-            className={`inline-flex shrink-0 items-center gap-[var(--s-200)] rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-400)] py-[var(--s-200)] text-[14px] font-medium text-[var(--text-default-heading)] hover:bg-[var(--surface-page-secondary)] ${txInteract}`}
-          >
-            <span className="material-symbols-outlined text-[20px] text-[var(--text-default-body)]">tune</span>
-            {filtersOpen ? "Hide filters" : "Filters"}
-          </button>
+          <div className="flex flex-wrap gap-[var(--s-200)] lg:justify-end">
+            <Button
+              variant="secondary"
+              type="button"
+              className={txBtn}
+              onClick={() => setTalkOpen(true)}
+            >
+              <span className="material-symbols-outlined text-[18px]" aria-hidden>
+                upload
+              </span>
+              Upload / Add New
+            </Button>
+            <button
+              type="button"
+              aria-expanded={filtersOpen}
+              onClick={() => setFiltersOpen((o) => !o)}
+              className={`inline-flex shrink-0 items-center gap-[var(--s-200)] rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-400)] py-[var(--s-200)] text-[14px] font-medium text-[var(--text-default-heading)] hover:bg-[var(--surface-page-secondary)] ${txInteract}`}
+            >
+              <span className="material-symbols-outlined text-[20px] text-[var(--text-default-body)]">tune</span>
+              {filtersOpen ? "Hide filters" : "Filters"}
+            </button>
+          </div>
         }
       />
 
@@ -220,6 +230,7 @@ export function PropsPage() {
         onClose={() => setSelectedId(null)}
         size="xl"
         contentAlign="start"
+        hideHeader
       >
         {detail.isLoading ? (
           <Skeleton className="h-40 w-full" />
@@ -235,6 +246,7 @@ export function PropsPage() {
       </CenterModal>
 
       <ExportAccessModal open={exportModalOpen} onClose={() => setExportModalOpen(false)} />
+      <TalkToTeamModal open={talkOpen} onClose={() => setTalkOpen(false)} context="general" />
     </div>
   );
 }
@@ -292,104 +304,119 @@ function PropDetail({
 
   const dims = `${asset.dimensionsMm.w} × ${asset.dimensionsMm.h} × ${asset.dimensionsMm.d} mm`;
   return (
-    <div className="space-y-[var(--s-500)]">
-      <div className="-mx-[var(--s-500)] mb-[var(--s-400)] overflow-hidden bg-[var(--surface-page-secondary)]">
-        <div className="flex max-h-[min(52vh,520px)] min-h-[220px] items-center justify-center">
-          <img
-            src={asset.thumbnailUrl}
-            alt=""
-            className="h-full w-full max-h-[min(52vh,520px)] object-contain object-center"
-          />
+    <div className="grid gap-[var(--s-500)] lg:grid-cols-[minmax(280px,1fr)_minmax(340px,420px)]">
+      <div className="flex min-h-[320px] items-center justify-center overflow-hidden rounded-br200 bg-[var(--surface-page-secondary)] p-[var(--s-300)]">
+        <img src={asset.thumbnailUrl} alt={asset.name} className="h-full w-full object-contain object-center" />
+      </div>
+
+      <div className="space-y-[var(--s-400)]">
+        <div>
+          <div className="flex items-center gap-[var(--s-200)]">
+            <span className="rounded-br100 border border-[#fed7aa] bg-[#fff7ed] px-[var(--s-200)] py-[3px] text-[12px] font-semibold text-[#c2410c]">
+              {tagLabel(asset.tag)}
+            </span>
+            <span className="text-[12px] font-medium uppercase tracking-[0.08em] text-[var(--text-default-placeholder)]">
+              {shelfCategory(asset.category)}
+            </span>
+          </div>
+          <h3 className="mt-[var(--s-100)] text-[34px] font-semibold leading-tight text-[var(--text-default-heading)]">
+            {asset.name}
+          </h3>
         </div>
-      </div>
 
-      <p className={`text-[13px] font-semibold ${tagClasses(asset.tag)}`}>{tagLabel(asset.tag)}</p>
-
-      <div>
-        <h3 className="text-[14px] font-semibold text-[var(--text-default-heading)]">Dimensions</h3>
-        <p className="mt-[var(--s-200)] text-[13px] text-[var(--text-default-body)]">
-          <span className="text-[var(--text-default-body)]">W × H × D</span>
-          <span className="mx-[var(--s-200)] text-[var(--border-default-secondary)]">·</span>
-          <span className="font-mono text-[var(--text-default-heading)]">{dims}</span>
-        </p>
-      </div>
-
-      <div>
-        <h3 className="text-[14px] font-semibold text-[var(--text-default-heading)]">Physics properties</h3>
-        <table className="mt-[var(--s-200)] w-full border-collapse text-[13px]">
-          <tbody>
-            {(
-              [
-                ["Mass", `${asset.massKg} kg`],
-                ["Material", asset.materialType],
-                ["Static friction", String(asset.physics.frictionStatic)],
-                ["Dynamic friction", String(asset.physics.frictionDynamic)],
-                ["Restitution", String(asset.physics.restitution)],
-                ["Density", `${asset.densityKgM3} kg/m³`],
-                ["Collision", asset.collisionLabel],
-              ] as const
-            ).map(([k, v]) => (
-              <tr key={k} className="border-b border-[var(--border-default-secondary)]">
-                <td className="py-[var(--s-200)] text-[var(--text-default-body)]">{k}</td>
-                <td className="py-[var(--s-200)] text-right font-mono text-[var(--text-default-heading)]">{v}</td>
+        <div>
+          <p className="text-[14px] font-semibold uppercase tracking-[0.04em] text-[var(--text-default-heading)]">
+            Dimensions
+          </p>
+          <table className="mt-[var(--s-200)] w-full border-collapse text-[13px]">
+            <tbody>
+              <tr className="border-b border-[var(--border-default-secondary)]">
+                <td className="py-[var(--s-200)] text-[var(--text-default-body)]">W x H x D</td>
+                <td className="py-[var(--s-200)] text-right font-mono text-[var(--text-default-heading)]">{dims}</td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </tbody>
+          </table>
+        </div>
 
-      <div className="sticky bottom-0 -mx-[var(--s-500)] mt-[var(--s-500)] space-y-[var(--s-300)] border-t border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-500)] pb-[max(var(--s-300),env(safe-area-inset-bottom))] pt-[var(--s-300)]">
-        <Button
-          variant="primary"
-          className={`w-full ${txBtn}`}
-          aria-haspopup={!exportAllowed ? "dialog" : undefined}
-          onClick={() =>
-            run(() => {
-              alert("Download queued: SimReady USD");
-            })
-          }
-        >
-          {!exportAllowed ? (
-            <span className="material-symbols-outlined text-[20px]" aria-hidden>
-              lock
-            </span>
-          ) : null}
-          Download SimReady USD
-        </Button>
-        <Button
-          variant="secondary"
-          className={`w-full border-[var(--border-primary-default)] text-[var(--text-primary-default)] hover:bg-[var(--surface-primary-default-subtle)] ${txBtn}`}
-          aria-haspopup={!exportAllowed ? "dialog" : undefined}
-          onClick={() =>
-            run(() => {
-              alert("Download queued: GLB");
-            })
-          }
-        >
-          {!exportAllowed ? (
-            <span className="material-symbols-outlined text-[20px]" aria-hidden>
-              lock
-            </span>
-          ) : null}
-          Download GLB
-        </Button>
-        <button
-          type="button"
-          className={`inline-flex w-full items-center justify-center gap-[var(--s-200)] text-center text-[14px] font-medium text-[var(--text-primary-default)] underline underline-offset-4 ${txInteract}`}
-          aria-haspopup={!exportAllowed ? "dialog" : undefined}
-          onClick={() =>
-            run(() => {
-              alert("Metadata JSON — download queued");
-            })
-          }
-        >
-          {!exportAllowed ? (
-            <span className="material-symbols-outlined text-[18px]" aria-hidden>
-              lock
-            </span>
-          ) : null}
-          Download metadata
-        </button>
+        <div>
+          <p className="text-[14px] font-semibold uppercase tracking-[0.04em] text-[var(--text-default-heading)]">
+            Physics Properties
+          </p>
+          <table className="mt-[var(--s-200)] w-full border-collapse text-[13px]">
+            <tbody>
+              {(
+                [
+                  ["Mass", `${asset.massKg} kg`],
+                  ["Material", asset.materialType],
+                  ["Static Friction", String(asset.physics.frictionStatic)],
+                  ["Dynamic Friction", String(asset.physics.frictionDynamic)],
+                  ["Restitution", String(asset.physics.restitution)],
+                  ["Density", `${asset.densityKgM3} kg/m3`],
+                  ["Collision", asset.collisionLabel],
+                ] as const
+              ).map(([k, v]) => (
+                <tr key={k} className="border-b border-[var(--border-default-secondary)]">
+                  <td className="py-[var(--s-200)] text-[var(--text-default-body)]">{k}</td>
+                  <td className="py-[var(--s-200)] text-right font-mono text-[var(--text-default-heading)]">{v}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="space-y-[var(--s-200)] pt-[var(--s-100)]">
+          <Button
+            variant="primary"
+            className={`w-full ${txBtn}`}
+            aria-haspopup={!exportAllowed ? "dialog" : undefined}
+            onClick={() =>
+              run(() => {
+                alert("Download queued: SimReady USD");
+              })
+            }
+          >
+            {!exportAllowed ? (
+              <span className="material-symbols-outlined text-[20px]" aria-hidden>
+                lock
+              </span>
+            ) : null}
+            Download SimReady USD
+          </Button>
+          <Button
+            variant="secondary"
+            className={`w-full border-[var(--border-primary-default)] text-[var(--text-primary-default)] hover:bg-[var(--surface-primary-default-subtle)] ${txBtn}`}
+            aria-haspopup={!exportAllowed ? "dialog" : undefined}
+            onClick={() =>
+              run(() => {
+                alert("Download queued: GLB");
+              })
+            }
+          >
+            {!exportAllowed ? (
+              <span className="material-symbols-outlined text-[20px]" aria-hidden>
+                lock
+              </span>
+            ) : null}
+            Download GLB
+          </Button>
+          <button
+            type="button"
+            className={`inline-flex w-full items-center justify-center gap-[var(--s-200)] text-center text-[14px] font-medium text-[var(--text-primary-default)] underline underline-offset-4 ${txInteract}`}
+            aria-haspopup={!exportAllowed ? "dialog" : undefined}
+            onClick={() =>
+              run(() => {
+                alert("Metadata JSON — download queued");
+              })
+            }
+          >
+            {!exportAllowed ? (
+              <span className="material-symbols-outlined text-[18px]" aria-hidden>
+                lock
+              </span>
+            ) : null}
+            Download metadata
+          </button>
+        </div>
       </div>
     </div>
   );

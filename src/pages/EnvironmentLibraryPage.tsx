@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { fetchEnvironments, ENVIRONMENT_CATALOG_PLACEHOLDERS } from "@/lib/mockApi";
 import { EnvironmentCatalogCards } from "@/components/environments/EnvironmentCatalogCards";
 import { PageHeader } from "@/components/layout/PageHeader";

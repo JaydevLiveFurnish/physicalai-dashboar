@@ -12,9 +12,19 @@ type CenterModalProps = {
   size?: "md" | "lg" | "xl";
   /** Detail views (asset specs) read better left-aligned */
   contentAlign?: "center" | "start";
+  /** Hide top title bar when content renders its own heading */
+  hideHeader?: boolean;
 };
 
-export function CenterModal({ open, title, onClose, children, size = "md", contentAlign = "center" }: CenterModalProps) {
+export function CenterModal({
+  open,
+  title,
+  onClose,
+  children,
+  size = "md",
+  contentAlign = "center",
+  hideHeader = false,
+}: CenterModalProps) {
   const titleId = useId();
   const { mounted, show } = usePresence(open);
 
@@ -72,22 +82,33 @@ export function CenterModal({ open, title, onClose, children, size = "md", conte
               show ? "translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-[0.98] opacity-0"
             } ${show ? "" : "pointer-events-none"}`}
           >
-            <div className="relative border-b border-[var(--border-default-secondary)] px-[var(--s-500)] pb-[var(--s-400)] pt-[var(--s-400)] text-center">
-              <h2
-                id={titleId}
-                className="mx-auto max-w-[calc(100%-3rem)] text-[18px] font-semibold leading-tight text-[var(--text-default-heading)]"
-              >
-                {title}
-              </h2>
+            {!hideHeader ? (
+              <div className="relative border-b border-[var(--border-default-secondary)] px-[var(--s-500)] pb-[var(--s-400)] pt-[var(--s-400)] text-center">
+                <h2
+                  id={titleId}
+                  className="mx-auto max-w-[calc(100%-3rem)] text-[18px] font-semibold leading-tight text-[var(--text-default-heading)]"
+                >
+                  {title}
+                </h2>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className={`absolute right-[var(--s-300)] top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-br200 text-[var(--text-default-body)] hover:bg-[var(--surface-page-secondary)] ${tx}`}
+                  aria-label="Close"
+                >
+                  <span className="material-symbols-outlined text-[22px]">close</span>
+                </button>
+              </div>
+            ) : (
               <button
                 type="button"
                 onClick={onClose}
-                className={`absolute right-[var(--s-300)] top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-br200 text-[var(--text-default-body)] hover:bg-[var(--surface-page-secondary)] ${tx}`}
+                className={`absolute right-[var(--s-300)] top-[var(--s-300)] z-10 flex h-9 w-9 items-center justify-center rounded-br200 text-[var(--text-default-body)] hover:bg-[var(--surface-page-secondary)] ${tx}`}
                 aria-label="Close"
               >
                 <span className="material-symbols-outlined text-[22px]">close</span>
               </button>
-            </div>
+            )}
             <div
               className={
                 contentAlign === "start"

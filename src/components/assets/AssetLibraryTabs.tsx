@@ -19,7 +19,7 @@ export function AssetLibraryTabs() {
             : "text-[var(--text-default-body)] hover:text-[var(--text-default-heading)]"
         }`}
       >
-        Summary
+        All
       </Link>
       <Link
         to="/assets/props"

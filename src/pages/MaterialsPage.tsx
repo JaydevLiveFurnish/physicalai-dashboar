@@ -5,6 +5,7 @@ import { fetchMaterialById, fetchMaterials } from "@/lib/mockApi";
 import { AssetLibraryTabs } from "@/components/assets/AssetLibraryTabs";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ExportAccessModal } from "@/components/access/ExportAccessModal";
+import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
 import { EmptyState } from "@/components/system/EmptyState";
 import { ErrorPanel } from "@/components/system/ErrorPanel";
 import { Card } from "@/components/ui/Card";
@@ -68,7 +69,8 @@ export function MaterialsPage() {
   const { accessTier } = useAuth();
   const fullExport = canUseFeature(accessTier, "full_export");
   const [exportModalOpen, setExportModalOpen] = useState(false);
-  const [filtersOpen, setFiltersOpen] = useState(true);
+  const [talkOpen, setTalkOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const { q, type, setParam } = useMaterialSearchParams();
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -101,6 +103,12 @@ export function MaterialsPage() {
         description="PBR surfaces with friction and restitution presets for Kitchen environments — wood, metal, glass, stone, tile, and fabrics."
         actions={
           <div className="flex flex-wrap gap-[var(--s-200)] lg:justify-end">
+            <Button variant="secondary" type="button" className={txBtn} onClick={() => setTalkOpen(true)}>
+              <span className="material-symbols-outlined text-[18px]" aria-hidden>
+                upload
+              </span>
+              Upload / Add New
+            </Button>
             <button
               type="button"
               aria-expanded={filtersOpen}
@@ -185,6 +193,7 @@ export function MaterialsPage() {
         onClose={() => setSelectedId(null)}
         size="xl"
         contentAlign="start"
+        hideHeader
       >
         {detail.isLoading ? (
           <Skeleton className="h-40 w-full" />
@@ -200,6 +209,7 @@ export function MaterialsPage() {
       </CenterModal>
 
       <ExportAccessModal open={exportModalOpen} onClose={() => setExportModalOpen(false)} />
+      <TalkToTeamModal open={talkOpen} onClose={() => setTalkOpen(false)} context="general" />
     </div>
   );
 }
@@ -259,78 +269,84 @@ function MaterialDetail({
   };
 
   return (
-    <div className="space-y-[var(--s-500)]">
-      {material.thumbnailUrl ? (
-        <div className="-mx-[var(--s-500)] mb-[var(--s-400)] overflow-hidden bg-[var(--surface-page-secondary)]">
-          <div className="flex max-h-[min(52vh,520px)] min-h-[220px] items-center justify-center">
-            <img
-              src={material.thumbnailUrl}
-              alt=""
-              className="h-full w-full max-h-[min(52vh,520px)] object-contain object-center"
-            />
-          </div>
-        </div>
-      ) : null}
-      {material.physicsLineOverride ? (
-        <p className="text-[14px] leading-[22px] text-[var(--text-default-body)]">{material.physicsLineOverride}</p>
-      ) : null}
-      <div>
-        <h3 className="text-[14px] font-semibold text-[var(--text-default-heading)]">Physics properties</h3>
-        <p className="mt-[var(--s-200)] font-mono text-[13px] text-[var(--text-default-heading)]">{materialFrictionLine(material)}</p>
-        <table className="mt-[var(--s-300)] w-full border-collapse text-[13px]">
-          <tbody>
-            {(
-              [
-                ["Static friction", String(material.staticFriction)],
-                ["Dynamic friction", String(material.dynamicFriction)],
-                ["Restitution", String(material.restitution)],
-                ["Density", `${material.densityKgM3} kg/m³`],
-              ] as const
-            ).map(([k, v]) => (
-              <tr key={k} className="border-b border-[var(--border-default-secondary)]">
-                <td className="py-[var(--s-200)] text-[var(--text-default-body)]">{k}</td>
-                <td className="py-[var(--s-200)] text-right font-mono text-[var(--text-default-heading)]">{v}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="grid gap-[var(--s-500)] lg:grid-cols-[minmax(280px,1fr)_minmax(340px,420px)]">
+      <div className="flex min-h-[320px] items-center justify-center overflow-hidden rounded-br200 bg-[var(--surface-page-secondary)] p-[var(--s-300)]">
+        {material.thumbnailUrl ? (
+          <img src={material.thumbnailUrl} alt={material.name} className="h-full w-full object-contain object-center" />
+        ) : (
+          <span className="material-symbols-outlined text-[72px] text-[var(--text-default-placeholder)]/40">texture</span>
+        )}
       </div>
 
-      <div className="sticky bottom-0 -mx-[var(--s-500)] mt-[var(--s-500)] space-y-[var(--s-300)] border-t border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-500)] pb-[max(var(--s-300),env(safe-area-inset-bottom))] pt-[var(--s-300)]">
-        <Button
-          variant="primary"
-          className={`w-full ${txBtn}`}
-          aria-haspopup={!exportAllowed ? "dialog" : undefined}
-          onClick={() =>
-            run(() => {
-              alert("Download queued: Material USD");
-            })
-          }
-        >
-          {!exportAllowed ? (
-            <span className="material-symbols-outlined text-[20px]" aria-hidden>
-              lock
-            </span>
-          ) : null}
-          Download material USD
-        </Button>
-        <Button
-          variant="secondary"
-          className={`w-full border-[var(--border-primary-default)] text-[var(--text-primary-default)] hover:bg-[var(--surface-primary-default-subtle)] ${txBtn}`}
-          aria-haspopup={!exportAllowed ? "dialog" : undefined}
-          onClick={() =>
-            run(() => {
-              alert("Download queued: PBR textures");
-            })
-          }
-        >
-          {!exportAllowed ? (
-            <span className="material-symbols-outlined text-[20px]" aria-hidden>
-              lock
-            </span>
-          ) : null}
-          Download PBR textures
-        </Button>
+      <div className="space-y-[var(--s-400)]">
+        <div>
+          <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--text-default-placeholder)]">
+            {categoryLabel(material)}
+          </p>
+          <h3 className="mt-[var(--s-100)] text-[34px] font-semibold leading-tight text-[var(--text-default-heading)]">
+            {material.name}
+          </h3>
+        </div>
+
+        <div>
+          <p className="text-[14px] font-semibold uppercase tracking-[0.04em] text-[var(--text-default-heading)]">
+            Physics Properties
+          </p>
+          <table className="mt-[var(--s-200)] w-full border-collapse text-[13px]">
+            <tbody>
+              {(
+                [
+                  ["Static Friction", String(material.staticFriction)],
+                  ["Dynamic Friction", String(material.dynamicFriction)],
+                  ["Restitution", String(material.restitution)],
+                  ["Density", `${material.densityKgM3} kg/m3`],
+                ] as const
+              ).map(([k, v]) => (
+                <tr key={k} className="border-b border-[var(--border-default-secondary)]">
+                  <td className="py-[var(--s-200)] text-[var(--text-default-body)]">{k}</td>
+                  <td className="py-[var(--s-200)] text-right font-mono text-[var(--text-default-heading)]">{v}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="space-y-[var(--s-200)] pt-[var(--s-100)]">
+          <Button
+            variant="primary"
+            className={`w-full ${txBtn}`}
+            aria-haspopup={!exportAllowed ? "dialog" : undefined}
+            onClick={() =>
+              run(() => {
+                alert("Download queued: Material USD");
+              })
+            }
+          >
+            {!exportAllowed ? (
+              <span className="material-symbols-outlined text-[20px]" aria-hidden>
+                lock
+              </span>
+            ) : null}
+            Download Material USD
+          </Button>
+          <Button
+            variant="secondary"
+            className={`w-full border-[var(--border-primary-default)] text-[var(--text-primary-default)] hover:bg-[var(--surface-primary-default-subtle)] ${txBtn}`}
+            aria-haspopup={!exportAllowed ? "dialog" : undefined}
+            onClick={() =>
+              run(() => {
+                alert("Download queued: PBR textures");
+              })
+            }
+          >
+            {!exportAllowed ? (
+              <span className="material-symbols-outlined text-[20px]" aria-hidden>
+                lock
+              </span>
+            ) : null}
+            Download PBR Textures
+          </Button>
+        </div>
       </div>
     </div>
   );

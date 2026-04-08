@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/Badge";
-import { PreviewModeBadge } from "@/components/kitchen/PreviewModeBadge";
 import type { EnvironmentEntity } from "@/types";
-import { canUseFeature } from "@/lib/access";
 import type { AccessTier } from "@/lib/access";
 
 const cardShell =
@@ -13,7 +11,7 @@ const heroActive =
   "relative flex min-h-[140px] shrink-0 items-center justify-center bg-[color-mix(in_srgb,var(--papaya-500)_12%,var(--surface-page-secondary))] md:min-h-[160px]";
 
 const txPrimaryCta =
-  "inline-flex min-h-[48px] w-full items-center justify-center gap-[var(--s-200)] rounded-br100 bg-[var(--surface-primary-default)] px-[var(--s-500)] py-[var(--s-300)] text-[18px] font-semibold text-[var(--text-on-color-body)] transition-[background-color,opacity,transform] duration-250 ease-out hover:bg-[var(--surface-primary-default-hover)] active:scale-[0.99]";
+  "inline-flex items-center justify-center gap-[var(--s-200)] rounded-br100 bg-[var(--surface-primary-default)] px-[var(--s-400)] py-[var(--s-200)] text-[14px] font-medium text-[var(--text-on-color-body)] transition-[background-color,opacity,transform] duration-250 ease-out hover:bg-[var(--surface-primary-default-hover)] active:scale-[0.99]";
 
 function environmentPath(id: string): string {
   if (id === "env-kitchen-v2") return "/environments/kitchen/batch";
@@ -39,7 +37,7 @@ export function EnvironmentCatalogCards({
   requestCustomHref = "/environments/request-custom",
   onRequestCustom,
 }: EnvironmentCatalogCardsProps) {
-  const fullExport = canUseFeature(accessTier, "full_export");
+  void accessTier;
 
   return (
     <div className="grid gap-[var(--s-400)] sm:grid-cols-2 xl:grid-cols-3">
@@ -95,7 +93,6 @@ export function EnvironmentCatalogCards({
                 <h2 className="text-[16px] font-semibold leading-snug text-[var(--text-default-heading)]">
                   {title}
                 </h2>
-                {e.id === "env-kitchen-v2" && !fullExport ? <PreviewModeBadge /> : null}
               </div>
 
               {eyebrow ? (

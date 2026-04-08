@@ -1,123 +1,102 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { fetchSystemOverview } from "@/lib/mockApi";
+import { fetchAssets, fetchMaterials } from "@/lib/mockApi";
 import { AssetLibraryTabs } from "@/components/assets/AssetLibraryTabs";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ErrorPanel } from "@/components/system/ErrorPanel";
-import { Card } from "@/components/ui/Card";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { tx } from "@/components/layout/motion";
-
-const txCardLink =
-  "mt-[var(--s-400)] inline-flex items-center gap-0.5 text-[14px] font-medium text-[var(--text-primary-default)] hover:underline";
-
-const propThumbs = [
-  "/assets/Props/Dining Chair.png",
-  "/assets/Props/Bar Stool.png",
-  "/assets/Props/Coffee Machine.png",
-  "/assets/Props/Floor Lamp.png",
-];
-
-const materialThumbs = [
-  "/assets/Materials/Carrara Marble.png",
-  "/assets/Materials/Oak Wood.png",
-  "/assets/Materials/Stainless Steel.png",
-  "/assets/Materials/Ceramic Tile.png",
-];
 
 export function AssetsHubPage() {
-  const overview = useQuery({ queryKey: ["overview"], queryFn: fetchSystemOverview });
+  const propsList = useQuery({ queryKey: ["assets", "all-hub"], queryFn: () => fetchAssets({}) });
+  const materialsList = useQuery({ queryKey: ["materials", "all-hub"], queryFn: () => fetchMaterials({}) });
+  const isLoading = propsList.isLoading || materialsList.isLoading;
+  const isError = propsList.isError || materialsList.isError;
 
-  if (overview.isLoading) {
+  if (isLoading) {
     return (
-      <div className="space-y-[var(--s-400)]">
+      <div className="space-y-[var(--s-500)]">
+        <Skeleton className="h-10 w-40" />
         <Skeleton className="h-10 w-64" />
-        <div className="grid gap-[var(--s-400)] md:grid-cols-2">
-          <Skeleton className="h-48" />
-          <Skeleton className="h-48" />
+        <div className="grid gap-[var(--s-400)] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={i} className="h-56" />
+          ))}
         </div>
       </div>
     );
   }
 
-  if (overview.isError || !overview.data) {
+  if (isError) {
     return (
       <ErrorPanel
-        message="We couldn’t load asset counts. Check your connection and try again."
-        onRetry={() => overview.refetch()}
+        message="We couldn’t load assets. Check your connection and try again."
+        onRetry={() => {
+          propsList.refetch();
+          materialsList.refetch();
+        }}
       />
     );
   }
 
-  const { propsCount, materialsCount } = overview.data.assets;
+  const props = propsList.data ?? [];
+  const materials = materialsList.data ?? [];
+
+  const allCards = [
+    ...props.map((p) => ({
+      id: p.id,
+      kind: "prop" as const,
+      name: p.name,
+      subtitle: p.category.charAt(0).toUpperCase() + p.category.slice(1),
+      detail: `${p.massKg} kg`,
+      thumb: p.thumbnailUrl,
+      href: "/assets/props",
+    })),
+    ...materials.map((m) => ({
+      id: m.id,
+      kind: "material" as const,
+      name: m.name,
+      subtitle: m.type.charAt(0).toUpperCase() + m.type.slice(1),
+      detail: `us ${m.staticFriction.toFixed(2)} · ud ${m.dynamicFriction.toFixed(2)}`,
+      thumb: m.thumbnailUrl ?? "",
+      href: "/assets/materials",
+    })),
+  ];
 
   return (
-    <div className="space-y-[var(--s-500)]">
+    <div className="space-y-[var(--s-400)]">
       <AssetLibraryTabs />
 
       <PageHeader
         title="Assets"
-        description="Browse physics-ready props and PBR materials for Kitchen environments. Open a library to filter and inspect assets."
+        description="Browse all physics-ready props and PBR materials with the same card layout used in the dedicated libraries."
       />
 
-      <div className="grid gap-[var(--s-400)] md:grid-cols-2">
-        <Card className="overflow-hidden p-0">
-          <div className="grid h-[200px] grid-cols-2 gap-[1px] bg-[var(--border-default-secondary)]">
-            {propThumbs.map((src, idx) => (
-              <img key={src} src={src} alt="" className={`h-full w-full bg-[var(--surface-page-secondary)] object-cover ${idx === 0 ? "object-[55%_45%]" : ""}`} />
-            ))}
-          </div>
-          <div className="p-[var(--s-400)] sm:p-[var(--s-500)]">
-            <div className="flex items-start justify-between gap-[var(--s-300)]">
-              <div>
-                <h2 className="text-[20px] font-semibold text-[var(--text-default-heading)]">Props</h2>
-                <p className="mt-[var(--s-200)] text-[14px] leading-[22px] text-[var(--text-default-body)]">
-                  Kitchen-native props with collision proxies, articulation metadata, and SimReady tiers.
-                </p>
-              </div>
-              <span className="rounded-br100 border border-[#7eb8ff]/40 bg-[#e8f2ff] px-[var(--s-200)] py-[4px] text-[12px] font-medium text-[#2563eb]">
-                Library
+      <div className="grid gap-[var(--s-400)] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {allCards.map((item) => (
+          <Link
+            key={`${item.kind}-${item.id}`}
+            to={item.href}
+            className="flex flex-col overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] text-left shadow-sm transition-[box-shadow,transform] duration-250 ease-out hover:shadow-md active:scale-[0.99]"
+          >
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-[var(--surface-page-secondary)]">
+              <span
+                className={`absolute left-[var(--s-300)] top-[var(--s-300)] z-[1] rounded-br100 px-[var(--s-200)] py-[3px] text-[10px] font-bold leading-tight tracking-wide ${
+                  item.kind === "prop"
+                    ? "border border-[#fed7aa] bg-[#fff7ed] text-[#c2410c]"
+                    : "border border-[#bfdbfe] bg-[#eff6ff] text-[#1d4ed8]"
+                }`}
+              >
+                {item.kind === "prop" ? "Prop" : "Material"}
               </span>
+              {item.thumb ? <img src={item.thumb} alt="" className="h-full w-full object-cover object-center" /> : null}
             </div>
-            <p className="mt-[var(--s-300)] text-[32px] font-semibold tabular-nums text-[var(--text-default-heading)]">
-              {propsCount.toLocaleString()}
-              <span className="ml-[var(--s-200)] text-[13px] font-medium text-[var(--text-default-body)]">assets</span>
-            </p>
-            <Link to="/assets/props" className={`${txCardLink} ${tx}`}>
-              Open props
-              <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-            </Link>
-          </div>
-        </Card>
-
-        <Card className="overflow-hidden p-0">
-          <div className="grid h-[200px] grid-cols-2 gap-[1px] bg-[var(--border-default-secondary)]">
-            {materialThumbs.map((src, idx) => (
-              <img key={src} src={src} alt="" className={`h-full w-full bg-[var(--surface-page-secondary)] object-cover ${idx === 0 ? "object-[55%_45%]" : ""}`} />
-            ))}
-          </div>
-          <div className="p-[var(--s-400)] sm:p-[var(--s-500)]">
-            <div className="flex items-start justify-between gap-[var(--s-300)]">
-              <div>
-                <h2 className="text-[20px] font-semibold text-[var(--text-default-heading)]">Materials</h2>
-                <p className="mt-[var(--s-200)] text-[14px] leading-[22px] text-[var(--text-default-body)]">
-                  PBR surfaces with friction, restitution, and density presets for simulation.
-                </p>
-              </div>
-              <span className="rounded-br100 border border-[#86efac]/40 bg-[#ecfdf5] px-[var(--s-200)] py-[4px] text-[12px] font-medium text-[#15803d]">
-                Library
-              </span>
+            <div className="space-y-[var(--s-200)] px-[var(--s-300)] pb-[var(--s-400)] pt-[var(--s-400)]">
+              <span className="block text-[16px] font-semibold leading-snug text-[var(--text-default-heading)]">{item.name}</span>
+              <p className="text-[13px] leading-[18px] text-[var(--text-default-body)]">{item.subtitle}</p>
+              <p className="text-[12px] text-[var(--text-default-placeholder)]">{item.detail}</p>
             </div>
-            <p className="mt-[var(--s-300)] text-[32px] font-semibold tabular-nums text-[var(--text-default-heading)]">
-              {materialsCount.toLocaleString()}
-              <span className="ml-[var(--s-200)] text-[13px] font-medium text-[var(--text-default-body)]">assets</span>
-            </p>
-            <Link to="/assets/materials" className={`${txCardLink} ${tx}`}>
-              Open materials
-              <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-            </Link>
-          </div>
-        </Card>
+          </Link>
+        ))}
       </div>
     </div>
   );

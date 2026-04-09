@@ -6,7 +6,7 @@ type AppTopBarProps = {
   navOpen: boolean;
 };
 
-/** Mobile only: menu control. Search and profile live in the sidebar on desktop. */
+/** Mobile only: menu control. Profile lives in the sidebar on desktop. */
 export function AppTopBar({ onOpenNav, navOpen }: AppTopBarProps) {
   return (
     <header

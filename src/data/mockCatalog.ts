@@ -229,6 +229,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Glass",
     thumbnailUrl: thumb("prop-mason-jar"),
     previewUrls: previews("prop-mason-jar"),
+    previewModelUrl: "/assets/3d/mason-jar.glb",
     dimensionsMm: { w: 76, h: 130, d: 76 },
     densityKgM3: 2500,
     physics: {
@@ -422,6 +423,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Oak Wood",
     thumbnailUrl: thumb("prop-dining-chair"),
     previewUrls: previews("prop-dining-chair"),
+    previewModelUrl: "/assets/3d/dining-chair.glb",
     dimensionsMm: { w: 460, h: 880, d: 520 },
     densityKgM3: 520,
     physics: {
@@ -494,6 +496,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Oak Wood",
     thumbnailUrl: thumb("prop-dining-table"),
     previewUrls: previews("prop-dining-table"),
+    previewModelUrl: "/assets/3d/dining-table.glb",
     dimensionsMm: { w: 2000, h: 760, d: 950 },
     densityKgM3: 650,
     physics: {
@@ -566,6 +569,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Marble",
     thumbnailUrl: thumb("prop-mortar"),
     previewUrls: previews("prop-mortar"),
+    previewModelUrl: "/assets/3d/marble-mortar-and-pestle.glb",
     dimensionsMm: { w: 140, h: 100, d: 140 },
     densityKgM3: 2710,
     physics: {
@@ -590,6 +594,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Stainless Steel",
     thumbnailUrl: thumb("prop-dishwasher"),
     previewUrls: previews("prop-dishwasher"),
+    previewModelUrl: "/assets/3d/dishwasher.glb",
     dimensionsMm: { w: 600, h: 820, d: 580 },
     densityKgM3: 7900,
     physics: {
@@ -614,6 +619,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Oak Wood",
     thumbnailUrl: thumb("prop-drawer-900"),
     previewUrls: previews("prop-drawer-900"),
+    previewModelUrl: "/assets/3d/drawer-base-unit-900mm.glb",
     dimensionsMm: { w: 900, h: 720, d: 560 },
     densityKgM3: 680,
     physics: {
@@ -638,6 +644,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Stainless Steel",
     thumbnailUrl: thumb("prop-fridge-freezer"),
     previewUrls: previews("prop-fridge-freezer"),
+    previewModelUrl: "/assets/3d/fridge-freezer.glb",
     dimensionsMm: { w: 900, h: 1850, d: 700 },
     densityKgM3: 7900,
     physics: {
@@ -710,6 +717,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Steel + fabric",
     thumbnailUrl: thumb("prop-floor-lamp"),
     previewUrls: previews("prop-floor-lamp"),
+    previewModelUrl: "/assets/3d/floor-lamp.glb",
     dimensionsMm: { w: 350, h: 1650, d: 350 },
     densityKgM3: 800,
     physics: {
@@ -758,6 +766,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Stainless Steel",
     thumbnailUrl: thumb("prop-microwave"),
     previewUrls: previews("prop-microwave"),
+    previewModelUrl: "/assets/3d/microwave.glb",
     dimensionsMm: { w: 520, h: 300, d: 420 },
     densityKgM3: 7900,
     physics: {

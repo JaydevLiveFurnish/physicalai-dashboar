@@ -8,12 +8,15 @@ type AssetDetailPreviewPaneProps = {
   alt: string;
 };
 
-/** Left column for asset/material modals: interactive GLB in 16:9, else flat thumbnail. */
+/** Left column for asset/material modals: GLB fills grid cell height beside the spec column (lg+). */
 export function AssetDetailPreviewPane({ previewModelUrl, thumbnailUrl, alt }: AssetDetailPreviewPaneProps) {
+  const shell =
+    "relative flex h-full min-h-[280px] w-full min-w-0 flex-col overflow-hidden rounded-br200 bg-[var(--surface-page-secondary)] shadow-[inset_0_0_0_1px_var(--border-default-secondary)]";
+
   if (hasPreviewModel(previewModelUrl)) {
     return (
-      <div className="relative w-full min-w-0 overflow-hidden rounded-br200 bg-[var(--surface-page-secondary)] shadow-[inset_0_0_0_1px_var(--border-default-secondary)]">
-        <div className="aspect-video w-full">
+      <div className={shell}>
+        <div className="relative min-h-0 flex-1">
           <AssetModelViewer url={previewModelUrl!.trim()} />
         </div>
       </div>
@@ -22,8 +25,8 @@ export function AssetDetailPreviewPane({ previewModelUrl, thumbnailUrl, alt }: A
 
   if (thumbnailUrl) {
     return (
-      <div className="relative w-full min-w-0 overflow-hidden rounded-br200 bg-[var(--surface-page-secondary)] shadow-[inset_0_0_0_1px_var(--border-default-secondary)]">
-        <div className="aspect-video w-full">
+      <div className={shell}>
+        <div className="relative min-h-0 flex-1">
           <img src={thumbnailUrl} alt={alt} className="h-full w-full object-contain object-center p-[var(--s-300)]" />
         </div>
       </div>
@@ -31,7 +34,7 @@ export function AssetDetailPreviewPane({ previewModelUrl, thumbnailUrl, alt }: A
   }
 
   return (
-    <div className="relative flex aspect-video w-full min-w-0 items-center justify-center overflow-hidden rounded-br200 bg-[var(--surface-page-secondary)]">
+    <div className={`${shell} items-center justify-center`}>
       <span className="material-symbols-outlined text-[72px] text-[var(--text-default-placeholder)]/40" aria-hidden>
         texture
       </span>

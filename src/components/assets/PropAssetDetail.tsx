@@ -29,7 +29,7 @@ export function PropAssetDetail({
 
   const dims = `${asset.dimensionsMm.w} × ${asset.dimensionsMm.h} × ${asset.dimensionsMm.d} mm`;
   return (
-    <div className="grid items-start gap-[var(--s-500)] lg:grid-cols-[minmax(420px,1.5fr)_minmax(300px,400px)]">
+    <div className="grid min-h-0 items-stretch gap-[var(--s-500)] lg:grid-cols-[minmax(420px,1.5fr)_minmax(300px,400px)]">
       <AssetDetailPreviewPane
         previewModelUrl={asset.previewModelUrl}
         thumbnailUrl={asset.thumbnailUrl}

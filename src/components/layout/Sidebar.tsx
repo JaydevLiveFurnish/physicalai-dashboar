@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { tx, txSidebarSlide } from "./motion";
 import { sidebarWidthClass } from "./sidebarLayout";
 import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
 import { RequestCustomSceneModal } from "@/components/environments/RequestCustomSceneModal";
-import { ThemeSegmentedControl } from "@/components/system/ThemeSegmentedControl";
 import { useAuth } from "@/context/AuthContext";
-import { useTheme } from "@/context/ThemeContext";
 import { isLiveEnvironmentWorkspace } from "@/lib/environmentAccess";
 
 /** Sidebar — Imagine.io × Physical AI (Figma: no section titles; Home → Assets → Environments → SimReady → API) */
@@ -72,14 +70,11 @@ function userInitials(name: string) {
 
 export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   const location = useLocation();
-  const navigate = useNavigate();
   const { user } = useAuth();
-  const { theme, setTheme } = useTheme();
   const [assetOpen, setAssetOpen] = useState(false);
   const [envOpen, setEnvOpen] = useState(true);
   const [requestOpen, setRequestOpen] = useState(false);
   const [talkTeamOpen, setTalkTeamOpen] = useState(false);
-  const [sidebarQ, setSidebarQ] = useState("");
 
   useEffect(() => {
     const p = location.pathname;
@@ -87,29 +82,13 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
     if (p.startsWith("/environments")) setEnvOpen(true);
   }, [location.pathname]);
 
-  useEffect(() => {
-    if (location.pathname.startsWith("/assets")) {
-      const params = new URLSearchParams(location.search);
-      setSidebarQ(params.get("q") ?? "");
-    } else {
-      setSidebarQ("");
-    }
-  }, [location.pathname, location.search]);
-
   const afterNav = () => {
     onClose();
   };
 
-  const submitSidebarSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const qVal = sidebarQ.trim();
-    const search = qVal ? `?q=${encodeURIComponent(qVal)}` : "";
-    navigate({ pathname: "/assets/props", search });
-    afterNav();
-  };
-
   const assetsNavActive = location.pathname.startsWith("/assets");
   const environmentsNavActive = location.pathname.startsWith("/environments");
+  const accountNavActive = location.pathname.startsWith("/account");
 
   const displayName = user?.name ?? "Account";
 
@@ -125,44 +104,25 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
         mobileOpen ? "translate-x-0 shadow-2xl shadow-black/40" : "-translate-x-full md:translate-x-0",
       )}
     >
-      <div className="relative flex shrink-0 flex-col items-center gap-[var(--s-300)] px-[var(--s-400)] pb-[var(--s-300)] pt-[max(var(--s-400),env(safe-area-inset-top))] md:pt-[max(var(--s-500),env(safe-area-inset-top))]">
+      <div className="relative flex shrink-0 flex-col items-center px-[var(--s-400)] pb-[var(--s-800)] pt-[max(var(--s-400),env(safe-area-inset-top))]">
         <Link
           to="/"
           onClick={afterNav}
-          className={`mx-auto flex w-full max-w-[220px] justify-center outline-none ring-offset-2 ring-offset-[#0a0a0a] focus-visible:ring-2 focus-visible:ring-[var(--papaya-500)] ${tx}`}
+          className={`mx-auto flex w-full max-w-[200px] justify-center outline-none ring-offset-2 ring-offset-[#0a0a0a] focus-visible:ring-2 focus-visible:ring-[var(--papaya-500)] ${tx}`}
           aria-label="Home"
         >
-          <img src="/logos/Horizontal.svg" alt="imagine.io" className="h-7 w-auto max-w-full" />
+          <img src="/logos/Horizontal.svg" alt="imagine.io" className="h-6 w-auto max-w-full" />
         </Link>
-
-        <form onSubmit={submitSidebarSearch} className="relative w-full" role="search">
-          <label htmlFor="sidebar-search" className="sr-only">
-            Search props and materials
-          </label>
-          <span className="pointer-events-none absolute left-[var(--s-300)] top-1/2 -translate-y-1/2 text-[#737373]">
-            <span className={`material-symbols-outlined text-[18px] ${tx}`}>search</span>
-          </span>
-          <input
-            id="sidebar-search"
-            type="search"
-            value={sidebarQ}
-            onChange={(e) => setSidebarQ(e.target.value)}
-            placeholder="Search"
-            className={`h-9 w-full rounded-br200 border-0 bg-[#141414] py-[var(--s-200)] pl-[36px] pr-[var(--s-300)] text-[13px] text-[#e8e8e8] placeholder:text-[#6b6b6b] focus:outline-none focus:ring-2 focus:ring-[rgba(236,78,11,0.35)] ${tx}`}
-          />
-        </form>
 
         <button
           type="button"
           aria-label="Close menu"
           onClick={onClose}
-          className={`absolute right-[var(--s-200)] top-[max(var(--s-200),env(safe-area-inset-top))] flex min-h-[44px] min-w-[44px] items-center justify-center rounded-[6px] text-[#a3a3a3] hover:bg-[rgba(255,255,255,0.06)] hover:text-white active:scale-[0.97] md:hidden ${tx}`}
+          className={`absolute right-[var(--s-200)] top-[max(var(--s-400),env(safe-area-inset-top))] flex min-h-[44px] min-w-[44px] items-center justify-center rounded-[6px] text-[#a3a3a3] hover:bg-[rgba(255,255,255,0.06)] hover:text-white active:scale-[0.97] md:hidden ${tx}`}
         >
           <span className="material-symbols-outlined text-[22px]">close</span>
         </button>
       </div>
-
-      <div className="mx-[var(--s-400)] mb-[var(--s-300)] h-px shrink-0 bg-[#262626]" />
 
       <nav className="flex flex-1 flex-col gap-[2px] overflow-y-auto overflow-x-hidden overscroll-contain px-[var(--s-100)] pb-[max(var(--s-400),env(safe-area-inset-bottom))] [-webkit-overflow-scrolling:touch]">
         <NavLink
@@ -440,22 +400,22 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
           <Link
             to="/account"
             onClick={afterNav}
-            className={`mx-[var(--s-200)] flex min-h-[48px] items-center gap-[var(--s-300)] rounded-[6px] px-[var(--s-300)] py-[var(--s-200)] text-left hover:bg-[rgba(255,255,255,0.05)] ${tx}`}
+            className={cn(
+              tx,
+              "group relative flex w-full min-w-0 items-center gap-[var(--s-300)]",
+              navItemShell,
+              navRow,
+              accountNavActive ? navActive : navInactive,
+            )}
           >
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--surface-primary-default)] text-[13px] font-semibold text-[var(--text-on-color-body)]"
+              className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--surface-primary-default)] text-[10px] font-semibold leading-none text-[var(--text-on-color-body)]"
               aria-hidden
             >
               {userInitials(displayName)}
             </span>
-            <span className="min-w-0 flex-1 truncate text-[14px] font-medium text-[#f0f0f0]">{displayName}</span>
+            <span className="min-w-0 flex-1 truncate">{displayName}</span>
           </Link>
-          <div className="mx-[var(--s-200)] mt-[var(--s-300)] px-[var(--s-300)] pb-[var(--s-200)]">
-            <p className="mb-[var(--s-200)] text-[11px] font-semibold uppercase tracking-wide text-[#737373]">
-              Appearance
-            </p>
-            <ThemeSegmentedControl value={theme} onChange={setTheme} className="!max-w-none" />
-          </div>
         </div>
       </nav>
       <RequestCustomSceneModal open={requestOpen} onClose={() => setRequestOpen(false)} />

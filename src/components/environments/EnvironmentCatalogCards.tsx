@@ -63,7 +63,6 @@ export function EnvironmentCatalogCards({
                   </span>
                 </div>
               )}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/15" />
               <div className="absolute left-[var(--s-300)] top-[var(--s-300)] z-[1]">
                 {live ? (
                   <Badge variant="live">Live</Badge>

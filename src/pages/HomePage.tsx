@@ -29,9 +29,6 @@ const homeViewAllLink = `shrink-0 text-[13px] font-medium text-[var(--text-prima
 const envShell =
   "group relative block w-full overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] text-left";
 
-/** Thumbnail rail — dark scrim so status pills read clearly (inline mock: semi-transparent over image). */
-const envImageDarkScrim = "pointer-events-none absolute inset-0 bg-black/45";
-
 /** Match locked pill scale — Live uses the same footprint as Locked on thumbnails. */
 const envLivePill =
   "inline-flex items-center rounded-full bg-[#0d2a1a] px-[8px] py-[3px] text-[10px] font-semibold uppercase leading-none tracking-[0.06em] text-[var(--text-success-default)]";
@@ -114,11 +111,6 @@ export function HomePage() {
                       alt=""
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                     />
-                    <div className={envImageDarkScrim} aria-hidden />
-                    <div
-                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/25"
-                      aria-hidden
-                    />
                     <div className="absolute left-[var(--s-300)] top-[var(--s-300)] z-[1]">
                       {live ? (
                         <span className={envLivePill}>Live</span>
@@ -133,7 +125,7 @@ export function HomePage() {
                     </div>
                   </div>
                   <div className="px-[var(--s-300)] pb-[var(--s-400)] pt-[var(--s-400)]">
-                    <p className="text-[13px] font-normal leading-snug text-[var(--text-default-body)]">Environment</p>
+                    <p className="text-[13px] font-normal leading-snug text-[var(--text-default-body)]">{env.name}</p>
                   </div>
                 </>
               );

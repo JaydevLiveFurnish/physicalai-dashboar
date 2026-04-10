@@ -25,6 +25,7 @@ export function MaterialAssetDetail({
 
   return (
     <div className="grid min-h-0 items-stretch gap-[var(--s-500)] lg:grid-cols-[minmax(420px,1.5fr)_minmax(300px,400px)]">
+      {/* Materials use flat swatches only; never mount a GLB even if catalog adds previewModelUrl */}
       <AssetDetailPreviewPane
         previewModelUrl={null}
         thumbnailUrl={material.thumbnailUrl}

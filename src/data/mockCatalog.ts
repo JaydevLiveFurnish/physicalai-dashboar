@@ -254,6 +254,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Glass",
     thumbnailUrl: thumb("prop-stemless-wine"),
     previewUrls: previews("prop-stemless-wine"),
+    previewModelUrl: "/assets/3d/mason-jar.glb",
     dimensionsMm: { w: 85, h: 95, d: 85 },
     densityKgM3: 2500,
     physics: {
@@ -278,6 +279,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Oak Wood",
     thumbnailUrl: thumb("prop-oak-cutting-board"),
     previewUrls: previews("prop-oak-cutting-board"),
+    previewModelUrl: "/assets/3d/marble-mortar-and-pestle.glb",
     dimensionsMm: { w: 400, h: 25, d: 300 },
     densityKgM3: 720,
     physics: {
@@ -302,6 +304,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Oak Wood",
     thumbnailUrl: thumb("prop-base-cab-600"),
     previewUrls: previews("prop-base-cab-600"),
+    previewModelUrl: "/assets/3d/drawer-base-unit-900mm.glb",
     dimensionsMm: { w: 600, h: 720, d: 560 },
     densityKgM3: 680,
     physics: {
@@ -326,6 +329,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Oak Wood",
     thumbnailUrl: thumb("prop-wall-cab-800"),
     previewUrls: previews("prop-wall-cab-800"),
+    previewModelUrl: "/assets/3d/drawer-base-unit-900mm.glb",
     dimensionsMm: { w: 800, h: 720, d: 350 },
     densityKgM3: 680,
     physics: {
@@ -376,6 +380,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Oak Wood",
     thumbnailUrl: thumb("prop-pantry-tall"),
     previewUrls: previews("prop-pantry-tall"),
+    previewModelUrl: "/assets/3d/fridge-freezer.glb",
     dimensionsMm: { w: 600, h: 2100, d: 560 },
     densityKgM3: 680,
     physics: {
@@ -400,6 +405,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Ceramic",
     thumbnailUrl: thumb("prop-planter-ceramic"),
     previewUrls: previews("prop-planter-ceramic"),
+    previewModelUrl: "/assets/3d/mason-jar.glb",
     dimensionsMm: { w: 280, h: 240, d: 280 },
     densityKgM3: 2200,
     physics: {
@@ -449,6 +455,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Glass + brass",
     thumbnailUrl: thumb("prop-pendant"),
     previewUrls: previews("prop-pendant"),
+    previewModelUrl: "/assets/3d/floor-lamp.glb",
     dimensionsMm: { w: 350, h: 1200, d: 350 },
     densityKgM3: 4500,
     physics: {
@@ -473,6 +480,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Polyester",
     thumbnailUrl: thumb("prop-blinds"),
     previewUrls: previews("prop-blinds"),
+    previewModelUrl: "/assets/3d/floor-lamp.glb",
     dimensionsMm: { w: 1800, h: 120, d: 80 },
     densityKgM3: 300,
     physics: {
@@ -523,6 +531,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Fabric",
     thumbnailUrl: thumb("prop-sofa-3"),
     previewUrls: previews("prop-sofa-3"),
+    previewModelUrl: "/assets/3d/dining-table.glb",
     dimensionsMm: { w: 2200, h: 850, d: 950 },
     densityKgM3: 180,
     physics: {
@@ -547,6 +556,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Stainless Steel",
     thumbnailUrl: thumb("prop-mixing-bowl"),
     previewUrls: previews("prop-mixing-bowl"),
+    previewModelUrl: "/assets/3d/mason-jar.glb",
     dimensionsMm: { w: 240, h: 120, d: 240 },
     densityKgM3: 7900,
     physics: {
@@ -671,6 +681,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "ABS Plastic",
     thumbnailUrl: thumb("prop-coffee-machine"),
     previewUrls: previews("prop-coffee-machine"),
+    previewModelUrl: "/assets/3d/microwave.glb",
     dimensionsMm: { w: 420, h: 380, d: 360 },
     densityKgM3: 1200,
     physics: {
@@ -695,6 +706,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Ceramic",
     thumbnailUrl: thumb("prop-dinner-plate"),
     previewUrls: previews("prop-dinner-plate"),
+    previewModelUrl: "/assets/3d/marble-mortar-and-pestle.glb",
     dimensionsMm: { w: 270, h: 25, d: 270 },
     densityKgM3: 2200,
     physics: {
@@ -744,6 +756,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Oak Wood + steel",
     thumbnailUrl: thumb("prop-bar-stool"),
     previewUrls: previews("prop-bar-stool"),
+    previewModelUrl: "/assets/3d/dining-chair.glb",
     dimensionsMm: { w: 460, h: 880, d: 520 },
     densityKgM3: 520,
     physics: {
@@ -793,6 +806,7 @@ export const MOCK_PROPS: PropAsset[] = [
     materialType: "Oak Wood",
     thumbnailUrl: thumb("prop-spice-rack"),
     previewUrls: previews("prop-spice-rack"),
+    previewModelUrl: "/assets/3d/drawer-base-unit-900mm.glb",
     dimensionsMm: { w: 400, h: 120, d: 120 },
     densityKgM3: 720,
     physics: {

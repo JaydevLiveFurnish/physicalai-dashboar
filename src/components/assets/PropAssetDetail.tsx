@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
 import { AssetDetailPreviewPane } from "@/components/assets/AssetDetailPreviewPane";
 import { Callout } from "@/components/system/Callout";
 import { Button } from "@/components/ui/Button";
 import { isAssetInWorkspace, recordAssetDownloaded } from "@/lib/workspaceAssetDownloads";
 import type { PropAsset } from "@/types";
 
-const txInteract =
-  "transition-[color,background-color,border-color,box-shadow,transform] duration-250 ease-out";
-
 const txBtn =
   "inline-flex items-center justify-center gap-[var(--s-200)] transition-[color,background-color,opacity] duration-250 ease-out";
+
+const txLink =
+  "text-[13px] font-medium text-[var(--text-default-body)] underline underline-offset-2 transition-[color] duration-200 hover:text-[var(--text-default-heading)]";
 
 export function PropAssetDetail({
   asset,
@@ -22,11 +21,14 @@ export function PropAssetDetail({
 }) {
   const downloadOk = exportAllowed;
   const inWorkspace = isAssetInWorkspace(asset.id);
-  const [downloadMenuOpen, setDownloadMenuOpen] = useState(false);
 
-  useEffect(() => {
-    setDownloadMenuOpen(false);
-  }, [asset.id]);
+  const run = (fn: () => void) => {
+    if (!downloadOk) {
+      onGatedExport();
+      return;
+    }
+    fn();
+  };
 
   const dims = `${asset.dimensionsMm.w} × ${asset.dimensionsMm.h} × ${asset.dimensionsMm.d} mm`;
   return (
@@ -86,70 +88,63 @@ export function PropAssetDetail({
           </table>
         </div>
 
-        <div className="space-y-[var(--s-300)] pt-[var(--s-200)]">
+        <div className="space-y-[var(--s-300)] pt-[var(--s-200)]" role="group" aria-label="Download options">
           <Button
             variant="primary"
             className={`w-full ${txBtn}`}
-            aria-expanded={downloadOk ? downloadMenuOpen : undefined}
-            aria-haspopup={!exportAllowed ? "dialog" : undefined}
-            onClick={() => {
-              if (!downloadOk) {
-                onGatedExport();
-                return;
-              }
-              setDownloadMenuOpen((o) => !o);
-            }}
+            aria-haspopup={!downloadOk ? "dialog" : undefined}
+            onClick={() =>
+              run(() => {
+                recordAssetDownloaded(asset.id);
+                alert("Download queued: SimReady USD");
+              })
+            }
           >
             {!downloadOk ? (
               <span className="material-symbols-outlined text-[20px]" aria-hidden>
                 lock
               </span>
-            ) : (
-              <span className="material-symbols-outlined text-[20px]" aria-hidden>
-                {downloadMenuOpen ? "expand_less" : "expand_more"}
-              </span>
-            )}
-            Download
+            ) : null}
+            Download SimReady USD
           </Button>
-
-          {downloadOk && downloadMenuOpen ? (
-            <div
-              className="flex flex-row flex-wrap items-stretch gap-[var(--s-200)]"
-              role="group"
-              aria-label="Download format options"
-            >
-              <Button
-                variant="secondary"
-                className={`min-h-[44px] min-w-0 flex-1 border-[var(--border-primary-default)] text-[var(--text-primary-default)] hover:bg-[var(--surface-primary-default-subtle)] sm:min-w-[160px] ${txBtn}`}
-                onClick={() => {
-                  recordAssetDownloaded(asset.id);
-                  alert("Download queued: SimReady USD");
-                }}
-              >
-                SimReady USD
-              </Button>
-              <Button
-                variant="secondary"
-                className={`min-h-[44px] min-w-0 flex-1 border-[var(--border-primary-default)] text-[var(--text-primary-default)] hover:bg-[var(--surface-primary-default-subtle)] sm:min-w-[160px] ${txBtn}`}
-                onClick={() => {
-                  recordAssetDownloaded(asset.id);
-                  alert("Download queued: GLB");
-                }}
-              >
-                GLB
-              </Button>
-              <button
-                type="button"
-                className={`inline-flex min-h-[44px] min-w-0 flex-1 items-center justify-center rounded-br100 border border-[var(--border-primary-default)] px-[var(--s-300)] text-[14px] font-medium text-[var(--text-primary-default)] hover:bg-[var(--surface-primary-default-subtle)] sm:min-w-[160px] ${txInteract}`}
-                onClick={() => {
+          <Button
+            variant="secondary"
+            className={`w-full border-[var(--border-primary-default)] text-[var(--text-primary-default)] hover:bg-[var(--surface-primary-default-subtle)] ${txBtn}`}
+            aria-haspopup={!downloadOk ? "dialog" : undefined}
+            onClick={() =>
+              run(() => {
+                recordAssetDownloaded(asset.id);
+                alert("Download queued: GLB");
+              })
+            }
+          >
+            {!downloadOk ? (
+              <span className="material-symbols-outlined text-[20px]" aria-hidden>
+                lock
+              </span>
+            ) : null}
+            Download GLB
+          </Button>
+          <div className="flex justify-center pt-[var(--s-100)]">
+            <button
+              type="button"
+              className={`inline-flex items-center gap-[var(--s-200)] ${txLink}`}
+              aria-haspopup={!downloadOk ? "dialog" : undefined}
+              onClick={() =>
+                run(() => {
                   recordAssetDownloaded(asset.id);
                   alert("Metadata JSON — download queued");
-                }}
-              >
-                Metadata
-              </button>
-            </div>
-          ) : null}
+                })
+              }
+            >
+              {!downloadOk ? (
+                <span className="material-symbols-outlined text-[18px] text-[var(--text-default-placeholder)]" aria-hidden>
+                  lock
+                </span>
+              ) : null}
+              Download Metadata
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,7 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { defaultKitchenValues, KITCHEN_PARAMETER_GROUPS } from "@/kitchen/params";
 import type { KitchenParamKey } from "@/kitchen/params";
+import { computeKitchenSceneSummary } from "@/kitchen/sceneSummary";
 import { kitchenOptionThumbnail } from "@/kitchen/kitchenConfigThumbnails";
 import { generateScene } from "@/lib/mockApi";
 import { tryConsume } from "@/lib/kitchenLimits";
@@ -65,6 +66,9 @@ export function KitchenConfigureWorkspace() {
   const [error, setError] = useState<string | null>(null);
   const [sceneResult, setSceneResult] = useState<SceneGenerationResult | null>(null);
   const [talkOpen, setTalkOpen] = useState(false);
+  const [summaryOpen, setSummaryOpen] = useState(false);
+
+  const sceneSummary = useMemo(() => computeKitchenSceneSummary(values), [values]);
 
   const mutation = useMutation({
     mutationFn: (opts: { fail?: boolean }) => generateScene(values as unknown as Record<string, string>, opts),
@@ -154,8 +158,49 @@ export function KitchenConfigureWorkspace() {
         <div
           className="shrink-0 border-t border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-400)] py-[var(--s-400)] shadow-[0_-4px_16px_rgba(0,0,0,0.04)]"
           role="region"
-          aria-label="Downloads"
+          aria-label="Scene summary and downloads"
         >
+          <div className="mb-[var(--s-400)] border-b border-[var(--border-default-secondary)] pb-[var(--s-400)]">
+            <button
+              type="button"
+              onClick={() => setSummaryOpen((o) => !o)}
+              aria-expanded={summaryOpen}
+              className="flex w-full flex-wrap items-center justify-between gap-[var(--s-200)] text-left"
+            >
+              <span className="flex min-w-0 flex-wrap items-baseline gap-x-[var(--s-200)] gap-y-[var(--s-100)]">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--text-default-heading)]">
+                  Scene summary
+                </span>
+                <span className="rounded-full bg-[color-mix(in_srgb,var(--papaya-500)_12%,transparent)] px-[var(--s-200)] py-[2px] text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--text-primary-default)]">
+                  Live
+                </span>
+              </span>
+              <span className="shrink-0 text-[13px] font-semibold text-[var(--text-primary-default)] underline-offset-2 hover:underline">
+                {summaryOpen ? "Hide details" : "Show details"}
+              </span>
+            </button>
+            {summaryOpen ? (
+              <dl className="mt-[var(--s-300)] max-h-[min(28vh,240px)] space-y-[var(--s-200)] overflow-y-auto overscroll-contain pr-[var(--s-100)] text-[13px]">
+                {(
+                  [
+                    ["Models", String(sceneSummary.models)],
+                    ["Articulated assets", String(sceneSummary.articulatedAssets)],
+                    ["Total joints", String(sceneSummary.totalJoints)],
+                    ["Isaac Sim FPS", sceneSummary.isaacFps],
+                    ["Appliances", String(sceneSummary.appliances)],
+                    ["Lighting", values.Lighting],
+                    ["Clutter", values["Clutter Density"]],
+                  ] as const
+                ).map(([dt, dd]) => (
+                  <div key={dt} className="flex justify-between gap-[var(--s-400)]">
+                    <dt className="text-[var(--text-default-body)]">{dt}</dt>
+                    <dd className="text-right font-medium tabular-nums text-[var(--text-default-heading)]">{dd}</dd>
+                  </div>
+                ))}
+              </dl>
+            ) : null}
+          </div>
+
           <div className="flex flex-col gap-[var(--s-200)]">
             <Button
               variant="primary"

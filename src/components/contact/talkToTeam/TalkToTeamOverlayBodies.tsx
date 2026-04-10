@@ -282,8 +282,8 @@ export function TalkToTeamOverlaySplit({ flow, onClose }: { flow: Flow; onClose:
 
   return (
     <div className="flex min-h-[min(72vh,640px)] flex-col md:flex-row">
-      <aside className="flex min-h-0 flex-col border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-500)] py-[var(--s-600)] md:w-[min(46%,400px)] md:max-w-[420px] md:border-b-0 md:border-r md:pl-[var(--s-600)] md:pr-[var(--s-500)]">
-        <h2 className="text-[clamp(1.25rem,2.2vw,1.5rem)] font-semibold leading-tight tracking-[-0.02em] text-[var(--text-default-heading)]">
+      <aside className="flex min-h-0 flex-col border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-500)] py-[var(--s-600)] md:w-[min(46%,400px)] md:max-w-[420px] md:justify-center md:border-b-0 md:border-r md:pl-[var(--s-600)] md:pr-[var(--s-500)]">
+        <h2 className="text-[clamp(1.5rem,3vw,2.125rem)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--text-default-heading)]">
           Book a demo with our experts
         </h2>
         <ul className="mt-[var(--s-500)] space-y-[var(--s-400)] text-[14px] leading-[1.45] text-[var(--text-default-body)]">

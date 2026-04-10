@@ -104,16 +104,15 @@ export function AssetsHubPage() {
         className="grid w-full grid-cols-[repeat(auto-fill,minmax(min(100%,200px),1fr))] gap-[var(--s-300)]"
       >
         {allCards.map((item) => {
-          const canOpen = item.kind === "material" || hasPreviewModel(item.previewModelUrl);
+          const canOpen =
+            item.kind === "material" || (item.kind === "prop" && hasPreviewModel(item.previewModelUrl));
           return (
             <button
               key={`${item.kind}-${item.id}`}
               type="button"
               disabled={!canOpen}
               title={
-                canOpen
-                  ? undefined
-                  : "3D preview not available yet — publish a GLB in /public/assets/3d to unlock"
+                canOpen ? undefined : "3D preview not available yet — publish a GLB in /public/assets/3d to unlock"
               }
               onClick={canOpen ? () => setSelected({ kind: item.kind, id: item.id }) : undefined}
               className={`flex w-full min-w-0 flex-col overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] text-left shadow-sm disabled:cursor-not-allowed disabled:hover:shadow-sm disabled:active:scale-100 ${
@@ -155,11 +154,7 @@ export function AssetsHubPage() {
           selectedProp.isLoading ? (
             <Skeleton className="h-40 w-full" />
           ) : selectedProp.data ? (
-            <PropAssetDetail
-              asset={selectedProp.data}
-              exportAllowed={fullExport}
-              onGatedExport={() => setExportModalOpen(true)}
-            />
+            <PropAssetDetail asset={selectedProp.data} />
           ) : (
             <p className="text-[14px] text-[var(--text-error-default)]">Asset not found.</p>
           )

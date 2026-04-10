@@ -10,25 +10,8 @@ const txBtn =
 const txLink =
   "text-[13px] font-medium text-[var(--text-default-body)] underline underline-offset-2 transition-[color] duration-200 hover:text-[var(--text-default-heading)]";
 
-export function PropAssetDetail({
-  asset,
-  exportAllowed,
-  onGatedExport,
-}: {
-  asset: PropAsset;
-  exportAllowed: boolean;
-  onGatedExport: () => void;
-}) {
-  const downloadOk = exportAllowed;
+export function PropAssetDetail({ asset }: { asset: PropAsset }) {
   const inWorkspace = isAssetInWorkspace(asset.id);
-
-  const run = (fn: () => void) => {
-    if (!downloadOk) {
-      onGatedExport();
-      return;
-    }
-    fn();
-  };
 
   const dims = `${asset.dimensionsMm.w} × ${asset.dimensionsMm.h} × ${asset.dimensionsMm.d} mm`;
   return (
@@ -92,56 +75,32 @@ export function PropAssetDetail({
           <Button
             variant="primary"
             className={`w-full text-[14px] font-semibold ${txBtn}`}
-            aria-haspopup={!downloadOk ? "dialog" : undefined}
-            onClick={() =>
-              run(() => {
-                recordAssetDownloaded(asset.id);
-                alert("Download queued: SimReady USD");
-              })
-            }
+            onClick={() => {
+              recordAssetDownloaded(asset.id);
+              alert("Download queued: SimReady USD");
+            }}
           >
-            {!downloadOk ? (
-              <span className="material-symbols-outlined text-[20px]" aria-hidden>
-                lock
-              </span>
-            ) : null}
             Download USD Scene
           </Button>
           <Button
             variant="secondary"
             className={`w-full border-[var(--border-primary-default)] bg-[var(--surface-default)] text-[14px] font-semibold text-[var(--text-primary-default)] hover:bg-[var(--surface-primary-default-subtle)] ${txBtn}`}
-            aria-haspopup={!downloadOk ? "dialog" : undefined}
-            onClick={() =>
-              run(() => {
-                recordAssetDownloaded(asset.id);
-                alert("Download queued: GLB");
-              })
-            }
+            onClick={() => {
+              recordAssetDownloaded(asset.id);
+              alert("Download queued: GLB");
+            }}
           >
-            {!downloadOk ? (
-              <span className="material-symbols-outlined text-[20px]" aria-hidden>
-                lock
-              </span>
-            ) : null}
             Download GLB Preview
           </Button>
           <div className="flex justify-center pt-[var(--s-100)]">
             <button
               type="button"
               className={`inline-flex items-center gap-[var(--s-200)] ${txLink}`}
-              aria-haspopup={!downloadOk ? "dialog" : undefined}
-              onClick={() =>
-                run(() => {
-                  recordAssetDownloaded(asset.id);
-                  alert("Metadata JSON — download queued");
-                })
-              }
+              onClick={() => {
+                recordAssetDownloaded(asset.id);
+                alert("Metadata JSON — download queued");
+              }}
             >
-              {!downloadOk ? (
-                <span className="material-symbols-outlined text-[18px] text-[var(--text-default-placeholder)]" aria-hidden>
-                  lock
-                </span>
-              ) : null}
               Download Metadata
             </button>
           </div>

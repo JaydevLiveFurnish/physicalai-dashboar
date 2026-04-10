@@ -37,8 +37,7 @@ export function EnvironmentLibraryPage() {
     <>
     <StaggerFadeGroup staggerMs={100} className="flex flex-col gap-[var(--s-400)]">
       <PageHeader
-        title="Environments catalog"
-        description="Browse simulation-ready spaces. Open available workspaces or request access for upcoming scenes."
+        title="environments"
         actions={
           <button type="button" className={txLink} onClick={() => setRequestOpen(true)}>
             Request custom

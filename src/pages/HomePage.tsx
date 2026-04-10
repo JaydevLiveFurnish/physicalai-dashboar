@@ -10,7 +10,9 @@ import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
 import { CenterModal } from "@/components/ui/CenterModal";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { useAuth } from "@/context/AuthContext";
+import { AssetCardLockOverlay } from "@/components/assets/AssetCardLockOverlay";
 import { canUseFeature } from "@/lib/access";
+import { hasPreviewModel } from "@/lib/assetPreview";
 import { MOCK_MATERIALS, MOCK_PROPS } from "@/data/mockCatalog";
 import { ENVIRONMENT_CATALOG_PLACEHOLDERS, fetchMaterialById, fetchPropById } from "@/lib/mockApi";
 import { environmentWorkspaceHref } from "@/lib/environmentWorkspaceHref";
@@ -182,25 +184,35 @@ export function HomePage() {
             staggerMs={60}
             className="grid w-full grid-cols-2 gap-[var(--s-400)] sm:grid-cols-3 lg:grid-cols-5"
           >
-            {propsShowcase.map((p) => (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => setAssetDetail({ kind: "prop", id: p.id })}
-                className={`group flex w-full min-w-0 flex-col rounded-br200 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--papaya-500)] ${tx}`}
-              >
-                <div className="relative aspect-square w-full overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-white shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)]">
-                  <img
-                    src={p.thumbnailUrl}
-                    alt=""
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                  />
-                </div>
-                <p className="mt-[var(--s-300)] text-left text-[13px] font-medium leading-snug text-[var(--text-default-heading)]">
-                  {p.name}
-                </p>
-              </button>
-            ))}
+            {propsShowcase.map((p) => {
+              const canOpen = hasPreviewModel(p.previewModelUrl);
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  disabled={!canOpen}
+                  title={
+                    canOpen
+                      ? undefined
+                      : "3D preview not available yet — publish a GLB in /public/assets/3d to unlock"
+                  }
+                  onClick={canOpen ? () => setAssetDetail({ kind: "prop", id: p.id }) : undefined}
+                  className={`group flex w-full min-w-0 flex-col rounded-br200 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--papaya-500)] disabled:cursor-not-allowed disabled:opacity-100 ${canOpen ? tx : ""}`}
+                >
+                  <div className="relative aspect-square w-full overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-white shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)]">
+                    <img
+                      src={p.thumbnailUrl}
+                      alt=""
+                      className={`absolute inset-0 h-full w-full object-cover ${canOpen ? "transition-transform duration-300 group-hover:scale-[1.03]" : ""}`}
+                    />
+                    {!canOpen ? <AssetCardLockOverlay /> : null}
+                  </div>
+                  <p className="mt-[var(--s-300)] text-left text-[13px] font-medium leading-snug text-[var(--text-default-heading)]">
+                    {p.name}
+                  </p>
+                </button>
+              );
+            })}
           </StaggerFadeGroup>
         </section>
 
@@ -260,11 +272,7 @@ export function HomePage() {
           propDetailQuery.isLoading ? (
             <Skeleton className="h-40 w-full" />
           ) : propDetailQuery.data ? (
-            <PropAssetDetail
-              asset={propDetailQuery.data}
-              exportAllowed={fullExport}
-              onGatedExport={() => setExportModalOpen(true)}
-            />
+            <PropAssetDetail asset={propDetailQuery.data} />
           ) : (
             <p className="text-[14px] text-[var(--text-error-default)]">Prop not found.</p>
           )

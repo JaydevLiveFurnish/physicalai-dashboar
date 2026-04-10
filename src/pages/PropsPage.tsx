@@ -5,15 +5,12 @@ import { fetchAssets, fetchPropById } from "@/lib/mockApi";
 import { AssetLibraryTabs } from "@/components/assets/AssetLibraryTabs";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { StaggerFadeGroup } from "@/components/layout/StaggerFadeGroup";
-import { ExportAccessModal } from "@/components/access/ExportAccessModal";
 import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
 import { ErrorPanel } from "@/components/system/ErrorPanel";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { CenterModal } from "@/components/ui/CenterModal";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { useAuth } from "@/context/AuthContext";
-import { canUseFeature } from "@/lib/access";
 import { AssetCardLockOverlay, AssetLibraryAccessOverlay } from "@/components/assets/AssetCardLockOverlay";
 import { PropAssetDetail } from "@/components/assets/PropAssetDetail";
 import { hasPreviewModel } from "@/lib/assetPreview";
@@ -50,9 +47,6 @@ function useAssetSearchParams() {
 }
 
 export function PropsPage() {
-  const { accessTier } = useAuth();
-  const fullExport = canUseFeature(accessTier, "full_export");
-  const [exportModalOpen, setExportModalOpen] = useState(false);
   const [talkOpen, setTalkOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const { q, category, simReady, articulation, setParam } = useAssetSearchParams();
@@ -203,17 +197,12 @@ export function PropsPage() {
         {detail.isLoading ? (
           <Skeleton className="h-40 w-full" />
         ) : selected ? (
-          <PropAssetDetail
-            asset={selected}
-            exportAllowed={fullExport && !selected.libraryLocked}
-            onGatedExport={() => setExportModalOpen(true)}
-          />
+          <PropAssetDetail asset={selected} />
         ) : (
           <p className="text-[14px] text-[var(--text-error-default)]">Asset not found.</p>
         )}
       </CenterModal>
 
-      <ExportAccessModal open={exportModalOpen} onClose={() => setExportModalOpen(false)} />
       <TalkToTeamModal open={talkOpen} onClose={() => setTalkOpen(false)} context="general" />
     </>
   );

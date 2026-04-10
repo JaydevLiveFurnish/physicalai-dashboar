@@ -12,13 +12,13 @@ function cn(...parts: (string | false | undefined)[]) {
   return parts.filter(Boolean).join(" ");
 }
 
-/** Kitchen configure: fill viewport on md+; only the options column scrolls inside the workspace */
-const KITCHEN_CONFIGURE_PATH = /^\/environments\/kitchen\/configure$/;
+/** Kitchen configure & batch: fill viewport on md+; inner workspace panels scroll */
+const KITCHEN_WORKSPACE_FILL_PATH = /^\/environments\/kitchen\/(configure|batch)$/;
 
 export function AppShell() {
   const location = useLocation();
   const contentWidthClass = "mx-auto w-full max-w-[1250px]";
-  const kitchenConfigureFill = KITCHEN_CONFIGURE_PATH.test(location.pathname);
+  const kitchenWorkspaceFill = KITCHEN_WORKSPACE_FILL_PATH.test(location.pathname);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { mounted: backdropMounted, show: backdropShow } = usePresence(mobileNavOpen);
 
@@ -66,14 +66,14 @@ export function AppShell() {
         <main
           className={cn(
             "w-full max-w-none min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-y-contain px-[var(--s-300)] pb-[max(var(--s-500),env(safe-area-inset-bottom))] pt-[calc(3.5rem+env(safe-area-inset-top)+var(--s-400))] sm:px-[var(--s-400)] md:px-[var(--s-600)] md:pb-[var(--s-500)] md:pt-[max(var(--s-500),env(safe-area-inset-top))] [-webkit-overflow-scrolling:touch]",
-            kitchenConfigureFill && "flex flex-col md:overflow-hidden",
+            kitchenWorkspaceFill && "flex flex-col md:overflow-hidden",
           )}
         >
-          <PageTransition className={kitchenConfigureFill ? "flex min-h-0 w-full flex-1 flex-col" : undefined}>
+          <PageTransition className={kitchenWorkspaceFill ? "flex min-h-0 w-full flex-1 flex-col" : undefined}>
             <div
               className={cn(
                 contentWidthClass,
-                kitchenConfigureFill && "flex min-h-0 flex-1 flex-col",
+                kitchenWorkspaceFill && "flex min-h-0 flex-1 flex-col",
               )}
             >
               <Outlet />

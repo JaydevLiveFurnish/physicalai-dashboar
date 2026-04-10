@@ -250,7 +250,11 @@ function WorkspacePanel({ section, environmentSlug }: { section: WorkspaceTab; e
   }
 
   if (section === "batch" && environmentSlug === "kitchen") {
-    return <BatchGenerationPage embedded />;
+    return (
+      <div className="flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] shadow-[inset_0_0_0_1px_var(--border-default-secondary)]">
+        <BatchGenerationPage embedded />
+      </div>
+    );
   }
 
   if (section === "configure") {
@@ -434,13 +438,13 @@ export function EnvironmentWorkspacePage() {
   }
 
   const isKitchen = meta.slug === "kitchen";
-  const kitchenConfigureFill = isKitchen && activeSection === "configure";
+  const kitchenWorkspaceFill = isKitchen && (activeSection === "configure" || activeSection === "batch");
 
   return (
     <>
       <div
         className={
-          kitchenConfigureFill
+          kitchenWorkspaceFill
             ? "flex w-full max-w-none flex-col gap-[var(--s-400)] lg:max-w-[1400px] md:min-h-0 md:flex-1"
             : "w-full max-w-none space-y-[var(--s-400)] lg:max-w-[1400px]"
         }
@@ -492,7 +496,7 @@ export function EnvironmentWorkspacePage() {
 
         <div
           className={
-            kitchenConfigureFill
+            kitchenWorkspaceFill
               ? "min-h-0 w-full flex-1 overflow-hidden"
               : "min-h-[min(560px,calc(100dvh-20rem))] w-full pt-[var(--s-200)]"
           }

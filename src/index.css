@@ -139,6 +139,20 @@
     animation: kitchen-cube-spin 14s linear infinite;
   }
 
+  /** Indeterminate bar while batch job is queueing */
+  .animate-batch-queue-indeterminate {
+    animation: batch-queue-indeterminate 1.15s ease-in-out infinite;
+  }
+
+  @keyframes batch-queue-indeterminate {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(400%);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .animate-page-in {
       animation: page-in-reduced 200ms ease both;
@@ -153,6 +167,10 @@
     }
 
     .animate-kitchen-cube {
+      animation: none;
+    }
+
+    .animate-batch-queue-indeterminate {
       animation: none;
     }
   }

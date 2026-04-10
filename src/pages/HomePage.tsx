@@ -7,7 +7,6 @@ import { PropAssetDetail } from "@/components/assets/PropAssetDetail";
 import { RequestCustomSceneModal } from "@/components/environments/RequestCustomSceneModal";
 import { StaggerFadeGroup } from "@/components/layout/StaggerFadeGroup";
 import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
-import { Badge } from "@/components/ui/Badge";
 import { CenterModal } from "@/components/ui/CenterModal";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { useAuth } from "@/context/AuthContext";
@@ -29,6 +28,16 @@ const homeViewAllLink = `shrink-0 text-[13px] font-medium text-[var(--text-prima
 
 const envShell =
   "group relative block w-full overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] text-left";
+
+/** Thumbnail rail — dark scrim so status pills read clearly (inline mock: semi-transparent over image). */
+const envImageDarkScrim = "pointer-events-none absolute inset-0 bg-black/45";
+
+/** Match locked pill scale — Live uses the same footprint as Locked on thumbnails. */
+const envLivePill =
+  "inline-flex items-center rounded-full bg-[#0d2a1a] px-[8px] py-[3px] text-[10px] font-semibold uppercase leading-none tracking-[0.06em] text-[var(--text-success-default)]";
+
+const envLockedPill =
+  "inline-flex items-center gap-[2px] rounded-full bg-[#2a2a2a] px-[8px] py-[3px] text-[10px] font-semibold uppercase leading-none tracking-[0.06em] text-[var(--grey-200)]";
 
 const HOME_ENV_COUNT = 4;
 
@@ -105,16 +114,17 @@ export function HomePage() {
                       alt=""
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-black/20" />
+                    <div className={envImageDarkScrim} aria-hidden />
+                    <div
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/25"
+                      aria-hidden
+                    />
                     <div className="absolute left-[var(--s-300)] top-[var(--s-300)] z-[1]">
                       {live ? (
-                        <Badge variant="live">Live</Badge>
+                        <span className={envLivePill}>Live</span>
                       ) : (
-                        <span className="inline-flex items-center gap-[3px] rounded-full bg-[#2a2a2a] px-[8px] py-[3px] text-[11px] font-semibold uppercase leading-none tracking-[0.06em] text-[var(--grey-200)]">
-                          <span
-                            className="material-symbols-outlined shrink-0 text-[11px] leading-none"
-                            aria-hidden
-                          >
+                        <span className={envLockedPill}>
+                          <span className="material-symbols-outlined shrink-0 text-[10px] leading-none" aria-hidden>
                             lock
                           </span>
                           Locked
@@ -123,14 +133,19 @@ export function HomePage() {
                     </div>
                   </div>
                   <div className="px-[var(--s-300)] pb-[var(--s-400)] pt-[var(--s-400)]">
-                    <p className="text-[15px] font-semibold leading-tight text-[var(--text-default-heading)]">{env.name}</p>
+                    <p className="text-[13px] font-normal leading-snug text-[var(--text-default-body)]">Environment</p>
                   </div>
                 </>
               );
 
               if (href) {
                 return (
-                  <Link key={env.id} to={href} className={`${envShell} ${tx}`}>
+                  <Link
+                    key={env.id}
+                    to={href}
+                    className={`${envShell} ${tx}`}
+                    aria-label={`${env.name} — open environment`}
+                  >
                     {innerTop}
                   </Link>
                 );
@@ -142,6 +157,7 @@ export function HomePage() {
                   type="button"
                   onClick={() => setTalkOpen(true)}
                   className={`${envShell} ${tx}`}
+                  aria-label={`${env.name} — request access`}
                   title="Available with full access — talk to the team"
                 >
                   {innerTop}
@@ -188,6 +204,10 @@ export function HomePage() {
                     alt=""
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                   />
+                  <div
+                    className="pointer-events-none absolute inset-0 bg-black/20 transition-[background-color] duration-300 group-hover:bg-black/35"
+                    aria-hidden
+                  />
                 </div>
                 <p className="mt-[var(--s-300)] text-left text-[13px] font-medium leading-snug text-[var(--text-default-heading)]">
                   {p.name}
@@ -222,6 +242,10 @@ export function HomePage() {
                     src={m.thumbnailUrl}
                     alt=""
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-0 bg-black/20 transition-[background-color] duration-300 group-hover:bg-black/35"
+                    aria-hidden
                   />
                 </div>
                 <p className="mt-[var(--s-300)] text-left text-[13px] font-medium leading-snug text-[var(--text-default-heading)]">

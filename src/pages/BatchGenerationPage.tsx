@@ -1,10 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import {
-  allKitchenBatchSelections,
-  KITCHEN_BATCH_RULE_DISPLAY,
-  KITCHEN_PARAMETER_GROUPS,
-} from "@/kitchen/params";
+import { allKitchenBatchSelections, KITCHEN_PARAMETER_GROUPS } from "@/kitchen/params";
 import type { KitchenParamKey } from "@/kitchen/params";
 import { getBatchCombinationStats } from "@/kitchen/batchCombinatorics";
 import { fetchJobs, runBatchJob } from "@/lib/mockApi";
@@ -15,8 +11,6 @@ import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
 
 const BATCH_GENERATE_COUNT = 500;
-
-const COMBO_BRUTE_FORCE_CAP = 2_500_000;
 
 const GRID_PREVIEW = 12;
 
@@ -174,30 +168,6 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
     mutation.data.status !== "failed" &&
     mutation.data.validCombinations > 0;
   const showVariationOutput = generationSucceeded && (simActive || generationComplete);
-  const canDownload =
-    generationComplete && generationSucceeded && Boolean(mutation.data?.jobId) && !queueing;
-
-  const downloadBatchManifest = () => {
-    if (!canDownload || !mutation.data?.jobId) return;
-    const variations = Array.from({ length: GRID_PREVIEW }, (_, i) => ({
-      id: `VAR-${String(i + 1).padStart(4, "0")}`,
-      status: "ready" as const,
-    }));
-    const payload = {
-      jobId: mutation.data.jobId,
-      validCombinations,
-      variationsPreview: variations,
-      note: "Preview slice of generated variation IDs for this batch run.",
-      generatedAt: new Date().toISOString(),
-    };
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `batch-${mutation.data.jobId}-manifest.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
 
   const runBatch = () => {
     setLimitMessage(null);
@@ -215,7 +185,7 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
     embedded ? null : (
       <PageHeader
         title="Batch variations"
-        description="Pick parameter ranges to define combinations. The system checks layout rules before you queue runs."
+        description="Pick parameter ranges to define combinations, then queue a batch run."
       />
     );
 
@@ -223,125 +193,91 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
     ? "flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden"
     : "flex min-h-0 w-full max-w-none flex-col gap-[var(--s-500)] lg:max-w-[1400px]";
 
-  const fixedBar = (
+  const batchFooter = (
     <div
-      className="shrink-0 border-b border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-400)] py-[var(--s-400)] shadow-[0_4px_24px_rgba(0,0,0,0.06)]"
-      aria-label="Combination summary and actions"
+      className="shrink-0 border-t border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-300)] py-[var(--s-300)] shadow-[0_-4px_16px_rgba(0,0,0,0.04)]"
+      aria-label="Combination statistics and batch actions"
     >
-      <div className="grid gap-[var(--s-300)] sm:grid-cols-3">
-        <div className="rounded-br200 border border-[var(--border-default-secondary)] bg-[color-mix(in_srgb,var(--papaya-500)_6%,var(--surface-page-secondary))] px-[var(--s-400)] py-[var(--s-400)]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--text-default-placeholder)]">
+      <div className="grid gap-[var(--s-200)] sm:grid-cols-3">
+        <div className="rounded-br100 border border-[var(--border-default-secondary)] bg-[color-mix(in_srgb,var(--papaya-500)_6%,var(--surface-page-secondary))] px-[var(--s-300)] py-[var(--s-200)]">
+          <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-[var(--text-default-placeholder)]">
             Valid combinations
           </p>
-          <p className="mt-[var(--s-200)] font-mono text-[clamp(1.35rem,3.5vw,2.25rem)] font-semibold leading-none tabular-nums tracking-tight text-[var(--text-default-heading)]">
+          <p className="mt-[4px] font-mono text-[15px] font-semibold leading-tight tabular-nums tracking-tight text-[var(--text-default-heading)] sm:text-[16px]">
             {validCombinations.toLocaleString()}
           </p>
         </div>
-        <div className="rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-400)] py-[var(--s-400)]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--text-default-placeholder)]">
+        <div className="rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-200)]">
+          <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-[var(--text-default-placeholder)]">
             Cartesian product (raw)
           </p>
-          <p className="mt-[var(--s-200)] font-mono text-[clamp(1.15rem,2.8vw,1.75rem)] font-semibold leading-none tabular-nums text-[var(--text-default-body)]">
+          <p className="mt-[4px] font-mono text-[15px] font-semibold leading-tight tabular-nums text-[var(--text-default-body)] sm:text-[16px]">
             {rawCount.toLocaleString()}
           </p>
         </div>
-        <div className="rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-400)] py-[var(--s-400)]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--text-default-placeholder)]">
+        <div className="rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-200)]">
+          <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-[var(--text-default-placeholder)]">
             Invalid combos
           </p>
-          <p className="mt-[var(--s-200)] font-mono text-[clamp(1.15rem,2.8vw,1.75rem)] font-semibold leading-none tabular-nums text-[var(--text-default-body)]">
+          <p className="mt-[4px] font-mono text-[15px] font-semibold leading-tight tabular-nums text-[var(--text-default-body)] sm:text-[16px]">
             − {invalidCombinations.toLocaleString()}
-            <span className="ml-[var(--s-200)] text-[13px] font-sans font-medium text-[var(--text-default-placeholder)]">
+            <span className="ml-[6px] text-[10px] font-sans font-medium text-[var(--text-default-placeholder)]">
               invalid
             </span>
           </p>
         </div>
       </div>
 
-      {rawCount > COMBO_BRUTE_FORCE_CAP ? (
-        <p className="mt-[var(--s-300)] text-[12px] leading-[18px] text-[var(--text-default-body)]">
-          Exact counts above {COMBO_BRUTE_FORCE_CAP.toLocaleString()} combinations use deterministic sampling for speed;
-          totals update when you change selections.
-        </p>
-      ) : null}
-
-      <div className="mt-[var(--s-400)]">
-        <p className="mb-[var(--s-200)] text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--text-default-placeholder)]">
-          Rules
-        </p>
-        <ul className="grid gap-[var(--s-200)] md:grid-cols-2 xl:grid-cols-3">
-          {KITCHEN_BATCH_RULE_DISPLAY.map((rule) => (
-            <li
-              key={rule}
-              className="rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-200)] text-[12px] leading-[18px] text-[var(--text-default-body)]"
-            >
-              {rule}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="mt-[var(--s-400)] flex flex-col gap-[var(--s-300)] sm:flex-row sm:items-end sm:justify-between">
-        <div className="min-w-0 flex-1 space-y-[var(--s-200)]">
+      <div className="mt-[var(--s-300)] border-t border-[var(--border-default-secondary)] pt-[var(--s-300)]">
+        <div className="flex flex-col gap-[4px]">
           <Button
             variant="primary"
-            className="min-h-[52px] w-full justify-center px-[var(--s-500)] py-[var(--s-300)] text-[15px] font-semibold sm:max-w-md"
+            className="h-9 min-h-0 w-full max-w-none justify-center px-[var(--s-400)] py-[var(--s-200)] text-[13px] font-semibold sm:max-w-[220px]"
             disabled={queueing || batchLeft === 0 || validCombinations === 0}
             onClick={runBatch}
           >
             {queueing ? "Queueing…" : "Generate batch"}
           </Button>
           {validCombinations > 0 ? (
-            <p className="text-[12px] text-[var(--text-default-body)]">
+            <p className="text-[11px] leading-snug text-[var(--text-default-body)]">
               Queues up to{" "}
               <span className="font-mono font-semibold text-[var(--text-default-heading)]">
                 {generateCap.toLocaleString()}
               </span>{" "}
-              of {validCombinations.toLocaleString()} valid variations for preview tiles.
+              preview tiles per run.
             </p>
           ) : (
-            <p className="text-[12px] text-[var(--text-error-default)]">No valid combinations for the current selection.</p>
+            <p className="text-[11px] leading-snug text-[var(--text-error-default)]">
+              No valid combinations for the current selection.
+            </p>
           )}
-          <p className="text-[12px] text-[var(--text-default-body)]">
+          <p className="text-[11px] leading-snug text-[var(--text-default-body)]">
             Batch runs left:{" "}
             <span className="font-mono font-medium text-[var(--text-default-heading)]">
               {batchLeft} / {KITCHEN_LIMITS.batchRuns}
             </span>
           </p>
           {limitMessage ? (
-            <p className="text-[13px] text-[var(--text-error-default)]" role="status">
+            <p className="text-[11px] leading-snug text-[var(--text-error-default)]" role="status">
               {limitMessage}
             </p>
           ) : null}
+          {mutation.isError ? (
+            <p className="text-[11px] leading-snug text-[var(--text-error-default)]" role="alert">
+              Could not queue the job.{" "}
+              <button type="button" className="font-medium underline underline-offset-2" onClick={() => mutation.reset()}>
+                Dismiss
+              </button>
+            </p>
+          ) : null}
+          {mutation.data && !mutation.isError ? (
+            <p className="font-mono text-[10px] leading-snug text-[var(--text-default-placeholder)]">
+              Last job {mutation.data.jobId}
+              {mutation.data.invalidRules.length ? ` · ${mutation.data.invalidRules.join("; ")}` : ""}
+            </p>
+          ) : null}
         </div>
-        <Button
-          variant="secondary"
-          className="inline-flex min-h-[48px] w-full shrink-0 items-center justify-center gap-[var(--s-200)] px-[var(--s-400)] sm:w-auto"
-          disabled={!canDownload}
-          onClick={downloadBatchManifest}
-          title={!canDownload ? "Complete a batch run to download the manifest" : undefined}
-        >
-          <span className="material-symbols-outlined text-[20px]" aria-hidden>
-            download
-          </span>
-          Download manifest
-        </Button>
       </div>
-
-      {mutation.isError ? (
-        <p className="mt-[var(--s-300)] text-[13px] text-[var(--text-error-default)]" role="alert">
-          Could not queue the job.{" "}
-          <button type="button" className="font-medium underline underline-offset-2" onClick={() => mutation.reset()}>
-            Dismiss
-          </button>
-        </p>
-      ) : null}
-      {mutation.data && !mutation.isError ? (
-        <p className="mt-[var(--s-200)] font-mono text-[11px] text-[var(--text-default-placeholder)]">
-          Last job {mutation.data.jobId}
-          {mutation.data.invalidRules.length ? ` · ${mutation.data.invalidRules.join("; ")}` : ""}
-        </p>
-      ) : null}
     </div>
   );
 
@@ -403,7 +339,7 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
             Run a batch to generate preview tiles here
           </p>
           <p className="max-w-[min(52ch,100%)] text-[13px] leading-[22px] text-[var(--text-default-placeholder)]">
-            Adjust selections above, then use <span className="font-medium text-[var(--text-default-body)]">Generate batch</span>{" "}
+            Adjust selections in the sidebar, then use <span className="font-medium text-[var(--text-default-body)]">Generate batch</span>{" "}
             to queue work and stream progress.
           </p>
         </div>
@@ -506,11 +442,11 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
     <div className={shellClass}>
       {headerBlock}
       <div className={embedded ? "flex min-h-0 flex-1 flex-col overflow-hidden" : "flex min-h-0 flex-1 flex-col overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)]"}>
-        {fixedBar}
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
           {paramsAside}
           {outputMain}
         </div>
+        {batchFooter}
       </div>
 
     </div>

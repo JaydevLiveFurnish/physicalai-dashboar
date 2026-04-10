@@ -167,13 +167,8 @@ export function KitchenConfigureWorkspace() {
               aria-expanded={summaryOpen}
               className="flex w-full flex-wrap items-center justify-between gap-[var(--s-200)] text-left"
             >
-              <span className="flex min-w-0 flex-wrap items-baseline gap-x-[var(--s-200)] gap-y-[var(--s-100)]">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--text-default-heading)]">
-                  Scene summary
-                </span>
-                <span className="rounded-full bg-[color-mix(in_srgb,var(--papaya-500)_12%,transparent)] px-[var(--s-200)] py-[2px] text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--text-primary-default)]">
-                  Live
-                </span>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--text-default-heading)]">
+                Scene summary
               </span>
               <span className="shrink-0 text-[13px] font-semibold text-[var(--text-primary-default)] underline-offset-2 hover:underline">
                 {summaryOpen ? "Hide details" : "Show details"}

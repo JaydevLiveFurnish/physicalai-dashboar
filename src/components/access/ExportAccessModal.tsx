@@ -1,60 +1,14 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
-import { CenterModal } from "@/components/ui/CenterModal";
-import { Button } from "@/components/ui/Button";
-import { ACCESS_COPY } from "@/lib/access";
 
 type ExportAccessModalProps = {
   open: boolean;
   onClose: () => void;
 };
 
+/**
+ * Gated export uses the same Talk to Team experience as locked environments
+ * (full access / upgrade path — no separate export-only copy).
+ */
 export function ExportAccessModal({ open, onClose }: ExportAccessModalProps) {
-  const navigate = useNavigate();
-  const [talkOpen, setTalkOpen] = useState(false);
-
-  return (
-    <>
-    <CenterModal open={open} title="Export Access Required" onClose={onClose} size="xl">
-      <div className="space-y-[var(--s-400)]">
-        <p className="text-[14px] leading-[22px] text-[var(--text-default-body)]">{ACCESS_COPY.exportModalIntro}</p>
-        <ul className="list-disc space-y-[var(--s-100)] pl-[var(--s-500)] text-[14px] text-[var(--text-default-heading)]">
-          <li>OpenUSD stages and resolved geometry payloads</li>
-          <li>PBR texture bundles and material bindings</li>
-          <li>Structured manifests with checksums and version pins</li>
-          <li>Bulk export jobs and batch artifact delivery</li>
-        </ul>
-        <p className="text-[13px] text-[var(--text-default-body)]">
-          Browse and inspect catalog metadata without export entitlements; downloads are disabled until provisioned.
-        </p>
-        <div className="sticky bottom-0 -mx-[var(--s-500)] mt-[var(--s-500)] flex flex-col items-stretch gap-[var(--s-300)] border-t border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-500)] pb-[max(var(--s-300),env(safe-area-inset-bottom))] pt-[var(--s-300)] sm:flex-row sm:flex-wrap sm:items-center sm:justify-center">
-          <Button
-            variant="primary"
-            className="w-full sm:w-auto sm:min-w-[200px]"
-            type="button"
-            onClick={() => {
-              onClose();
-              navigate("/environments/request-custom");
-            }}
-          >
-            Request Export Access
-          </Button>
-          <Button
-            variant="secondary"
-            className="w-full border-[var(--border-primary-default)] text-[var(--text-primary-default)] sm:w-auto sm:min-w-[200px]"
-            type="button"
-            onClick={() => {
-              onClose();
-              setTalkOpen(true);
-            }}
-          >
-            Talk to Team
-          </Button>
-        </div>
-      </div>
-    </CenterModal>
-    <TalkToTeamModal open={talkOpen} onClose={() => setTalkOpen(false)} context="export" />
-    </>
-  );
+  return <TalkToTeamModal open={open} onClose={onClose} context="general" />;
 }

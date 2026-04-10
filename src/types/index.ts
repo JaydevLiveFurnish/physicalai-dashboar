@@ -79,6 +79,12 @@ export interface EnvironmentEntity {
   catalogDescription?: string;
   /** Environment thumbnail image shown on library cards */
   catalogThumbnailUrl?: string;
+  /** Category pill (e.g. Kitchen, Retail) on catalog rows */
+  catalogCategory?: string;
+  /** Stats row — models */
+  catalogModelsLabel?: string;
+  /** Stats row — joints */
+  catalogJointsLabel?: string;
 }
 
 export interface SystemOverview {

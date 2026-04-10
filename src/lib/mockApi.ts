@@ -12,54 +12,12 @@ import type {
 } from "@/types";
 
 import { MOCK_MATERIALS, MOCK_PROPS } from "@/data/mockCatalog";
+import { ENVIRONMENT_CATALOG_PLACEHOLDERS } from "@/data/environmentCatalog";
+import { getBrokenBatchRulesFromRequest } from "@/kitchen/params";
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-/** Default rows for the environment library grid when the API returns nothing */
-export const ENVIRONMENT_CATALOG_PLACEHOLDERS: EnvironmentEntity[] = [
-  {
-    id: "env-kitchen-v2",
-    name: "Kitchen",
-    parameterCount: 13,
-    totalCombinations: 3_800_000,
-    lastGeneratedAt: new Date(Date.now() - 3600_000).toISOString(),
-    status: "active",
-    catalogIcon: "kitchen",
-    catalogEyebrow: "Interactive workspace",
-    catalogDescription: "Configure layouts, run batches, and download simulation-ready outputs.",
-    catalogThumbnailUrl: "/assets/environments/kitchen.jpg",
-  },
-  {
-    id: "env-living-soon",
-    name: "Living Room",
-    parameterCount: 9,
-    totalCombinations: 420_000,
-    lastGeneratedAt: "",
-    status: "soon",
-    catalogDescription: "This environment is available as part of the full platform.",
-    catalogThumbnailUrl: "/assets/environments/livingroom.png",
-  },
-  {
-    id: "env-warehouse-soon",
-    name: "Warehouse",
-    parameterCount: 11,
-    totalCombinations: 890_000,
-    lastGeneratedAt: "",
-    status: "soon",
-    catalogDescription: "This environment is available as part of the full platform.",
-    catalogThumbnailUrl: "/assets/environments/warehouse.png",
-  },
-  {
-    id: "env-retail-soon",
-    name: "Retail Store",
-    parameterCount: 8,
-    totalCombinations: 310_000,
-    lastGeneratedAt: "",
-    status: "soon",
-    catalogDescription: "This environment is available as part of the full platform.",
-    catalogThumbnailUrl: "/assets/environments/store.png",
-  },
-];
+export { ENVIRONMENT_CATALOG_PLACEHOLDERS };
 
 let jobsStore: GenerationJob[] = [
   {
@@ -238,23 +196,9 @@ export async function generateScene(
   };
 }
 
-const RULES: { test: (sel: Record<string, string[]>) => boolean; message: string }[] = [
-  {
-    test: (sel) => {
-      const layout = sel["Layout"] ?? [];
-      const island = sel["Island"] ?? [];
-      return layout.includes("U-Shape") && island.includes("true");
-    },
-    message: "U-Shape + island violates clearance rule CR-09",
-  },
-];
-
 export async function runBatchJob(req: BatchJobRequest): Promise<BatchJobResult> {
   await delay(700);
-  const invalidRules: string[] = [];
-  for (const r of RULES) {
-    if (r.test(req.selections)) invalidRules.push(r.message);
-  }
+  const invalidRules = getBrokenBatchRulesFromRequest(req.selections);
   let product = 1;
   for (const vals of Object.values(req.selections)) {
     const c = vals.length;

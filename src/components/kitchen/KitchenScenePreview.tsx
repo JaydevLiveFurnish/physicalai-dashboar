@@ -8,25 +8,10 @@ type KitchenScenePreviewProps = {
 };
 
 function formatConfiguratorHeadline(values: Record<KitchenParamKey, string>): string {
-  const layout =
-    values.Layout === "L-Shape"
-      ? "L-Shaped"
-      : values.Layout === "U-Shape"
-        ? "U-Shaped"
-        : "Galley";
-  const door = values["Door Style"]
-    .replace(" Minimal", "")
-    .replace(" Modern", "")
-    .replace(" Raised", "");
-  const finish =
-    values["Cabinet Finish"] === "Matte Bone"
-      ? "White Oak"
-      : values["Cabinet Finish"] === "Walnut Veneer"
-        ? "Walnut"
-        : values["Cabinet Finish"] === "Graphite"
-          ? "Graphite"
-          : values["Cabinet Finish"];
-  const island = values.Island === "true" ? " · Island" : "";
+  const layout = values.Layout ?? "L-Shaped";
+  const door = values["Door Style"] ?? "Shaker";
+  const finish = values["Cabinet Finish"] ?? "White Oak";
+  const island = values.Island?.startsWith("No") ? "" : ` · ${values.Island ?? ""}`;
   return `3D Configurator — ${layout}, ${door}, ${finish}${island}`;
 }
 

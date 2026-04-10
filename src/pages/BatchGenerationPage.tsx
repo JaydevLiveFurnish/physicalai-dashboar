@@ -1,6 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
-import { defaultKitchenValues, KITCHEN_PARAMETER_GROUPS } from "@/kitchen/params";
+import { useEffect, useMemo, useState } from "react";
+import {
+  defaultKitchenValues,
+  getBrokenBatchRules,
+  KITCHEN_BATCH_RULE_DISPLAY,
+  KITCHEN_PARAMETER_GROUPS,
+} from "@/kitchen/params";
 import type { KitchenParamKey } from "@/kitchen/params";
 import { fetchJobs, runBatchJob } from "@/lib/mockApi";
 import { KITCHEN_LIMITS, remaining, tryConsume } from "@/lib/kitchenLimits";
@@ -16,6 +21,10 @@ import { useAuth } from "@/context/AuthContext";
 import { canUseFeature, FULL_ACCESS_TOOLTIP } from "@/lib/access";
 
 const ALL_KEYS = Object.keys(defaultKitchenValues()) as KitchenParamKey[];
+
+const BATCH_GENERATE_COUNT = 500;
+
+const GRID_PREVIEW = 12;
 
 function initialSelections(): Record<KitchenParamKey, string[]> {
   const base = defaultKitchenValues();
@@ -35,33 +44,42 @@ function combinationCount(sel: Record<KitchenParamKey, string[]>) {
   return n;
 }
 
-/** Sum of selected values across parameters in a group (for concise group-level copy). */
-function countSelectedValuesInGroup(
-  groupParams: Record<string, readonly string[]>,
-  selections: Record<KitchenParamKey, string[]>,
-): number {
-  let n = 0;
-  for (const key of Object.keys(groupParams) as KitchenParamKey[]) {
-    n += selections[key]?.length ?? 0;
-  }
-  return n;
+function OrangeCheckbox({
+  checked,
+  onToggle,
+  label,
+}: {
+  checked: boolean;
+  onToggle: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={checked}
+      onClick={onToggle}
+      className="flex w-full cursor-pointer items-start gap-[var(--s-200)] rounded-br100 py-[6px] text-left text-[13px] text-[var(--text-default-body)] transition-colors hover:bg-[var(--surface-page-secondary)]"
+    >
+      <span
+        className={[
+          "mt-[2px] flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-[5px] border-2 transition-[background-color,border-color] duration-200",
+          checked
+            ? "border-[var(--papaya-500)] bg-[var(--papaya-500)] text-white"
+            : "border-[var(--border-default-secondary)] bg-[var(--surface-default)]",
+        ].join(" ")}
+        aria-hidden
+      >
+        {checked ? (
+          <span className="material-symbols-outlined !text-[14px] leading-none">check</span>
+        ) : null}
+      </span>
+      <span className="leading-snug">{label}</span>
+    </button>
+  );
 }
-
-function valuesSelectedPhrase(n: number) {
-  return n === 1 ? "1 value selected" : `${n} values selected`;
-}
-
-const PREVIEW_RULES = [
-  {
-    id: "CR-09",
-    test: (s: Record<KitchenParamKey, string[]>) =>
-      s.Layout?.includes("U-Shape") && s.Island?.includes("true"),
-    message: "U-Shape + island violates clearance rule CR-09",
-  },
-];
 
 export type BatchGenerationPageProps = {
-  /** When true, omit page header (used inside environment workspace). */
   embedded?: boolean;
 };
 
@@ -72,6 +90,9 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
   const [talkOpen, setTalkOpen] = useState(false);
   const batchAllowed = canUseFeature(accessTier, "batch_submit");
 
+  const [simProgress, setSimProgress] = useState(0);
+  const [simActive, setSimActive] = useState(false);
+
   const jobs = useQuery({
     queryKey: ["jobs"],
     queryFn: fetchJobs,
@@ -80,11 +101,8 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
   });
 
   const rawCount = useMemo(() => combinationCount(selections), [selections]);
-  const batchLeft = remaining("batchRuns");
-  const brokenRules = useMemo(
-    () => PREVIEW_RULES.filter((r) => r.test(selections)).map((r) => r.message),
-    [selections],
-  );
+  const brokenRules = useMemo(() => getBrokenBatchRules(selections), [selections]);
+  const validCombinations = brokenRules.length ? 0 : rawCount;
 
   const mutation = useMutation({
     mutationFn: () =>
@@ -92,8 +110,26 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
         environmentId: "env-kitchen-v2",
         selections: selections as unknown as Record<string, string[]>,
       }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["jobs"] }),
+    onSuccess: (data) => {
+      qc.invalidateQueries({ queryKey: ["jobs"] });
+      if (data.validCombinations > 0 && !data.invalidRules.length) {
+        setSimActive(true);
+        setSimProgress(0);
+      }
+    },
   });
+
+  useEffect(() => {
+    if (!simActive) return;
+    if (simProgress >= BATCH_GENERATE_COUNT) {
+      setSimActive(false);
+      return;
+    }
+    const id = window.setTimeout(() => {
+      setSimProgress((p) => Math.min(BATCH_GENERATE_COUNT, p + Math.max(1, Math.ceil((BATCH_GENERATE_COUNT - p) / 25))));
+    }, 45);
+    return () => window.clearTimeout(id);
+  }, [simActive, simProgress]);
 
   const toggleValue = (key: KitchenParamKey, value: string) => {
     setSelections((prev) => {
@@ -105,195 +141,160 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
     });
   };
 
+  const batchLeft = remaining("batchRuns");
+
   const headerBlock =
     embedded ? null : (
       <PageHeader
         title="Batch variations"
-        titleAfter={
-          !batchAllowed ? (
-            <PreviewModeBadge title={FULL_ACCESS_TOOLTIP} />
-          ) : null
-        }
+        titleAfter={!batchAllowed ? <PreviewModeBadge title={FULL_ACCESS_TOOLTIP} /> : null}
         description="Pick parameter ranges to define combinations. The system checks layout rules before you queue runs."
       />
     );
 
+  const showGenGrid = simActive || simProgress >= BATCH_GENERATE_COUNT;
+
   return (
-    <div className="space-y-[var(--s-500)]">
+    <div className={embedded ? "space-y-[var(--s-400)]" : "space-y-[var(--s-500)]"}>
       {headerBlock}
 
-      <section className="space-y-[var(--s-300)]" aria-labelledby="batch-setup-heading">
-        <h2 id="batch-setup-heading" className="text-[15px] font-semibold text-[var(--text-default-heading)]">
-          Batch setup
-        </h2>
-        <p className="text-[13px] text-[var(--text-default-body)]">
-          Each selected value multiplies with the others. Invalid combinations are flagged before you run a batch.
-        </p>
-        <div className="grid gap-[var(--s-400)] lg:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="space-y-[var(--s-300)]">
+      <div
+        className={
+          embedded
+            ? "flex flex-col gap-[var(--s-400)] lg:flex-row lg:items-start"
+            : "grid gap-[var(--s-400)] lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)] lg:items-start"
+        }
+      >
+        <aside
+          className={`order-2 w-full shrink-0 space-y-[var(--s-400)] lg:order-1 ${
+            embedded ? "lg:max-w-[340px]" : ""
+          }`}
+        >
+          <div className="max-h-[min(520px,calc(100dvh-16rem))] space-y-[var(--s-500)] overflow-y-auto pr-[var(--s-100)] [-webkit-overflow-scrolling:touch] lg:max-h-[calc(100dvh-14rem)]">
             {(Object.entries(KITCHEN_PARAMETER_GROUPS) as [string, Record<string, readonly string[]>][]).map(
-              ([group, params]) => {
-                const selectedInGroup = countSelectedValuesInGroup(params, selections);
-                return (
-                  <Card key={group} title={group}>
-                    <p className="mb-[var(--s-300)] text-[12px] text-[var(--text-default-body)]">
-                      <span className="font-medium text-[var(--text-default-heading)]">
-                        {valuesSelectedPhrase(selectedInGroup)}
-                      </span>
-                    </p>
-                    <div className="space-y-[var(--s-400)]">
-                      {Object.entries(params).map(([param, opts]) => {
-                        const key = param as KitchenParamKey;
-                        return (
-                          <div key={param}>
-                            <p className="mb-[var(--s-200)] text-[13px] font-medium text-[var(--text-default-heading)]">
-                              {param}
-                            </p>
-                            <div className="flex flex-wrap gap-[var(--s-200)]">
-                              {opts.map((opt) => {
-                                const active = selections[key]?.includes(opt);
-                                return (
-                                  <button
-                                    key={opt}
-                                    type="button"
-                                    onClick={() => toggleValue(key, opt)}
-                                    className={`rounded-br100 border px-[var(--s-300)] py-[var(--s-100)] text-[12px] transition-[color,background-color,border-color] duration-250 ease-out ${
-                                      active
-                                        ? "border-[var(--border-primary-default)] bg-[var(--surface-primary-default-subtle)] text-[var(--text-default-heading)]"
-                                        : "border-[var(--border-default-secondary)] bg-[var(--surface-default)] text-[var(--text-default-body)]"
-                                    }`}
-                                  >
-                                    {opt}
-                                  </button>
-                                );
-                              })}
-                            </div>
+              ([group, params]) => (
+                <section key={group} className="space-y-[var(--s-300)]">
+                  <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--text-default-heading)]">
+                    {group}
+                  </h3>
+                  <div className="space-y-[var(--s-400)]">
+                    {Object.entries(params).map(([param, opts]) => {
+                      const key = param as KitchenParamKey;
+                      return (
+                        <div key={param}>
+                          <p className="mb-[var(--s-200)] text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--text-default-placeholder)]">
+                            {param}
+                          </p>
+                          <div className="flex flex-col gap-[2px]">
+                            {opts.map((opt) => (
+                              <OrangeCheckbox
+                                key={opt}
+                                label={opt}
+                                checked={Boolean(selections[key]?.includes(opt))}
+                                onToggle={() => toggleValue(key, opt)}
+                              />
+                            ))}
                           </div>
-                        );
-                      })}
-                    </div>
-                  </Card>
-                );
-              },
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+              ),
             )}
           </div>
 
-          <div className="space-y-[var(--s-400)]">
-            <section aria-labelledby="summary-heading">
-              <h2 id="summary-heading" className="text-[15px] font-semibold text-[var(--text-default-heading)]">
-                Summary
-              </h2>
-              <Card className="mt-[var(--s-300)]">
-                <dl className="space-y-[var(--s-200)] text-[13px]">
-                  <div className="flex justify-between gap-[var(--s-400)]">
-                    <dt className="text-[var(--text-default-body)]">Combinations</dt>
-                    <dd className="font-mono text-[var(--text-default-heading)]">{rawCount.toLocaleString()}</dd>
-                  </div>
-                  {batchAllowed ? (
-                    <div className="flex justify-between gap-[var(--s-400)]">
-                      <dt className="text-[var(--text-default-body)]">Batch runs left</dt>
-                      <dd className="font-mono text-[var(--text-default-heading)]">
-                        {batchLeft} / {KITCHEN_LIMITS.batchRuns}
-                      </dd>
-                    </div>
-                  ) : null}
-                  <div className="flex justify-between gap-[var(--s-400)]">
-                    <dt className="text-[var(--text-default-body)]">Rule check</dt>
-                    <dd
-                      className={
-                        brokenRules.length ? "text-[var(--text-error-default)]" : "text-[var(--text-success-default)]"
-                      }
-                    >
-                      {brokenRules.length ? "Invalid setup" : "Valid"}
-                    </dd>
-                  </div>
-                </dl>
-                <div className="mt-[var(--s-400)] border-t border-[var(--border-default-secondary)] pt-[var(--s-400)]">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--text-default-placeholder)]">
-                    Calculation method
-                  </p>
-                  <p className="mt-[var(--s-200)] text-[12px] leading-[18px] text-[var(--text-default-body)]">
-                    Multiply selections across Layout, Style, and Appliances. Constraints such as clearance rules can mark a setup invalid even when the count is non-zero.
-                  </p>
-                </div>
-                {brokenRules.length ? (
-                  <ul className="mt-[var(--s-300)] list-disc space-y-[var(--s-100)] pl-[var(--s-400)] text-[12px] text-[var(--text-error-default)]">
-                    {brokenRules.map((m) => (
-                      <li key={m}>{m}</li>
-                    ))}
-                  </ul>
-                ) : null}
-              </Card>
-            </section>
+          <section className="space-y-[var(--s-300)] rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] p-[var(--s-400)]">
+            <div className="text-center">
+              <p className="text-[clamp(1.75rem,4vw,2.25rem)] font-bold leading-none text-[var(--papaya-500)]">
+                {validCombinations.toLocaleString()}
+              </p>
+              <p className="mt-[var(--s-200)] text-[13px] text-[var(--text-default-body)]">valid combinations</p>
+              {brokenRules.length ? (
+                <p className="mt-[var(--s-200)] text-[12px] text-[var(--text-error-default)]">
+                  Rule conflicts — adjust selections (raw product {rawCount.toLocaleString()})
+                </p>
+              ) : null}
+            </div>
 
-            <section aria-labelledby="batch-run-heading">
-              <h2 id="batch-run-heading" className="text-[15px] font-semibold text-[var(--text-default-heading)]">
-                Run batch generation
-              </h2>
-              <div className="mt-[var(--s-300)] rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] p-[var(--s-400)]">
-                {!batchAllowed ? (
-                  <>
-                    <p className="text-[13px] leading-[20px] text-[var(--text-default-body)]">
-                      You can explore parameter combinations and validation here. Executing a batch requires full access.
-                    </p>
-                    <p className="mt-[var(--s-200)] text-[13px] font-medium leading-[20px] text-[var(--text-default-heading)]">
-                      Batch generation requires full access
-                    </p>
-                    <div className="mt-[var(--s-400)] flex flex-col gap-[var(--s-300)]">
-                      <Button variant="primary" type="button" className="w-full justify-center" onClick={() => setTalkOpen(true)}>
-                        Talk to Team
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        type="button"
-                        className="w-full justify-center border-dashed opacity-80"
-                        disabled
-                        title={FULL_ACCESS_TOOLTIP}
-                      >
-                        Run Batch Job
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      variant="primary"
-                      className="inline-flex w-full items-center justify-center gap-[var(--s-200)]"
-                      disabled={mutation.isPending || Boolean(brokenRules.length) || batchLeft === 0}
-                      onClick={() => {
-                        if (!tryConsume("batchRuns")) {
-                          setTalkOpen(true);
-                          return;
-                        }
-                        mutation.reset();
-                        mutation.mutate();
-                      }}
-                    >
-                      {mutation.isPending ? "Running…" : "Run Batch Job"}
-                    </Button>
-                    {mutation.isError ? (
-                      <p className="mt-[var(--s-300)] text-[13px] text-[var(--text-error-default)]" role="alert">
-                        Could not queue the job.{" "}
-                        <button
-                          type="button"
-                          className="font-medium underline underline-offset-2"
-                          onClick={() => mutation.reset()}
-                        >
-                          Dismiss
-                        </button>
-                      </p>
-                    ) : null}
-                    {mutation.data ? (
-                      <p className="mt-[var(--s-300)] font-mono text-[12px] text-[var(--text-default-body)]">
-                        job {mutation.data.jobId} · valid {mutation.data.validCombinations.toLocaleString()}
-                        {mutation.data.invalidRules.length ? ` · rules ${mutation.data.invalidRules.join("; ")}` : ""}
-                      </p>
-                    ) : null}
-                  </>
-                )}
+            <ul className="space-y-[var(--s-200)] text-[12px] leading-[18px] text-[var(--text-default-body)]">
+              {KITCHEN_BATCH_RULE_DISPLAY.map((rule) => (
+                <li
+                  key={rule}
+                  className="rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-200)]"
+                >
+                  <span className="font-semibold text-[var(--papaya-500)]">Rule: </span>
+                  {rule}
+                </li>
+              ))}
+            </ul>
+
+            {!batchAllowed ? (
+              <div className="space-y-[var(--s-300)]">
+                <p className="text-[13px] leading-[20px] text-[var(--text-default-body)]">
+                  You can explore parameter combinations and validation here. Executing a batch requires full access.
+                </p>
+                <Button variant="primary" type="button" className="w-full justify-center" onClick={() => setTalkOpen(true)}>
+                  Talk to Team
+                </Button>
+                <Button variant="secondary" type="button" className="w-full justify-center border-dashed opacity-80" disabled title={FULL_ACCESS_TOOLTIP}>
+                  Generate batch
+                </Button>
               </div>
-            </section>
+            ) : (
+              <Button
+                variant="primary"
+                className="w-full justify-center px-[var(--s-200)] py-[var(--s-300)] text-[14px] font-semibold"
+                disabled={
+                  mutation.isPending || Boolean(brokenRules.length) || batchLeft === 0 || validCombinations === 0
+                }
+                onClick={() => {
+                  if (!tryConsume("batchRuns")) {
+                    setTalkOpen(true);
+                    return;
+                  }
+                  mutation.reset();
+                  setSimProgress(0);
+                  setSimActive(false);
+                  mutation.mutate();
+                }}
+              >
+                {mutation.isPending
+                  ? "Queueing…"
+                  : `Generate ${BATCH_GENERATE_COUNT.toLocaleString()} of ${validCombinations.toLocaleString()} variations`}
+              </Button>
+            )}
 
+            {batchAllowed ? (
+              <p className="text-center text-[12px] text-[var(--text-default-body)]">
+                Batch runs left:{" "}
+                <span className="font-mono font-medium text-[var(--text-default-heading)]">
+                  {batchLeft} / {KITCHEN_LIMITS.batchRuns}
+                </span>
+              </p>
+            ) : null}
+
+            {mutation.isError ? (
+              <p className="text-center text-[13px] text-[var(--text-error-default)]" role="alert">
+                Could not queue the job.{" "}
+                <button
+                  type="button"
+                  className="font-medium underline underline-offset-2"
+                  onClick={() => mutation.reset()}
+                >
+                  Dismiss
+                </button>
+              </p>
+            ) : null}
+            {mutation.data ? (
+              <p className="text-center font-mono text-[11px] text-[var(--text-default-body)]">
+                Job {mutation.data.jobId}
+                {mutation.data.invalidRules.length ? ` · ${mutation.data.invalidRules.join("; ")}` : ""}
+              </p>
+            ) : null}
+          </section>
+
+          {!embedded ? (
             <section aria-labelledby="job-queue-heading">
               <h2 id="job-queue-heading" className="text-[15px] font-semibold text-[var(--text-default-heading)]">
                 Job queue
@@ -357,9 +358,125 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
                 </ul>
               )}
             </section>
-          </div>
-        </div>
-      </section>
+          ) : null}
+        </aside>
+
+        <main className={`order-1 min-w-0 flex-1 space-y-[var(--s-400)] lg:order-2 ${embedded ? "" : ""}`}>
+          {embedded ? (
+            <div className="rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] p-[var(--s-400)]">
+              {!showGenGrid ? (
+                <div className="flex min-h-[280px] flex-col items-center justify-center gap-[var(--s-300)] text-center">
+                  <span className="material-symbols-outlined text-[40px] text-[var(--text-default-placeholder)]" aria-hidden>
+                    deployed_code
+                  </span>
+                  <p className="max-w-[36ch] text-[14px] text-[var(--text-default-body)]">
+                    Select parameters on the left, then generate. Variations appear here with progress while the batch runs.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--grey-100)]">
+                      <div
+                        className="h-full rounded-full bg-[var(--papaya-500)] transition-[width] duration-200 ease-out"
+                        style={{
+                          width: `${Math.min(100, (simProgress / BATCH_GENERATE_COUNT) * 100)}%`,
+                        }}
+                      />
+                    </div>
+                    <p className="mt-[var(--s-200)] text-[13px] text-[var(--text-default-body)]">
+                      {simProgress >= BATCH_GENERATE_COUNT ? (
+                        <>Complete — {BATCH_GENERATE_COUNT.toLocaleString()} / {BATCH_GENERATE_COUNT.toLocaleString()}</>
+                      ) : (
+                        <>
+                          Generating… {simProgress.toLocaleString()} / {BATCH_GENERATE_COUNT.toLocaleString()}
+                        </>
+                      )}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-[var(--s-300)] sm:grid-cols-3 xl:grid-cols-4">
+                    {Array.from({ length: GRID_PREVIEW }).map((_, i) => {
+                      const n = i + 1;
+                      const id = `VAR-${String(n).padStart(4, "0")}`;
+                      const threshold = ((n - 1) / GRID_PREVIEW) * BATCH_GENERATE_COUNT;
+                      const ready = simProgress > threshold || simProgress >= BATCH_GENERATE_COUNT;
+                      return (
+                        <div
+                          key={id}
+                          className="flex flex-col items-center overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-200)] py-[var(--s-400)] text-center"
+                        >
+                          <span className="material-symbols-outlined text-[22px] text-[var(--text-default-placeholder)]" aria-hidden>
+                            kitchen
+                          </span>
+                          <p className="mt-[var(--s-200)] font-mono text-[12px] text-[var(--text-default-body)]">{id}</p>
+                          <p
+                            className={`mt-[var(--s-200)] text-[12px] font-semibold ${
+                              ready ? "text-[var(--text-success-default)]" : "text-[var(--text-default-placeholder)]"
+                            }`}
+                          >
+                            {ready ? "Ready" : "Queued"}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <Card title="Batch output">
+              {!showGenGrid ? (
+                <p className="text-[13px] text-[var(--text-default-body)]">
+                  Queue a valid batch to simulate variation tiles and progress here.
+                </p>
+              ) : (
+                <>
+                  <div className="mb-[var(--s-400)]">
+                    <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--grey-100)]">
+                      <div
+                        className="h-full rounded-full bg-[var(--papaya-500)] transition-[width] duration-200 ease-out"
+                        style={{
+                          width: `${Math.min(100, (simProgress / BATCH_GENERATE_COUNT) * 100)}%`,
+                        }}
+                      />
+                    </div>
+                    <p className="mt-[var(--s-200)] text-[13px] text-[var(--text-default-body)]">
+                      Generating… {simProgress.toLocaleString()} / {BATCH_GENERATE_COUNT.toLocaleString()}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-[var(--s-300)] sm:grid-cols-3 lg:grid-cols-4">
+                    {Array.from({ length: GRID_PREVIEW }).map((_, i) => {
+                      const n = i + 1;
+                      const id = `VAR-${String(n).padStart(4, "0")}`;
+                      const threshold = ((n - 1) / GRID_PREVIEW) * BATCH_GENERATE_COUNT;
+                      const ready = simProgress > threshold || simProgress >= BATCH_GENERATE_COUNT;
+                      return (
+                        <div
+                          key={id}
+                          className="flex flex-col items-center rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-200)] py-[var(--s-400)] text-center"
+                        >
+                          <span className="material-symbols-outlined text-[22px] text-[var(--text-default-placeholder)]" aria-hidden>
+                            kitchen
+                          </span>
+                          <p className="mt-[var(--s-200)] font-mono text-[12px] text-[var(--text-default-body)]">{id}</p>
+                          <p
+                            className={`mt-[var(--s-200)] text-[12px] font-semibold ${
+                              ready ? "text-[var(--text-success-default)]" : "text-[var(--text-default-placeholder)]"
+                            }`}
+                          >
+                            {ready ? "Ready" : "Queued"}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+            </Card>
+          )}
+        </main>
+      </div>
 
       <TalkToTeamModal open={talkOpen} onClose={() => setTalkOpen(false)} context="batch" />
     </div>

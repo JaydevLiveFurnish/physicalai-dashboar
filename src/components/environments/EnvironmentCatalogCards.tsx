@@ -1,35 +1,29 @@
 import { Link } from "react-router-dom";
 import { StaggerFadeGroup } from "@/components/layout/StaggerFadeGroup";
-import { Badge } from "@/components/ui/Badge";
 import type { EnvironmentEntity } from "@/types";
 import type { AccessTier } from "@/lib/access";
+import { environmentWorkspaceHref } from "@/lib/environmentWorkspaceHref";
 
-const cardShell =
-  "flex flex-col overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] text-left";
+const tx = "transition-[color,background-color,opacity,transform] duration-200 ease-out";
 
-const heroSoon = "relative flex min-h-[140px] shrink-0 items-center justify-center bg-[var(--surface-page-secondary)] md:min-h-[160px]";
-const heroActive =
-  "relative flex min-h-[140px] shrink-0 items-center justify-center bg-[color-mix(in_srgb,var(--papaya-500)_12%,var(--surface-page-secondary))] md:min-h-[160px]";
+const categoryPill =
+  "inline-flex shrink-0 items-center rounded-full bg-[color-mix(in_srgb,var(--papaya-500)_14%,#ffffff)] px-[10px] py-[4px] text-[11px] font-semibold uppercase tracking-[0.06em] text-[#9a3412]";
 
-const txPrimaryCta =
-  "inline-flex items-center justify-center gap-[var(--s-200)] rounded-br100 bg-[var(--surface-primary-default)] px-[var(--s-400)] py-[var(--s-200)] text-[14px] font-medium text-[var(--text-on-color-body)] transition-[background-color,opacity,transform] duration-250 ease-out hover:bg-[var(--surface-primary-default-hover)] active:scale-[0.99]";
+const statPill =
+  "inline-flex items-center rounded-full border border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[10px] py-[6px] text-[12px] font-medium text-[var(--text-default-body)]";
 
-function environmentPath(id: string): string {
-  if (id === "env-kitchen-v2") return "/environments/kitchen/configure";
-  if (id.startsWith("env-living")) return "/environments/living-room/configure";
-  if (id.startsWith("env-warehouse")) return "/environments/warehouse/configure";
-  if (id.startsWith("env-retail")) return "/environments/retail-store/configure";
-  return "/environments/kitchen/configure";
-}
+const detailLink =
+  `inline-flex items-center gap-[2px] text-[13px] font-semibold text-[var(--text-primary-default)] hover:text-[var(--text-default-heading)] ${tx}`;
+
+const requestShell =
+  "flex flex-col gap-[var(--s-400)] overflow-hidden rounded-br200 border-2 border-dashed border-[var(--border-primary-default)] bg-[var(--surface-default)] p-[var(--s-400)] shadow-[0_1px_3px_rgba(0,0,0,0.04)] sm:flex-row sm:items-center sm:gap-[var(--s-500)] sm:p-[var(--s-500)]";
 
 type EnvironmentCatalogCardsProps = {
   environments: EnvironmentEntity[];
   accessTier: AccessTier;
-  /** Show dashed “Request a Custom Scene” tile (hide on `/environments/request-custom`) */
   showRequestCard?: boolean;
   requestCustomHref?: string;
   onRequestCustom?: () => void;
-  /** Locked (non-live) tiles open Talk to Team instead of navigating to a workspace */
   onLockedEnvironmentClick?: () => void;
 };
 
@@ -44,97 +38,67 @@ export function EnvironmentCatalogCards({
   void accessTier;
 
   return (
-    <StaggerFadeGroup staggerMs={150} className="grid gap-[var(--s-400)] sm:grid-cols-2 xl:grid-cols-3">
+    <StaggerFadeGroup staggerMs={80} className="flex flex-col gap-[var(--s-400)]">
       {environments.map((e) => {
-        const isActive = e.status === "active";
-        const title = e.name;
+        const href = environmentWorkspaceHref(e);
         const description =
           e.catalogDescription ??
-          (isActive
-            ? "Configure parameters, generate scenes, and export SimReady assets."
-            : "This environment is available as part of the full platform.");
-        const eyebrow = e.catalogEyebrow;
-        const icon = e.catalogIcon ?? "view_in_ar";
-        const thumbnailUrl = e.catalogThumbnailUrl;
+          "Configure parameters, generate scenes, and export simulation-ready outputs.";
+        const category = e.catalogCategory ?? "Environment";
+        const models = e.catalogModelsLabel ?? "—";
+        const joints = e.catalogJointsLabel ?? "—";
+        const thumb = e.catalogThumbnailUrl;
+
+        const detailsControl =
+          href != null ? (
+            <Link to={href} className={detailLink}>
+              View details
+              <span aria-hidden>→</span>
+            </Link>
+          ) : onLockedEnvironmentClick ? (
+            <button type="button" onClick={() => onLockedEnvironmentClick()} className={detailLink}>
+              View details
+              <span aria-hidden>→</span>
+            </button>
+          ) : (
+            <Link to={requestCustomHref} className={detailLink}>
+              View details
+              <span aria-hidden>→</span>
+            </Link>
+          );
 
         return (
-          <article key={e.id} className={cardShell}>
-            <div className={isActive ? heroActive : heroSoon}>
-              {thumbnailUrl ? (
-                <>
-                  <img
-                    src={thumbnailUrl}
-                    alt={`${e.name} environment`}
-                    className="absolute inset-0 h-full w-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/15 to-black/25" />
-                </>
-              ) : null}
-              <div className="absolute left-[var(--s-300)] top-[var(--s-300)] z-[1]">
-                {isActive ? (
-                  <Badge variant="live">Live</Badge>
-                ) : (
-                  <span className="inline-flex items-center gap-[6px] rounded-full bg-[#f5efd2] px-[10px] py-[4px] text-[12px] font-semibold uppercase tracking-[0.02em] text-[#60511d]">
-                    <span className="material-symbols-outlined text-[14px]" aria-hidden>
-                      lock
-                    </span>
-                    Locked
+          <article
+            key={e.id}
+            className="flex flex-col overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] shadow-[0_1px_3px_rgba(0,0,0,0.06)] sm:flex-row"
+          >
+            <div className="relative h-[200px] w-full shrink-0 overflow-hidden bg-[var(--surface-page-secondary)] sm:h-auto sm:min-h-[220px] sm:w-[min(38vw,300px)] sm:max-w-[300px]">
+              {thumb ? (
+                <img src={thumb} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex h-full min-h-[200px] items-center justify-center text-[var(--text-default-placeholder)]">
+                  <span className="material-symbols-outlined text-[48px]" aria-hidden>
+                    view_in_ar
                   </span>
-                )}
-              </div>
-              {isActive && !thumbnailUrl ? (
-                <span
-                  className="material-symbols-outlined text-[64px] text-[var(--papaya-500)]/90"
-                  aria-hidden
-                >
-                  {icon}
-                </span>
-              ) : null}
+                </div>
+              )}
             </div>
 
-            <div className="flex flex-1 flex-col gap-[var(--s-200)] p-[var(--s-400)]">
-              <div className="flex flex-wrap items-center gap-[var(--s-200)]">
-                <h2 className="text-[16px] font-semibold leading-snug text-[var(--text-default-heading)]">
-                  {title}
-                </h2>
+            <div className="flex min-w-0 flex-1 flex-col gap-[var(--s-300)] p-[var(--s-400)] sm:justify-between sm:py-[var(--s-500)] sm:pl-[var(--s-500)] sm:pr-[var(--s-500)]">
+              <div className="space-y-[var(--s-200)]">
+                <div className="flex flex-wrap items-center gap-[var(--s-200)]">
+                  <h2 className="text-[17px] font-semibold leading-snug text-[var(--text-default-heading)]">{e.name}</h2>
+                  <span className={categoryPill}>{category}</span>
+                </div>
+                <p className="text-[13px] leading-[20px] text-[var(--text-default-body)]">{description}</p>
               </div>
 
-              {eyebrow ? (
-                <p className="text-[12px] font-medium leading-[18px] text-[var(--text-primary-default)]">
-                  {eyebrow}
-                </p>
-              ) : null}
-
-              <p className="flex-1 text-[13px] leading-[20px] text-[var(--text-default-body)]">{description}</p>
-
-              <div className="pt-[var(--s-100)]">
-                {isActive ? (
-                  <Link to={environmentPath(e.id)} className={txPrimaryCta}>
-                    {e.id === "env-kitchen-v2" ? "Open Kitchen" : "Open"}
-                    <span className="material-symbols-outlined text-[18px]" aria-hidden>
-                      arrow_forward
-                    </span>
-                  </Link>
-                ) : onLockedEnvironmentClick ? (
-                  <button type="button" className={txPrimaryCta} onClick={() => onLockedEnvironmentClick()}>
-                    Talk to Team
-                    <span className="material-symbols-outlined text-[18px]" aria-hidden>
-                      arrow_forward
-                    </span>
-                  </button>
-                ) : (
-                  <Link to={environmentPath(e.id)} className={txPrimaryCta}>
-                    View
-                    <span className="material-symbols-outlined text-[18px]" aria-hidden>
-                      arrow_forward
-                    </span>
-                  </Link>
-                )}
-                {!isActive ? (
-                  <p className="mt-[var(--s-200)] text-[12px] text-[var(--text-default-body)]">
-                    Available with full access
-                  </p>
-                ) : null}
+              <div className="flex flex-col gap-[var(--s-300)] pt-[var(--s-100)] sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+                <div className="flex flex-wrap gap-[var(--s-200)]">
+                  <span className={statPill}>{models}</span>
+                  <span className={statPill}>{joints}</span>
+                </div>
+                <div className="sm:ml-auto">{detailsControl}</div>
               </div>
             </div>
           </article>
@@ -142,39 +106,36 @@ export function EnvironmentCatalogCards({
       })}
 
       {showRequestCard ? (
-        <div
-          className={`${cardShell} border-2 border-dashed border-[var(--border-primary-default)] transition-[background-color,box-shadow] duration-200 hover:bg-[var(--surface-primary-default-subtle)]`}
-        >
-          <div className="relative flex min-h-[140px] shrink-0 items-center justify-center border-b border-dashed border-[var(--border-primary-default)] bg-[var(--surface-default)] md:min-h-[160px]">
-            <span
-              className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[var(--border-primary-default)] text-[var(--text-primary-default)]"
-              aria-hidden
-            >
-              <span className="material-symbols-outlined text-[36px]">add</span>
-            </span>
+        <div className={requestShell}>
+          <div
+            className="flex h-14 w-14 shrink-0 items-center justify-center self-start rounded-full border-2 border-[var(--border-primary-default)] text-[var(--text-primary-default)] sm:self-center"
+            aria-hidden
+          >
+            <span className="material-symbols-outlined text-[28px]">add</span>
           </div>
-          <div className="flex flex-1 flex-col gap-[var(--s-200)] p-[var(--s-400)]">
-            <h2 className="text-[16px] font-semibold text-[var(--text-default-heading)]">Request New Environment</h2>
-            <p className="flex-1 text-[13px] leading-[20px] text-[var(--text-default-body)]">
+          <div className="min-w-0 flex-1 space-y-[var(--s-200)]">
+            <h2 className="text-[16px] font-semibold text-[var(--text-default-heading)]">Request new environment</h2>
+            <p className="text-[13px] leading-[20px] text-[var(--text-default-body)]">
               Tell us what you need for your simulation or robotics pipeline.
             </p>
-            <div className="pt-[var(--s-100)]">
-              {onRequestCustom ? (
-                <button type="button" className={txPrimaryCta} onClick={onRequestCustom}>
-                  Talk to Team
-                  <span className="material-symbols-outlined text-[18px]" aria-hidden>
-                    arrow_forward
-                  </span>
-                </button>
-              ) : (
-                <Link to={requestCustomHref} className={txPrimaryCta}>
-                  Talk to Team
-                  <span className="material-symbols-outlined text-[18px]" aria-hidden>
-                    arrow_forward
-                  </span>
-                </Link>
-              )}
-            </div>
+          </div>
+          <div className="shrink-0 sm:self-center">
+            {onRequestCustom ? (
+              <button
+                type="button"
+                onClick={onRequestCustom}
+                className="inline-flex w-full items-center justify-center rounded-br100 bg-[var(--surface-primary-default)] px-[var(--s-400)] py-[var(--s-200)] text-[14px] font-medium text-[var(--text-on-color-body)] transition-[background-color] duration-200 hover:bg-[var(--surface-primary-default-hover)] sm:w-auto"
+              >
+                Talk to Team
+              </button>
+            ) : (
+              <Link
+                to={requestCustomHref}
+                className="inline-flex w-full items-center justify-center rounded-br100 bg-[var(--surface-primary-default)] px-[var(--s-400)] py-[var(--s-200)] text-[14px] font-medium text-[var(--text-on-color-body)] sm:w-auto"
+              >
+                Talk to Team
+              </Link>
+            )}
           </div>
         </div>
       ) : null}

@@ -1,19 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { fetchEnvironments, ENVIRONMENT_CATALOG_PLACEHOLDERS } from "@/lib/mockApi";
 import { EnvironmentCatalogCards } from "@/components/environments/EnvironmentCatalogCards";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Card } from "@/components/ui/Card";
 import { RequestCustomSceneForm } from "@/components/environments/RequestCustomSceneForm";
+import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { useAuth } from "@/context/AuthContext";
 
 export function RequestCustomPage() {
   const { accessTier } = useAuth();
+  const [talkOpen, setTalkOpen] = useState(false);
   const envs = useQuery({ queryKey: ["environments"], queryFn: fetchEnvironments });
   const catalog =
     envs.data && envs.data.length > 0 ? envs.data : ENVIRONMENT_CATALOG_PLACEHOLDERS;
 
   return (
+    <>
     <div className="space-y-[var(--s-500)]">
       <PageHeader
         title="Request a Custom Scene"
@@ -28,9 +32,9 @@ export function RequestCustomPage() {
           Browse available and upcoming environments. Submit this form below for a custom scene.
         </p>
         {envs.isLoading ? (
-          <div className="grid gap-[var(--s-400)] sm:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="min-h-[360px] rounded-br200" />
+          <div className="flex flex-col gap-[var(--s-400)]">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-[220px] w-full rounded-br200" />
             ))}
           </div>
         ) : (
@@ -38,6 +42,7 @@ export function RequestCustomPage() {
             environments={catalog}
             accessTier={accessTier}
             showRequestCard={false}
+            onLockedEnvironmentClick={() => setTalkOpen(true)}
           />
         )}
       </section>
@@ -49,6 +54,8 @@ export function RequestCustomPage() {
         </Card>
       </section>
     </div>
+    <TalkToTeamModal open={talkOpen} onClose={() => setTalkOpen(false)} context="general" />
+    </>
   );
 }
 

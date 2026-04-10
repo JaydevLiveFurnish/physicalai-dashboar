@@ -56,7 +56,6 @@ export const ACCESS_COPY = {
     "API keys enable programmatic access to scene generation and exports. Issuing keys requires full access.",
   apiModalIntro:
     "Provisioning enables workspace-scoped credentials for authenticated requests to the Physical AI HTTP API.",
-  exportModalIntro: "Export entitlements unlock artifact retrieval from generation and asset pipelines:",
   batchGated:
     "You can select parameters and review combinations. Running batch jobs requires full access.",
   batchModalIntro: "Full access enables your workspace to run variation jobs on the cluster, including:",

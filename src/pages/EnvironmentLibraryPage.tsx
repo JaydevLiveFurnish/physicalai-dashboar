@@ -37,8 +37,8 @@ export function EnvironmentLibraryPage() {
     <>
     <StaggerFadeGroup staggerMs={100} className="flex flex-col gap-[var(--s-400)]">
       <PageHeader
-        title="Environments"
-        description="Pick a space to configure, generate scenes, and pull simulation-ready outputs."
+        title="Environments catalog"
+        description="Browse simulation-ready spaces. Open available workspaces or request access for upcoming scenes."
         actions={
           <button type="button" className={txLink} onClick={() => setRequestOpen(true)}>
             Request custom
@@ -52,9 +52,9 @@ export function EnvironmentLibraryPage() {
       {envs.isError ? (
         <ErrorPanel message="Environments couldn’t be loaded." onRetry={() => envs.refetch()} />
       ) : envs.isLoading ? (
-        <div className="grid gap-[var(--s-400)] sm:grid-cols-2 xl:grid-cols-3">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="min-h-[360px] rounded-br200" />
+        <div className="flex flex-col gap-[var(--s-400)]">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-[min(240px,28vh)] w-full rounded-br200 sm:h-[220px]" />
           ))}
         </div>
       ) : (

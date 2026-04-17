@@ -96,7 +96,7 @@ function WorkspaceNav({
   end?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-[var(--s-200)] border-b border-[var(--border-default-secondary)] sm:flex-row sm:items-center sm:justify-between sm:gap-[var(--s-400)]">
+    <div className="flex flex-col gap-[var(--s-200)] sm:flex-row sm:items-center sm:justify-between sm:gap-[var(--s-400)]">
       <nav className="min-w-0 flex-1" aria-label="Environment sections">
         <ul className="flex flex-wrap gap-[var(--s-200)]">
           {tabList.map((tab) => (

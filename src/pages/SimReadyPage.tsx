@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 
-/** Break out of AppShell main padding so the hero spans the full content column */
-const bleed =
-  "-mx-[var(--s-300)] w-[calc(100%+2*var(--s-300))] max-w-none sm:-mx-[var(--s-400)] sm:w-[calc(100%+2*var(--s-400))] md:-mx-[var(--s-600)] md:w-[calc(100%+2*var(--s-600))]";
-
 const FEATURES = [
   { icon: "view_in_ar", label: "Physics and collision setup" },
   { icon: "account_tree", label: "Articulation and joint definitions" },
@@ -17,14 +13,14 @@ export function SimReadyPage() {
   const [sent, setSent] = useState(false);
 
   return (
-    <section className={`relative flex min-h-0 flex-1 flex-col ${bleed}`}>
-      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+    <section className="relative flex min-h-0 w-full min-w-0 flex-1 flex-col bg-black">
+      <div className="relative flex min-h-full flex-1 flex-col overflow-hidden">
         <div
-          className="absolute inset-0 min-h-full bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: "url(/assets/simready-hero.png)" }}
           aria-hidden
         />
-        <div className="absolute inset-0 min-h-full bg-black/55" aria-hidden />
+        <div className="absolute inset-0 bg-black/55" aria-hidden />
 
         <div className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center px-[var(--s-400)] py-[var(--s-600)] text-center max-md:pt-[var(--s-500)]">
           <div className="flex justify-center">

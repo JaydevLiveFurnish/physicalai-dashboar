@@ -1,18 +1,18 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { allKitchenBatchSelections, KITCHEN_PARAMETER_GROUPS } from "@/kitchen/params";
 import type { KitchenParamKey } from "@/kitchen/params";
 import { getBatchCombinationStats } from "@/kitchen/batchCombinatorics";
-import { fetchJobs, runBatchJob } from "@/lib/mockApi";
+import { runBatchJob } from "@/lib/mockApi";
 import { KITCHEN_LIMITS, remaining, tryConsume } from "@/lib/kitchenLimits";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { ErrorPanel } from "@/components/system/ErrorPanel";
 import { Button } from "@/components/ui/Button";
-import { Skeleton } from "@/components/ui/Skeleton";
+import { CenterModal } from "@/components/ui/CenterModal";
 
 const BATCH_GENERATE_COUNT = 500;
 
-const GRID_PREVIEW = 12;
+/** Visible preview slice in the grid (progress animation distributes across this count). */
+const GRID_PREVIEW = 96;
 
 const BATCH_PARAM_ORDER: KitchenParamKey[] = [
   "Layout",
@@ -77,34 +77,49 @@ function OrangeCheckbox({
 function VariationGrid({
   simProgress,
   batchTotal,
+  tileCount,
+  onSelectTile,
 }: {
   simProgress: number;
   batchTotal: number;
+  tileCount: number;
+  onSelectTile: (payload: { id: string; index: number; ready: boolean }) => void;
 }) {
   return (
-    <div className="grid grid-cols-2 gap-[var(--s-300)] sm:grid-cols-3 xl:grid-cols-4">
-      {Array.from({ length: GRID_PREVIEW }).map((_, i) => {
+    <div className="grid grid-cols-3 gap-[var(--s-200)] sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8">
+      {Array.from({ length: tileCount }).map((_, i) => {
         const n = i + 1;
         const id = `VAR-${String(n).padStart(4, "0")}`;
-        const threshold = ((n - 1) / GRID_PREVIEW) * batchTotal;
+        const threshold = ((n - 1) / tileCount) * batchTotal;
         const ready = simProgress > threshold || simProgress >= batchTotal;
         return (
-          <div
+          <button
             key={id}
-            className="flex flex-col items-center overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-200)] py-[var(--s-400)] text-center"
+            type="button"
+            onClick={() => onSelectTile({ id, index: n, ready })}
+            className="group flex min-h-0 flex-col items-center overflow-hidden rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-100)] py-[var(--s-200)] text-center transition-[border-color,box-shadow,transform] duration-200 hover:border-[var(--grey-300)] hover:shadow-[0_2px_12px_rgba(0,0,0,0.06)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-primary-default)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-page-secondary)]"
+            aria-label={`Open preview ${id}${ready ? ", ready" : ", queued"}`}
           >
-            <span className="material-symbols-outlined text-[22px] text-[var(--text-default-placeholder)]" aria-hidden>
+            <span
+              className="material-symbols-outlined text-[18px] text-[var(--text-default-placeholder)] transition-colors group-hover:text-[var(--text-default-body)]"
+              aria-hidden
+            >
               kitchen
             </span>
-            <p className="mt-[var(--s-200)] font-mono text-[12px] text-[var(--text-default-body)]">{id}</p>
+            <p className="mt-[4px] w-full truncate font-mono text-[10px] leading-tight text-[var(--text-default-body)] sm:text-[11px]">
+              {id}
+            </p>
             <p
-              className={`mt-[var(--s-200)] text-[12px] font-semibold ${
+              className={`mt-[4px] text-[10px] font-semibold leading-tight sm:text-[11px] ${
                 ready ? "text-[var(--text-success-default)]" : "text-[var(--text-default-placeholder)]"
               }`}
             >
               {ready ? "Ready" : "Queued"}
             </p>
-          </div>
+            <span className="mt-[6px] text-[9px] font-medium text-[var(--text-primary-default)] opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+              View
+            </span>
+          </button>
         );
       })}
     </div>
@@ -116,9 +131,9 @@ export type BatchGenerationPageProps = {
 };
 
 export function BatchGenerationPage({ embedded = false }: BatchGenerationPageProps) {
-  const qc = useQueryClient();
   const [selections, setSelections] = useState<Record<KitchenParamKey, string[]>>(initialSelections);
   const [limitMessage, setLimitMessage] = useState<string | null>(null);
+  const [previewDetail, setPreviewDetail] = useState<{ id: string; index: number; ready: boolean } | null>(null);
   const parameterOptions = useMemo(() => {
     const optionsByParam = new Map<KitchenParamKey, readonly string[]>();
     for (const params of Object.values(KITCHEN_PARAMETER_GROUPS)) {
@@ -138,14 +153,6 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
 
   const [simProgress, setSimProgress] = useState(0);
   const [simActive, setSimActive] = useState(false);
-  const [hasStartedBatchRun, setHasStartedBatchRun] = useState(false);
-
-  const jobs = useQuery({
-    queryKey: ["jobs"],
-    queryFn: fetchJobs,
-    refetchInterval: 4000,
-    enabled: hasStartedBatchRun,
-  });
 
   const comboStats = useMemo(() => getBatchCombinationStats(selections), [selections]);
   const { raw: rawCount, valid: validCombinations } = comboStats;
@@ -157,11 +164,7 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
         environmentId: "env-kitchen-v2",
         selections: selections as unknown as Record<string, string[]>,
       }),
-    onMutate: () => {
-      setHasStartedBatchRun(true);
-    },
     onSuccess: (data) => {
-      qc.invalidateQueries({ queryKey: ["jobs"] });
       if (data.validCombinations > 0 && data.status !== "failed") {
         setSimActive(true);
         setSimProgress(0);
@@ -352,7 +355,15 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
             <h3 className="mb-[var(--s-300)] text-[13px] font-semibold text-[var(--text-default-heading)]">
               Generated variations (preview)
             </h3>
-            <VariationGrid simProgress={simProgress} batchTotal={BATCH_GENERATE_COUNT} />
+            <p className="mb-[var(--s-300)] text-[12px] text-[var(--text-default-placeholder)]">
+              Showing {GRID_PREVIEW.toLocaleString()} samples · Click a tile to expand.
+            </p>
+            <VariationGrid
+              simProgress={simProgress}
+              batchTotal={BATCH_GENERATE_COUNT}
+              tileCount={GRID_PREVIEW}
+              onSelectTile={setPreviewDetail}
+            />
           </div>
         </>
       ) : null}
@@ -371,57 +382,53 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
           </p>
         </div>
       ) : null}
-
-      {hasStartedBatchRun ? (
-        <section aria-labelledby="job-queue-heading" className="space-y-[var(--s-300)] border-t border-[var(--border-default-secondary)] pt-[var(--s-400)]">
-          <h2 id="job-queue-heading" className="text-[15px] font-semibold text-[var(--text-default-heading)]">
-            Job queue
-          </h2>
-          {jobs.isError ? (
-            <ErrorPanel message="Could not load the job queue." onRetry={() => jobs.refetch()} />
-          ) : jobs.isLoading ? (
-            <div className="space-y-[var(--s-300)]" aria-busy="true" aria-live="polite">
-              <p className="text-[12px] text-[var(--text-default-body)]">Loading queue…</p>
-              <Skeleton className="h-20 w-full" />
-              <Skeleton className="h-20 w-full" />
-            </div>
-          ) : jobs.data?.length === 0 ? (
-            <div className="rounded-br200 border border-dashed border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-400)] py-[var(--s-500)] text-center">
-              <span
-                className="material-symbols-outlined mx-auto mb-[var(--s-200)] block text-[28px] text-[var(--text-default-placeholder)]"
-                aria-hidden
-              >
-                inventory_2
-              </span>
-              <p className="text-[14px] font-medium text-[var(--text-default-heading)]">No jobs yet</p>
-              <p className="mt-[var(--s-200)] text-[13px] leading-[20px] text-[var(--text-default-body)]">
-                Queued runs appear here with status and progress.
-              </p>
-            </div>
-          ) : (
-            <ul className="space-y-[var(--s-200)] text-[13px]">
-              {jobs.data?.map((j) => (
-                <li key={j.id} className="border-b border-[var(--border-default-secondary)] pb-[var(--s-200)] last:border-0">
-                  <div className="flex justify-between gap-[var(--s-200)]">
-                    <span className="font-mono text-[12px]">{j.id}</span>
-                    <span className="capitalize">{j.status}</span>
-                  </div>
-                  <div className="mt-[var(--s-100)] h-1 w-full overflow-hidden rounded-full bg-[var(--grey-100)]">
-                    <div
-                      className={`h-full ${j.status === "failed" ? "bg-[var(--text-error-default)]" : "bg-[var(--text-primary-default)]"}`}
-                      style={{ width: `${j.progress}%` }}
-                    />
-                  </div>
-                  {j.errorCode ? (
-                    <p className="mt-[var(--s-100)] text-[12px] text-[var(--text-error-default)]">{j.errorCode}</p>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      ) : null}
     </div>
+  );
+
+  const previewModal = (
+    <CenterModal
+      open={previewDetail !== null}
+      title={previewDetail ? `Preview ${previewDetail.id}` : "Preview"}
+      onClose={() => setPreviewDetail(null)}
+      size="lg"
+      contentAlign="start"
+    >
+      {previewDetail ? (
+        <div className="space-y-[var(--s-400)]">
+          <div className="overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)]">
+            <img
+              src="/assets/kitchen-scene-placeholder.png"
+              alt={`Kitchen preview for ${previewDetail.id}`}
+              className="mx-auto max-h-[min(52vh,520px)] w-full object-contain p-[var(--s-400)]"
+            />
+          </div>
+          <dl className="grid gap-[var(--s-300)] text-[13px] sm:grid-cols-2">
+            <div className="space-y-[var(--s-100)]">
+              <dt className="text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--text-default-placeholder)]">
+                Variation
+              </dt>
+              <dd className="font-mono text-[15px] font-medium text-[var(--text-default-heading)]">{previewDetail.id}</dd>
+            </div>
+            <div className="space-y-[var(--s-100)]">
+              <dt className="text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--text-default-placeholder)]">
+                Status
+              </dt>
+              <dd
+                className={`text-[15px] font-semibold ${
+                  previewDetail.ready ? "text-[var(--text-success-default)]" : "text-[var(--text-default-placeholder)]"
+                }`}
+              >
+                {previewDetail.ready ? "Ready for export" : "Queued"}
+              </dd>
+            </div>
+          </dl>
+          <p className="text-[13px] leading-[22px] text-[var(--text-default-body)]">
+            This is a representative render for the batch slice. In a connected pipeline, each variation would map to a
+            unique parameter draw from your selections.
+          </p>
+        </div>
+      ) : null}
+    </CenterModal>
   );
 
   const paramsAside = (
@@ -476,6 +483,7 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
         {batchFooter}
       </div>
 
+      {previewModal}
     </div>
   );
 }

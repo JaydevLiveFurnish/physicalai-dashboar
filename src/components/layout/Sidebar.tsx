@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { tx, txSidebarSlide } from "./motion";
 import { sidebarWidthClass } from "./sidebarLayout";
-import { AskImagineSidebarButton } from "@/components/assistant/AskImagineDock";
 import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
 import { useAuth } from "@/context/AuthContext";
 import { isLiveEnvironmentWorkspace } from "@/lib/environmentAccess";
@@ -399,9 +398,6 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
         </NavLink>
 
         <div className="mt-auto flex flex-col gap-[var(--s-300)] border-t border-[#262626] pt-[var(--s-400)]">
-          <div className="mx-[var(--s-200)] min-w-0">
-            <AskImagineSidebarButton />
-          </div>
           <Link
             to="/account"
             onClick={afterNav}

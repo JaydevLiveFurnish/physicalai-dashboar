@@ -66,17 +66,26 @@ export function AppShell() {
 
         <main
           className={cn(
-            "w-full max-w-none min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-y-contain px-[var(--s-300)] pb-[max(var(--s-500),env(safe-area-inset-bottom))] pt-[calc(3.5rem+env(safe-area-inset-top)+var(--s-400))] sm:px-[var(--s-400)] md:px-[var(--s-600)] md:pb-[var(--s-500)] md:pt-[max(var(--s-500),env(safe-area-inset-top))] [-webkit-overflow-scrolling:touch]",
+            "w-full max-w-none min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-y-contain pb-[max(var(--s-500),env(safe-area-inset-bottom))] pt-[calc(3.5rem+env(safe-area-inset-top)+var(--s-400))] md:pb-[var(--s-500)] md:pt-[max(var(--s-500),env(safe-area-inset-top))] [-webkit-overflow-scrolling:touch]",
+            simReadyHeroFill
+              ? "px-0"
+              : "px-[var(--s-300)] sm:px-[var(--s-400)] md:px-[var(--s-600)]",
             mainOutletFill && "flex flex-col",
             kitchenWorkspaceFill && "md:overflow-hidden",
-            simReadyHeroFill && "pb-0 md:pt-0",
+            simReadyHeroFill && "pb-0 md:pb-0 md:pt-0",
           )}
         >
-          <PageTransition className={mainOutletFill ? "flex min-h-0 w-full flex-1 flex-col" : undefined}>
+          <PageTransition
+            className={cn(
+              mainOutletFill && "flex min-h-0 w-full flex-1 flex-col",
+              simReadyHeroFill && "min-h-full",
+            )}
+          >
             <div
               className={cn(
-                contentWidthClass,
+                simReadyHeroFill ? "mx-auto flex h-full min-h-0 w-full max-w-none flex-col" : contentWidthClass,
                 mainOutletFill && "flex min-h-0 flex-1 flex-col",
+                simReadyHeroFill && "min-h-full",
               )}
             >
               <Outlet />

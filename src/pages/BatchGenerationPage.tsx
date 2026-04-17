@@ -14,13 +14,25 @@ const BATCH_GENERATE_COUNT = 500;
 
 const GRID_PREVIEW = 12;
 
-const BATCH_GROUP_LABEL: Partial<Record<string, string>> = {
-  "Layout & flow": "LAYOUT",
-  Cabinets: "CABINETS",
-  "Doors & hardware": "STYLE",
-  Appliances: "APPLIANCES",
-  Finishes: "FINISHES",
-  "Scene conditions": "SCENE CONDITIONS",
+const BATCH_PARAM_ORDER: KitchenParamKey[] = [
+  "Layout",
+  "Island",
+  "Base Cabinet",
+  "Wall Cabinet",
+  "Tall Cabinet",
+  "Door Style",
+  "Door Handle",
+  "Appliance Preset",
+  "Cabinet Finish",
+  "Counter Top Finish",
+  "Hardware Finish",
+  "Lighting",
+  "Clutter Density",
+];
+
+const BATCH_PARAM_LABEL: Partial<Record<KitchenParamKey, string>> = {
+  "Cabinet Finish": "Cabinet finish",
+  "Clutter Density": "Clutter density",
 };
 
 function initialSelections(): Record<KitchenParamKey, string[]> {
@@ -107,6 +119,22 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
   const qc = useQueryClient();
   const [selections, setSelections] = useState<Record<KitchenParamKey, string[]>>(initialSelections);
   const [limitMessage, setLimitMessage] = useState<string | null>(null);
+  const parameterOptions = useMemo(() => {
+    const optionsByParam = new Map<KitchenParamKey, readonly string[]>();
+    for (const params of Object.values(KITCHEN_PARAMETER_GROUPS)) {
+      for (const [param, opts] of Object.entries(params)) {
+        optionsByParam.set(param as KitchenParamKey, opts);
+      }
+    }
+    return BATCH_PARAM_ORDER.map((key) => ({
+      key,
+      label: BATCH_PARAM_LABEL[key] ?? key,
+      options: optionsByParam.get(key) ?? [],
+    }));
+  }, []);
+  const [collapsedParams, setCollapsedParams] = useState<Record<KitchenParamKey, boolean>>(() =>
+    Object.fromEntries(BATCH_PARAM_ORDER.map((key) => [key, key !== "Layout"])) as Record<KitchenParamKey, boolean>,
+  );
 
   const [simProgress, setSimProgress] = useState(0);
   const [simActive, setSimActive] = useState(false);
@@ -156,6 +184,9 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
       const next = Array.from(cur);
       return { ...prev, [key]: next.length ? next : [value] };
     });
+  };
+  const toggleParamCollapsed = (key: KitchenParamKey) => {
+    setCollapsedParams((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   const batchLeft = remaining("batchRuns");
@@ -398,42 +429,40 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
   const paramsAside = (
     <aside className="flex min-h-0 w-full min-w-0 shrink-0 flex-col border-b border-[var(--border-default-secondary)] bg-[var(--surface-default)] lg:w-[min(100%,340px)] lg:border-b-0 lg:border-r">
       <div className="min-h-0 flex-1 space-y-[var(--s-500)] overflow-y-auto px-[var(--s-400)] py-[var(--s-400)] [-webkit-overflow-scrolling:touch]">
-        {(Object.entries(KITCHEN_PARAMETER_GROUPS) as [string, Record<string, readonly string[]>][]).map(
-          ([group, params]) => (
-            <section key={group} className="space-y-[var(--s-300)]">
-              <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--text-default-placeholder)]">
-                {BATCH_GROUP_LABEL[group] ?? group}
-              </h3>
-              <div className="space-y-[var(--s-400)]">
-                {Object.entries(params).map(([param, opts]) => {
-                  const key = param as KitchenParamKey;
-                  return (
-                    <div key={param}>
-                      <p className="mb-[var(--s-200)] text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-default-heading)]">
-                        {param}
-                      </p>
-                      <div className="flex flex-col gap-[2px]">
-                        {opts.map((opt) => (
-                          <OrangeCheckbox
-                            key={opt}
-                            label={opt}
-                            checked={Boolean(selections[key]?.includes(opt))}
-                            onToggle={() => toggleValue(key, opt)}
-                          />
-                        ))}
-                      </div>
-                      {param === "Appliance Preset" ? (
-                        <p className="mt-[var(--s-200)] text-[11px] leading-[16px] text-[var(--text-default-placeholder)]">
-                          Presets are fixed configs to avoid 2<sup className="text-[10px]">7</sup> appliance combinations.
-                        </p>
-                      ) : null}
-                    </div>
-                  );
-                })}
+        {parameterOptions.map(({ key, label, options }) => {
+          const isCollapsed = collapsedParams[key];
+          return (
+            <section key={key} className="rounded-br100 border border-[var(--border-default-secondary)] px-[var(--s-200)] py-[var(--s-200)]">
+              <button
+                type="button"
+                onClick={() => toggleParamCollapsed(key)}
+                aria-expanded={!isCollapsed}
+                className="flex w-full items-center justify-between gap-[var(--s-200)] text-left"
+              >
+                <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-default-heading)]">{label}</p>
+                <span className="material-symbols-outlined text-[18px] text-[var(--text-default-body)]" aria-hidden>
+                  {isCollapsed ? "expand_more" : "expand_less"}
+                </span>
+              </button>
+              <p className="mt-[4px] text-[11px] text-[var(--text-default-body)]">{(selections[key] ?? []).length} selected</p>
+              <div className={`mt-[var(--s-200)] flex flex-col gap-[2px] ${isCollapsed ? "hidden" : ""}`}>
+                {options.map((opt) => (
+                  <OrangeCheckbox
+                    key={opt}
+                    label={opt}
+                    checked={Boolean(selections[key]?.includes(opt))}
+                    onToggle={() => toggleValue(key, opt)}
+                  />
+                ))}
               </div>
+              {!isCollapsed && key === "Appliance Preset" ? (
+                <p className="mt-[var(--s-200)] text-[11px] leading-[16px] text-[var(--text-default-placeholder)]">
+                  Presets are fixed configs to avoid 2<sup className="text-[10px]">7</sup> appliance combinations.
+                </p>
+              ) : null}
             </section>
-          ),
-        )}
+          );
+        })}
       </div>
     </aside>
   );

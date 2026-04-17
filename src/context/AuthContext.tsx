@@ -2,15 +2,18 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   useSyncExternalStore,
   type ReactNode,
 } from "react";
 import { migrateAccessTierStorage, readAccessTier, writeAccessTier, type AccessTier } from "@/lib/access";
+import { fetchCurrentUser, getAuthToken, setAuthToken, type ApiUser } from "@/lib/api";
 
 const STORAGE_KEY = "imagine.auth.session";
 const SIGNED_OUT_KEY = "imagine.auth.signedOut";
+const URL_TOKEN_PARAM = "token";
 
 const DEMO_USER: AuthUser = {
   email: "demo@imagine.io",
@@ -56,6 +59,7 @@ function writeStoredUser(user: AuthUser | null) {
 }
 
 let memoryUser: AuthUser | null = readStoredUser();
+let userFetchStarted = false;
 const listeners = new Set<() => void>();
 
 function emit() {
@@ -94,6 +98,31 @@ function displayNameFromEmail(email: string) {
     .join(" ");
 }
 
+function apiUserToAuthUser(apiUser: ApiUser): AuthUser {
+  const fullName = [apiUser.first_name, apiUser.last_name].filter(Boolean).join(" ").trim();
+  return {
+    email: apiUser.email ?? "",
+    name: apiUser.username || fullName || apiUser.email || "User",
+    orgLabel: "imagine.io",
+  };
+}
+
+function consumeTokenFromUrl(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const url = new URL(window.location.href);
+    const token = url.searchParams.get(URL_TOKEN_PARAM);
+    if (!token) return null;
+    url.searchParams.delete(URL_TOKEN_PARAM);
+    const nextSearch = url.searchParams.toString();
+    const nextUrl = `${url.pathname}${nextSearch ? `?${nextSearch}` : ""}${url.hash}`;
+    window.history.replaceState({}, "", nextUrl);
+    return token;
+  } catch {
+    return null;
+  }
+}
+
 type AuthContextValue = {
   user: AuthUser | null;
   isAuthenticated: boolean;
@@ -114,6 +143,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     migrateAccessTierStorage();
     return readAccessTier();
   });
+
+  useEffect(() => {
+    const urlToken = consumeTokenFromUrl();
+    if (urlToken) setAuthToken(urlToken);
+
+    const token = getAuthToken();
+    if (!token) return;
+    if (userFetchStarted) return;
+    userFetchStarted = true;
+
+    fetchCurrentUser()
+      .then((apiUser) => {
+        if (!apiUser) return;
+        setUserInternal(apiUserToAuthUser(apiUser));
+      })
+      .catch(() => {
+        setAuthToken(null);
+        userFetchStarted = false;
+      });
+  }, []);
 
   const setAccessTier = useCallback((tier: AccessTier) => {
     writeAccessTier(tier);
@@ -142,6 +191,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signOut = useCallback(() => {
+    setAuthToken(null);
     setUserInternal(null);
   }, []);
 

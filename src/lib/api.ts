@@ -40,6 +40,8 @@ export type ApiUser = {
   email?: string;
   first_name?: string;
   last_name?: string;
+  role?: string;
+  company_name?: string;
 };
 
 export async function fetchCurrentUser(): Promise<ApiUser | null> {

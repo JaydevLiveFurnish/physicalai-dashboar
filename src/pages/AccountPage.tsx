@@ -22,19 +22,19 @@ export function AccountPage() {
           <dl className="space-y-[var(--s-300)] text-[14px]">
             <div className="flex items-center justify-between gap-[var(--s-300)]">
               <dt className="text-[var(--text-default-body)]">Name</dt>
-              <dd className="font-medium text-[var(--text-default-heading)]">{user?.name ?? "Rachit Kataria"}</dd>
+              <dd className="font-medium text-[var(--text-default-heading)]">{user?.name ?? "-"}</dd>
             </div>
             <div className="flex items-center justify-between gap-[var(--s-300)]">
               <dt className="text-[var(--text-default-body)]">Email</dt>
-              <dd className="text-[var(--text-default-heading)]">{user?.email ?? "rachit@imagine.io"}</dd>
+              <dd className="text-[var(--text-default-heading)]">{user?.email ?? "-"}</dd>
             </div>
             <div className="flex items-center justify-between gap-[var(--s-300)]">
               <dt className="text-[var(--text-default-body)]">Company</dt>
-              <dd className="text-[var(--text-default-heading)]">{user?.orgLabel ?? "Imagine.io"}</dd>
+              <dd className="text-[var(--text-default-heading)]">{user?.orgLabel ?? "-"}</dd>
             </div>
             <div className="flex items-center justify-between gap-[var(--s-300)]">
               <dt className="text-[var(--text-default-body)]">Role</dt>
-              <dd className="font-medium text-[var(--text-default-heading)]">Admin</dd>
+              <dd className="font-medium text-[var(--text-default-heading)]">{user?.role ?? "-"}</dd>
             </div>
           </dl>
         </Card>

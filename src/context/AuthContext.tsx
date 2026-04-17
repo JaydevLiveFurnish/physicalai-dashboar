@@ -25,6 +25,7 @@ export type AuthUser = {
   email: string;
   name: string;
   orgLabel: string;
+  role?: string;
 };
 
 function readStoredUser(): AuthUser | null {
@@ -103,7 +104,8 @@ function apiUserToAuthUser(apiUser: ApiUser): AuthUser {
   return {
     email: apiUser.email ?? "",
     name: apiUser.username || fullName || apiUser.email || "User",
-    orgLabel: "imagine.io",
+    orgLabel: apiUser.company_name || "-",
+    role: apiUser.role,
   };
 }
 

@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { KitchenConfigureWorkspace } from "@/components/kitchen/KitchenConfigureWorkspace";
-import { AssetModelViewer } from "@/components/assets/AssetModelViewer";
+import GLBViewer from "@/components/library/GLBViewer";
 import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -402,7 +402,12 @@ function LockedEnvironmentPage({ meta }: { meta: EnvironmentMeta }) {
 
         <div className="grid gap-[var(--s-500)] lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,1fr)] lg:items-stretch">
           <div className="relative min-h-[min(440px,52vh)] overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] shadow-[inset_0_0_0_1px_var(--border-default-secondary)]">
-            <AssetModelViewer url={modelUrl} />
+            <div className="absolute inset-0">
+              <GLBViewer glbPath={modelUrl} fallbackImage="" className="h-full w-full" />
+              <p className="pointer-events-none absolute bottom-[var(--s-200)] left-[var(--s-200)] right-[var(--s-200)] text-center text-[11px] text-[var(--text-default-placeholder)]">
+                Drag to orbit · scroll to zoom
+              </p>
+            </div>
           </div>
           <div className="flex flex-col justify-center space-y-[var(--s-400)] rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] p-[var(--s-500)]">
             <h2 className="text-[clamp(1.15rem,1.8vw,1.35rem)] font-semibold leading-snug text-[var(--text-default-heading)]">

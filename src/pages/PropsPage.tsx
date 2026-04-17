@@ -13,7 +13,6 @@ import { CenterModal } from "@/components/ui/CenterModal";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { AssetCardLockOverlay, AssetLibraryAccessOverlay } from "@/components/assets/AssetCardLockOverlay";
 import { PropAssetDetail } from "@/components/assets/PropAssetDetail";
-import { hasPreviewModel } from "@/lib/assetPreview";
 import { propTagHeroWash, propTagPill } from "@/lib/prismSurfaces";
 import { shelfCategory, simReadyLabel, tagLabel } from "@/lib/propDisplay";
 import type { PropAsset } from "@/types";
@@ -209,7 +208,7 @@ export function PropsPage() {
 }
 
 function PropCard({ asset, onOpen }: { asset: PropAsset; onOpen: () => void }) {
-  const canOpen = hasPreviewModel(asset.previewModelUrl);
+  const canOpen = !asset.isLocked;
   return (
     <button
       type="button"

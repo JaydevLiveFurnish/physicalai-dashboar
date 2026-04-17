@@ -1,5 +1,13 @@
-import { materialThumbnail, propPreviewUrls, propThumbnail } from "@/lib/assetThumbnails";
-import type { MaterialRecord, PropAsset } from "@/types";
+import catalog from "@/data/catalog.json";
+import { materialThumbnail } from "@/lib/assetThumbnails";
+import type {
+  ArticulationType,
+  CollisionType,
+  MaterialRecord,
+  PropAsset,
+  PropTagKind,
+  SimReadyTier,
+} from "@/types";
 
 /** Catalog materials aligned to dashboard reference screens */
 export const MOCK_MATERIALS: MaterialRecord[] = [
@@ -205,602 +213,197 @@ export const MOCK_MATERIALS: MaterialRecord[] = [
   },
 ];
 
-function thumb(id: string) {
-  return propThumbnail(id);
+interface CatalogEntry {
+  id: string;
+  name: string;
+  thumb: string;
+  glb: string;
+  usdz: string;
+  isAsset: boolean;
+  isAppliance: boolean;
+  isCabinet: boolean;
+  size: [number, number, number];
+  overallMassKg: number | null;
+  topMaterial: string | null;
+  material: {
+    dynamic_friction: number;
+    static_friction: number;
+    restitution: number;
+    density: number;
+  } | null;
+  collisionTypes: string[];
+  articulationJoints: number;
+  articulationKind: string | null;
+  partCount: number;
+  primaryLabel: string | null;
+  isLocked?: boolean;
 }
 
-function previews(id: string) {
-  return propPreviewUrls(id);
+const rawCatalog = catalog as CatalogEntry[];
+
+function titleCase(input: string): string {
+  return input
+    .replace(/[_\-]+/g, " ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-/** Kitchen props grid aligned to reference screens */
-export const MOCK_PROPS: PropAsset[] = [
-  {
-    id: "prop-mason-jar",
-    name: "Mason Jar",
-    category: "tableware",
-    tag: "manipulation",
-    simReady: "certified",
-    massKg: 0.35,
-    collision: "convex_decomposition",
-    collisionLabel: "convexDecomposition",
-    articulationJoints: 0,
-    articulationType: "fixed",
-    materialType: "Glass",
-    thumbnailUrl: thumb("prop-mason-jar"),
-    previewUrls: previews("prop-mason-jar"),
-    previewModelUrl: "/assets/3d/mason-jar.glb",
-    dimensionsMm: { w: 76, h: 130, d: 76 },
-    densityKgM3: 2500,
-    physics: {
-      inertiaApproxKgM2: [0.001, 0.0012, 0.001],
-      frictionStatic: 0.94,
-      frictionDynamic: 0.4,
-      restitution: 0.65,
-      collisionMarginMm: 0.2,
+function humanizeMaterial(raw: string | null, fallback: string): string {
+  if (!raw) return fallback;
+  const cleaned = raw
+    .replace(/^Material_(Base_|Wall_)?Cabinet_/i, "")
+    .replace(/_\d+$/, "")
+    .replace(/^opaque_/i, "")
+    .replace(/_toaster$/i, "")
+    .replace(/_spice_jar$/i, "");
+  const pretty = titleCase(cleaned);
+  // Collapse common aliases
+  if (/^Omni\s?Glass$/i.test(pretty)) return "Glass";
+  if (/^Plasric$/i.test(pretty)) return "Plastic";
+  if (/^Bone China/i.test(pretty)) return "Bone China";
+  if (/^Stainless Steel/i.test(pretty) || /^White Stainless Steel$/i.test(pretty))
+    return "Stainless Steel";
+  if (/^Carbon Steel Back$/i.test(pretty)) return "Stainless Steel";
+  if (/^Paper Shaker$/i.test(pretty)) return "Ceramic";
+  if (/^Metal$/i.test(pretty)) return "Metal";
+  return pretty;
+}
+
+function categoryFor(entry: CatalogEntry): string {
+  if (entry.isCabinet) return "cabinetry";
+  if (entry.isAppliance) return "appliance";
+  return "tableware";
+}
+
+function collisionFor(entry: CatalogEntry): { type: CollisionType; label: string } {
+  const first = entry.collisionTypes[0];
+  switch (first) {
+    case "sdf":
+      return { type: "sdf", label: "sdf" };
+    case "convexDecomposition":
+      return { type: "convex_decomposition", label: "convexDecomposition" };
+    case "boundingCube":
+      return { type: "convex_hull", label: "boundingCube" };
+    case "convexHull":
+    default:
+      return { type: "convex_hull", label: "convexHull" };
+  }
+}
+
+function articulationJointsFor(entry: CatalogEntry): number {
+  if (entry.articulationJoints > 0) return entry.articulationJoints;
+  if (entry.isCabinet) return Math.max(0, entry.partCount - 1);
+  return 0;
+}
+
+function articulationTypeFor(entry: CatalogEntry, joints: number): ArticulationType {
+  if (joints === 0) return "fixed";
+  if (entry.articulationKind === "mixed") return "compound";
+  const name = entry.name.toLowerCase();
+  const hasDoor = name.includes("door");
+  const hasDrawer = name.includes("drawer");
+  if (hasDoor && hasDrawer) return "compound";
+  if (hasDrawer) return "prismatic";
+  if (hasDoor) return "revolute";
+  if (joints > 1) return "compound";
+  return "revolute";
+}
+
+function tagFor(entry: CatalogEntry, joints: number): PropTagKind {
+  if (entry.isCabinet || entry.isAppliance || joints > 0) return "articulated";
+  const mass = entry.overallMassKg ?? 0;
+  const volume = entry.size[0] * entry.size[1] * entry.size[2];
+  if (mass >= 10 || volume >= 0.25) return "navigation";
+  return "manipulation";
+}
+
+function simReadyFor(entry: CatalogEntry): SimReadyTier {
+  if (entry.overallMassKg == null) return "pending";
+  if (!entry.material && !entry.topMaterial) return "pending";
+  return "certified";
+}
+
+function densityFor(entry: CatalogEntry): number {
+  const matDensity = entry.material?.density ?? 0;
+  if (matDensity > 0) return matDensity;
+  const [w, h, d] = entry.size;
+  const volume = w * h * d;
+  const mass = entry.overallMassKg ?? 0;
+  if (volume > 0 && mass > 0) return Math.round(mass / volume);
+  return 1000;
+}
+
+function approxInertia(
+  massKg: number,
+  size: [number, number, number],
+): [number, number, number] {
+  const [w, h, d] = size;
+  const m = massKg || 0.1;
+  const ix = (m * (h * h + d * d)) / 12;
+  const iy = (m * (w * w + d * d)) / 12;
+  const iz = (m * (w * w + h * h)) / 12;
+  const round = (x: number) => Number(x.toFixed(4));
+  return [round(ix), round(iy), round(iz)];
+}
+
+function fallbackMaterialName(entry: CatalogEntry): string {
+  if (entry.isCabinet) return "Walnut Wood";
+  if (entry.isAppliance) return "Stainless Steel";
+  const name = entry.name.toLowerCase();
+  if (name.includes("glass") || name.includes("wine") || name.includes("bottle")) return "Glass";
+  if (name.includes("knife") || name.includes("fork") || name.includes("spoon") || name.includes("whisk") || name.includes("tongs"))
+    return "Stainless Steel";
+  if (name.includes("cutting") || name.includes("board") || name.includes("basket") || name.includes("ladle") || name.includes("spatula"))
+    return "Wood";
+  if (name.includes("plate") || name.includes("bowl") || name.includes("mug") || name.includes("cup") || name.includes("shaker"))
+    return "Ceramic";
+  if (name.includes("bread") || name.includes("sandwich") || name.includes("loaf")) return "Bread";
+  return "Mixed";
+}
+
+function transformEntry(entry: CatalogEntry): PropAsset {
+  const [w, h, d] = entry.size;
+  const mass = entry.overallMassKg ?? 0.5;
+  const collision = collisionFor(entry);
+  const joints = articulationJointsFor(entry);
+  const articulationType = articulationTypeFor(entry, joints);
+  const tag = tagFor(entry, joints);
+  const materialType = humanizeMaterial(entry.topMaterial, fallbackMaterialName(entry));
+  const mat = entry.material;
+  const physics = {
+    inertiaApproxKgM2: approxInertia(mass, entry.size),
+    frictionStatic: mat?.static_friction ?? 0.5,
+    frictionDynamic: mat?.dynamic_friction ?? 0.35,
+    restitution: mat?.restitution ?? 0.3,
+    collisionMarginMm: 0.2,
+  };
+  return {
+    id: `prop-${entry.id}`,
+    name: entry.name,
+    category: categoryFor(entry),
+    simReady: simReadyFor(entry),
+    tag,
+    massKg: Number(mass.toFixed(3)),
+    collision: collision.type,
+    collisionLabel: collision.label,
+    articulationJoints: joints,
+    articulationType,
+    materialType,
+    thumbnailUrl: entry.thumb,
+    previewUrls: [entry.thumb],
+    previewModelUrl: entry.glb,
+    dimensionsMm: {
+      w: Math.round(w * 1000),
+      h: Math.round(h * 1000),
+      d: Math.round(d * 1000),
     },
-  },
-  {
-    id: "prop-stemless-wine",
-    name: "Stemless Wine Glass Set",
-    category: "tableware",
-    tag: "manipulation",
-    simReady: "certified",
-    massKg: 0.42,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 0,
-    articulationType: "fixed",
-    materialType: "Glass",
-    thumbnailUrl: thumb("prop-stemless-wine"),
-    previewUrls: previews("prop-stemless-wine"),
-    dimensionsMm: { w: 85, h: 95, d: 85 },
-    densityKgM3: 2500,
-    physics: {
-      inertiaApproxKgM2: [0.0015, 0.0018, 0.0015],
-      frictionStatic: 0.9,
-      frictionDynamic: 0.38,
-      restitution: 0.6,
-      collisionMarginMm: 0.15,
-    },
-  },
-  {
-    id: "prop-oak-cutting-board",
-    name: "Oak Cutting Board",
-    category: "tableware",
-    tag: "manipulation",
-    simReady: "certified",
-    massKg: 1.2,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 0,
-    articulationType: "fixed",
-    materialType: "Oak Wood",
-    thumbnailUrl: thumb("prop-oak-cutting-board"),
-    previewUrls: previews("prop-oak-cutting-board"),
-    dimensionsMm: { w: 400, h: 25, d: 300 },
-    densityKgM3: 720,
-    physics: {
-      inertiaApproxKgM2: [0.05, 0.02, 0.04],
-      frictionStatic: 0.54,
-      frictionDynamic: 0.32,
-      restitution: 0.12,
-      collisionMarginMm: 0.3,
-    },
-  },
-  {
-    id: "prop-base-cab-600",
-    name: "Base Cabinet 600mm",
-    category: "cabinetry",
-    tag: "articulated",
-    simReady: "certified",
-    massKg: 25.5,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 2,
-    articulationType: "revolute",
-    materialType: "Oak Wood",
-    thumbnailUrl: thumb("prop-base-cab-600"),
-    previewUrls: previews("prop-base-cab-600"),
-    dimensionsMm: { w: 600, h: 720, d: 560 },
-    densityKgM3: 680,
-    physics: {
-      inertiaApproxKgM2: [0.8, 0.7, 0.25],
-      frictionStatic: 0.45,
-      frictionDynamic: 0.38,
-      restitution: 0.02,
-      collisionMarginMm: 0.2,
-    },
-  },
-  {
-    id: "prop-wall-cab-800",
-    name: "Wall Cabinet 800mm",
-    category: "cabinetry",
-    tag: "articulated",
-    simReady: "certified",
-    massKg: 14.2,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 2,
-    articulationType: "revolute",
-    materialType: "Oak Wood",
-    thumbnailUrl: thumb("prop-wall-cab-800"),
-    previewUrls: previews("prop-wall-cab-800"),
-    dimensionsMm: { w: 800, h: 720, d: 350 },
-    densityKgM3: 680,
-    physics: {
-      inertiaApproxKgM2: [0.55, 0.5, 0.12],
-      frictionStatic: 0.45,
-      frictionDynamic: 0.38,
-      restitution: 0.02,
-      collisionMarginMm: 0.2,
-    },
-  },
-  {
-    id: "prop-oven-bi",
-    name: "Built-in Oven",
-    category: "appliance",
-    tag: "articulated",
-    simReady: "certified",
-    massKg: 42,
-    collision: "sdf",
-    collisionLabel: "sdf",
-    articulationJoints: 1,
-    articulationType: "revolute",
-    materialType: "Stainless Steel",
-    thumbnailUrl: thumb("prop-oven-bi"),
-    previewUrls: previews("prop-oven-bi"),
-    previewModelUrl: "/assets/3d/oven.glb",
-    libraryLocked: true,
-    dimensionsMm: { w: 600, h: 600, d: 550 },
-    densityKgM3: 7900,
-    physics: {
-      inertiaApproxKgM2: [0.9, 0.85, 0.35],
-      frictionStatic: 0.35,
-      frictionDynamic: 0.3,
-      restitution: 0.05,
-      collisionMarginMm: 0.5,
-    },
-  },
-  {
-    id: "prop-pantry-tall",
-    name: "Tall Pantry Cabinet",
-    category: "cabinetry",
-    tag: "articulated",
-    simReady: "pending",
-    massKg: 52,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 0,
-    articulationType: "fixed",
-    materialType: "Oak Wood",
-    thumbnailUrl: thumb("prop-pantry-tall"),
-    previewUrls: previews("prop-pantry-tall"),
-    dimensionsMm: { w: 600, h: 2100, d: 560 },
-    densityKgM3: 680,
-    physics: {
-      inertiaApproxKgM2: [2.1, 1.9, 0.4],
-      frictionStatic: 0.5,
-      frictionDynamic: 0.42,
-      restitution: 0.01,
-      collisionMarginMm: 0.3,
-    },
-  },
-  {
-    id: "prop-planter-ceramic",
-    name: "Ceramic Planter",
-    category: "decor",
-    tag: "manipulation",
-    simReady: "certified",
-    massKg: 2.8,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 0,
-    articulationType: "fixed",
-    materialType: "Ceramic",
-    thumbnailUrl: thumb("prop-planter-ceramic"),
-    previewUrls: previews("prop-planter-ceramic"),
-    dimensionsMm: { w: 280, h: 240, d: 280 },
-    densityKgM3: 2200,
-    physics: {
-      inertiaApproxKgM2: [0.04, 0.035, 0.04],
-      frictionStatic: 0.65,
-      frictionDynamic: 0.5,
-      restitution: 0.15,
-      collisionMarginMm: 0.2,
-    },
-  },
-  {
-    id: "prop-dining-chair",
-    name: "Dining Chair",
-    category: "furniture",
-    tag: "navigation",
-    simReady: "certified",
-    massKg: 8.5,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 0,
-    articulationType: "fixed",
-    materialType: "Oak Wood",
-    thumbnailUrl: thumb("prop-dining-chair"),
-    previewUrls: previews("prop-dining-chair"),
-    previewModelUrl: "/assets/3d/dining-chair.glb",
-    dimensionsMm: { w: 460, h: 880, d: 520 },
-    densityKgM3: 520,
-    physics: {
-      inertiaApproxKgM2: [0.12, 0.15, 0.08],
-      frictionStatic: 0.42,
-      frictionDynamic: 0.36,
-      restitution: 0.1,
-      collisionMarginMm: 0.2,
-    },
-  },
-  {
-    id: "prop-pendant",
-    name: "Pendant Light",
-    category: "lighting",
-    tag: "navigation",
-    simReady: "certified",
-    massKg: 1.8,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 0,
-    articulationType: "fixed",
-    materialType: "Glass + brass",
-    thumbnailUrl: thumb("prop-pendant"),
-    previewUrls: previews("prop-pendant"),
-    dimensionsMm: { w: 350, h: 1200, d: 350 },
-    densityKgM3: 4500,
-    physics: {
-      inertiaApproxKgM2: [0.03, 0.08, 0.03],
-      frictionStatic: 0.5,
-      frictionDynamic: 0.4,
-      restitution: 0.2,
-      collisionMarginMm: 0.15,
-    },
-  },
-  {
-    id: "prop-blinds",
-    name: "Roller Blinds",
-    category: "decor",
-    tag: "navigation",
-    simReady: "pending",
-    massKg: 2.1,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 1,
-    articulationType: "revolute",
-    materialType: "Polyester",
-    thumbnailUrl: thumb("prop-blinds"),
-    previewUrls: previews("prop-blinds"),
-    dimensionsMm: { w: 1800, h: 120, d: 80 },
-    densityKgM3: 300,
-    physics: {
-      inertiaApproxKgM2: [0.08, 0.01, 0.06],
-      frictionStatic: 0.55,
-      frictionDynamic: 0.45,
-      restitution: 0.05,
-      collisionMarginMm: 0.2,
-    },
-  },
-  {
-    id: "prop-dining-table",
-    name: "Dining Table",
-    category: "furniture",
-    tag: "navigation",
-    simReady: "certified",
-    massKg: 48,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 0,
-    articulationType: "fixed",
-    materialType: "Oak Wood",
-    thumbnailUrl: thumb("prop-dining-table"),
-    previewUrls: previews("prop-dining-table"),
-    previewModelUrl: "/assets/3d/dining-table.glb",
-    libraryLocked: true,
-    dimensionsMm: { w: 2000, h: 760, d: 950 },
-    densityKgM3: 650,
-    physics: {
-      inertiaApproxKgM2: [1.8, 0.15, 1.2],
-      frictionStatic: 0.48,
-      frictionDynamic: 0.4,
-      restitution: 0.08,
-      collisionMarginMm: 0.25,
-    },
-  },
-  {
-    id: "prop-sofa-3",
-    name: "Sofa 3-Seater",
-    category: "furniture",
-    tag: "navigation",
-    simReady: "certified",
-    massKg: 72,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 0,
-    articulationType: "fixed",
-    materialType: "Fabric",
-    thumbnailUrl: thumb("prop-sofa-3"),
-    previewUrls: previews("prop-sofa-3"),
-    dimensionsMm: { w: 2200, h: 850, d: 950 },
-    densityKgM3: 180,
-    physics: {
-      inertiaApproxKgM2: [2.5, 0.4, 1.8],
-      frictionStatic: 0.55,
-      frictionDynamic: 0.45,
-      restitution: 0.12,
-      collisionMarginMm: 0.3,
-    },
-  },
-  {
-    id: "prop-mixing-bowl",
-    name: "Stainless Steel Mixing Bowl",
-    category: "tableware",
-    tag: "manipulation",
-    simReady: "certified",
-    massKg: 0.45,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 0,
-    articulationType: "fixed",
-    materialType: "Stainless Steel",
-    thumbnailUrl: thumb("prop-mixing-bowl"),
-    previewUrls: previews("prop-mixing-bowl"),
-    dimensionsMm: { w: 240, h: 120, d: 240 },
-    densityKgM3: 7900,
-    physics: {
-      inertiaApproxKgM2: [0.002, 0.0015, 0.002],
-      frictionStatic: 0.74,
-      frictionDynamic: 0.57,
-      restitution: 0.25,
-      collisionMarginMm: 0.1,
-    },
-  },
-  {
-    id: "prop-mortar",
-    name: "Marble Mortar and Pestle",
-    category: "tableware",
-    tag: "manipulation",
-    simReady: "certified",
-    massKg: 3.2,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 0,
-    articulationType: "compound",
-    materialType: "Marble",
-    thumbnailUrl: thumb("prop-mortar"),
-    previewUrls: previews("prop-mortar"),
-    previewModelUrl: "/assets/3d/marble-mortar-and-pestle.glb",
-    dimensionsMm: { w: 140, h: 100, d: 140 },
-    densityKgM3: 2710,
-    physics: {
-      inertiaApproxKgM2: [0.008, 0.006, 0.008],
-      frictionStatic: 0.75,
-      frictionDynamic: 0.5,
-      restitution: 0.12,
-      collisionMarginMm: 0.15,
-    },
-  },
-  {
-    id: "prop-dishwasher",
-    name: "Dishwasher",
-    category: "appliance",
-    tag: "articulated",
-    simReady: "certified",
-    massKg: 38,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 1,
-    articulationType: "revolute",
-    materialType: "Stainless Steel",
-    thumbnailUrl: thumb("prop-dishwasher"),
-    previewUrls: previews("prop-dishwasher"),
-    previewModelUrl: "/assets/3d/dishwasher.glb",
-    dimensionsMm: { w: 600, h: 820, d: 580 },
-    densityKgM3: 7900,
-    physics: {
-      inertiaApproxKgM2: [0.85, 0.8, 0.32],
-      frictionStatic: 0.35,
-      frictionDynamic: 0.3,
-      restitution: 0.05,
-      collisionMarginMm: 0.5,
-    },
-  },
-  {
-    id: "prop-drawer-900",
-    name: "Drawer Base Unit 900mm",
-    category: "cabinetry",
-    tag: "articulated",
-    simReady: "certified",
-    massKg: 32,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 3,
-    articulationType: "prismatic",
-    materialType: "Oak Wood",
-    thumbnailUrl: thumb("prop-drawer-900"),
-    previewUrls: previews("prop-drawer-900"),
-    previewModelUrl: "/assets/3d/drawer-base-unit-900mm.glb",
-    dimensionsMm: { w: 900, h: 720, d: 560 },
-    densityKgM3: 680,
-    physics: {
-      inertiaApproxKgM2: [0.9, 0.75, 0.28],
-      frictionStatic: 0.45,
-      frictionDynamic: 0.38,
-      restitution: 0.02,
-      collisionMarginMm: 0.2,
-    },
-  },
-  {
-    id: "prop-fridge-freezer",
-    name: "Fridge-Freezer",
-    category: "appliance",
-    tag: "articulated",
-    simReady: "certified",
-    massKg: 85,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 2,
-    articulationType: "revolute",
-    materialType: "Stainless Steel",
-    thumbnailUrl: thumb("prop-fridge-freezer"),
-    previewUrls: previews("prop-fridge-freezer"),
-    previewModelUrl: "/assets/3d/fridge-freezer.glb",
-    dimensionsMm: { w: 900, h: 1850, d: 700 },
-    densityKgM3: 7900,
-    physics: {
-      inertiaApproxKgM2: [3.2, 2.8, 0.9],
-      frictionStatic: 0.35,
-      frictionDynamic: 0.3,
-      restitution: 0.04,
-      collisionMarginMm: 0.5,
-    },
-  },
-  {
-    id: "prop-coffee-machine",
-    name: "Coffee Machine",
-    category: "appliance",
-    tag: "manipulation",
-    simReady: "certified",
-    massKg: 6.5,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 0,
-    articulationType: "fixed",
-    materialType: "ABS Plastic",
-    thumbnailUrl: thumb("prop-coffee-machine"),
-    previewUrls: previews("prop-coffee-machine"),
-    dimensionsMm: { w: 420, h: 380, d: 360 },
-    densityKgM3: 1200,
-    physics: {
-      inertiaApproxKgM2: [0.05, 0.04, 0.04],
-      frictionStatic: 0.45,
-      frictionDynamic: 0.38,
-      restitution: 0.1,
-      collisionMarginMm: 0.2,
-    },
-  },
-  {
-    id: "prop-dinner-plate",
-    name: "Ceramic Dinner Plate",
-    category: "tableware",
-    tag: "manipulation",
-    simReady: "certified",
-    massKg: 0.55,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 0,
-    articulationType: "fixed",
-    materialType: "Ceramic",
-    thumbnailUrl: thumb("prop-dinner-plate"),
-    previewUrls: previews("prop-dinner-plate"),
-    dimensionsMm: { w: 270, h: 25, d: 270 },
-    densityKgM3: 2200,
-    physics: {
-      inertiaApproxKgM2: [0.002, 0.0008, 0.002],
-      frictionStatic: 0.65,
-      frictionDynamic: 0.5,
-      restitution: 0.15,
-      collisionMarginMm: 0.15,
-    },
-  },
-  {
-    id: "prop-floor-lamp",
-    name: "Floor Lamp",
-    category: "lighting",
-    tag: "navigation",
-    simReady: "certified",
-    massKg: 4.2,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 0,
-    articulationType: "fixed",
-    materialType: "Steel + fabric",
-    thumbnailUrl: thumb("prop-floor-lamp"),
-    previewUrls: previews("prop-floor-lamp"),
-    previewModelUrl: "/assets/3d/floor-lamp.glb",
-    dimensionsMm: { w: 350, h: 1650, d: 350 },
-    densityKgM3: 800,
-    physics: {
-      inertiaApproxKgM2: [0.08, 0.35, 0.08],
-      frictionStatic: 0.5,
-      frictionDynamic: 0.4,
-      restitution: 0.15,
-      collisionMarginMm: 0.2,
-    },
-  },
-  {
-    id: "prop-bar-stool",
-    name: "Bar Stool",
-    category: "furniture",
-    tag: "navigation",
-    simReady: "certified",
-    massKg: 6.2,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 1,
-    articulationType: "revolute",
-    materialType: "Oak Wood + steel",
-    thumbnailUrl: thumb("prop-bar-stool"),
-    previewUrls: previews("prop-bar-stool"),
-    dimensionsMm: { w: 460, h: 880, d: 520 },
-    densityKgM3: 520,
-    physics: {
-      inertiaApproxKgM2: [0.12, 0.15, 0.08],
-      frictionStatic: 0.42,
-      frictionDynamic: 0.36,
-      restitution: 0.1,
-      collisionMarginMm: 0.2,
-    },
-  },
-  {
-    id: "prop-microwave",
-    name: "Microwave",
-    category: "appliance",
-    tag: "articulated",
-    simReady: "certified",
-    massKg: 12.6,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 1,
-    articulationType: "revolute",
-    materialType: "Stainless Steel",
-    thumbnailUrl: thumb("prop-microwave"),
-    previewUrls: previews("prop-microwave"),
-    previewModelUrl: "/assets/3d/microwave.glb",
-    dimensionsMm: { w: 520, h: 300, d: 420 },
-    densityKgM3: 7900,
-    physics: {
-      inertiaApproxKgM2: [0.12, 0.08, 0.1],
-      frictionStatic: 0.35,
-      frictionDynamic: 0.3,
-      restitution: 0.05,
-      collisionMarginMm: 0.4,
-    },
-  },
-  {
-    id: "prop-spice-rack",
-    name: "Spice Rack",
-    category: "tableware",
-    tag: "manipulation",
-    simReady: "certified",
-    massKg: 1.8,
-    collision: "convex_hull",
-    collisionLabel: "convexHull",
-    articulationJoints: 0,
-    articulationType: "fixed",
-    materialType: "Oak Wood",
-    thumbnailUrl: thumb("prop-spice-rack"),
-    previewUrls: previews("prop-spice-rack"),
-    dimensionsMm: { w: 400, h: 120, d: 120 },
-    densityKgM3: 720,
-    physics: {
-      inertiaApproxKgM2: [0.015, 0.004, 0.004],
-      frictionStatic: 0.54,
-      frictionDynamic: 0.32,
-      restitution: 0.1,
-      collisionMarginMm: 0.2,
-    },
-  },
-];
+    densityKgM3: densityFor(entry),
+    physics,
+    isLocked: entry.isLocked ?? false,
+  };
+}
+
+/** Kitchen props — derived from the SimReady catalog */
+export const MOCK_PROPS: PropAsset[] = rawCatalog.map(transformEntry);

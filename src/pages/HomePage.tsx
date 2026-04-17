@@ -11,7 +11,6 @@ import { Skeleton } from "@/components/ui/Skeleton";
 import { useAuth } from "@/context/AuthContext";
 import { AssetCardLockOverlay } from "@/components/assets/AssetCardLockOverlay";
 import { canUseFeature } from "@/lib/access";
-import { hasPreviewModel } from "@/lib/assetPreview";
 import { MOCK_MATERIALS, MOCK_PROPS } from "@/data/mockCatalog";
 import { ENVIRONMENT_CATALOG_PLACEHOLDERS, fetchMaterialById, fetchPropById } from "@/lib/mockApi";
 import { environmentWorkspaceHref } from "@/lib/environmentWorkspaceHref";
@@ -51,7 +50,7 @@ function daypartGreeting() {
 const HOME_PROPS_MAX = 5;
 const HOME_MATERIALS_COUNT = 9;
 
-const propsShowcase = MOCK_PROPS.filter((p) => hasPreviewModel(p.previewModelUrl)).slice(0, HOME_PROPS_MAX);
+const propsShowcase = MOCK_PROPS.filter((p) => !p.isLocked).slice(0, HOME_PROPS_MAX);
 const materialsShowcase = MOCK_MATERIALS.slice(0, HOME_MATERIALS_COUNT);
 
 type HomeAssetSelection = { kind: "prop" | "material"; id: string } | null;
@@ -185,7 +184,7 @@ export function HomePage() {
             className="grid w-full grid-cols-2 gap-[var(--s-400)] sm:grid-cols-3 lg:grid-cols-5"
           >
             {propsShowcase.map((p) => {
-              const canOpen = hasPreviewModel(p.previewModelUrl);
+              const canOpen = !p.isLocked;
               return (
                 <button
                   key={p.id}

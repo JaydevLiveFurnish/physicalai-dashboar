@@ -6,7 +6,6 @@ import { PropAssetDetail } from "@/components/assets/PropAssetDetail";
 import { ExportAccessModal } from "@/components/access/ExportAccessModal";
 import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
 import { fetchAssets, fetchMaterialById, fetchMaterials, fetchPropById } from "@/lib/mockApi";
-import { hasPreviewModel } from "@/lib/assetPreview";
 import { assetKindPill } from "@/lib/prismSurfaces";
 import { AssetLibraryTabs } from "@/components/assets/AssetLibraryTabs";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -78,6 +77,7 @@ export function AssetsHubPage() {
       thumb: p.thumbnailUrl,
       meta: `SimReady: ${p.simReady}`,
       previewModelUrl: p.previewModelUrl,
+      isLocked: p.isLocked ?? false,
     })),
     ...materials.map((m) => ({
       id: m.id,
@@ -88,6 +88,7 @@ export function AssetsHubPage() {
       thumb: m.thumbnailUrl ?? "",
       meta: `e ${m.restitution.toFixed(2)}`,
       previewModelUrl: m.previewModelUrl,
+      isLocked: false,
     })),
   ];
 
@@ -106,8 +107,7 @@ export function AssetsHubPage() {
         className="grid w-full grid-cols-[repeat(auto-fill,minmax(min(100%,200px),1fr))] gap-[var(--s-300)]"
       >
         {allCards.map((item) => {
-          const canOpen =
-            item.kind === "material" || (item.kind === "prop" && hasPreviewModel(item.previewModelUrl));
+          const canOpen = !item.isLocked;
           return (
             <button
               key={`${item.kind}-${item.id}`}

@@ -1,4 +1,4 @@
-import { AssetModelViewer } from "@/components/assets/AssetModelViewer";
+import GLBViewer from "@/components/library/GLBViewer";
 import { hasPreviewModel } from "@/lib/assetPreview";
 
 type AssetDetailPreviewPaneProps = {
@@ -17,7 +17,16 @@ export function AssetDetailPreviewPane({ previewModelUrl, thumbnailUrl, alt }: A
     return (
       <div className={shell}>
         <div className="relative min-h-0 flex-1">
-          <AssetModelViewer url={previewModelUrl!.trim()} />
+          <div className="absolute inset-0">
+            <GLBViewer
+              glbPath={previewModelUrl!.trim()}
+              fallbackImage={thumbnailUrl ?? ""}
+              className="h-full w-full"
+            />
+            <p className="pointer-events-none absolute bottom-[var(--s-200)] left-[var(--s-200)] right-[var(--s-200)] text-center text-[11px] text-[var(--text-default-placeholder)]">
+              Drag to orbit · scroll to zoom
+            </p>
+          </div>
         </div>
       </div>
     );

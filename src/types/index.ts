@@ -41,6 +41,8 @@ export interface PropAsset {
   previewModelUrl?: string | null;
   /** When true, downloads stay gated; interactive preview may still be available when a GLB exists. */
   libraryLocked?: boolean;
+  /** When true, the card shows a lock overlay and is not clickable. Drives the library lock UI. */
+  isLocked?: boolean;
 }
 
 export interface MaterialRecord {

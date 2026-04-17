@@ -42,7 +42,7 @@ export function TalkToTeamModal({ open, onClose, context = "general", layout = "
       hideHeader={layout === "split" && flow.step < 3}
     >
       {layout === "split" && flow.step < 3 ? (
-        <div className="-mx-[var(--s-500)] -mt-[var(--s-500)]">{body}</div>
+        <div className="-mx-[var(--s-500)] -mb-[var(--s-500)] -mt-[var(--s-500)]">{body}</div>
       ) : (
         body
       )}

@@ -176,6 +176,29 @@
   }
 }
 
+/** Asset card hover: 2px accent gradient bar at the top (matches /library/assets reference). */
+.asset-card-ring {
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.asset-card-ring::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.asset-card-ring:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
   font-size: 20px;

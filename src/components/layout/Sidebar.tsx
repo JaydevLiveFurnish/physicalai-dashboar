@@ -173,9 +173,9 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
               >
                 folder
               </span>
-              <span className="min-w-0 flex-1 truncate">Assets</span>
+              <span className="min-w-0 flex-1 truncate">3D Assets</span>
             </Link>
-            <button
+            {/* <button
               type="button"
               aria-label={assetOpen ? "Collapse assets menu" : "Expand assets menu"}
               aria-expanded={assetOpen}
@@ -189,9 +189,9 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
               <span className="material-symbols-outlined text-[18px]">
                 {assetOpen ? "expand_more" : "chevron_right"}
               </span>
-            </button>
+            </button> */}
           </div>
-          {assetOpen ? (
+          {/* {assetOpen ? (
             <div className={cn(subTree, "flex flex-col gap-[2px] py-[var(--s-100)]")}>
               <NavLink
                 to="/assets/props"
@@ -220,7 +220,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                 Materials
               </NavLink>
             </div>
-          ) : null}
+          ) : null} */}
         </div>
 
         <div className="flex flex-col">

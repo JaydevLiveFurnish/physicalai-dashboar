@@ -1,0 +1,376 @@
+/* ═══════════════════════════════════════════════════════
+   BookingWidget — custom form + calendar + slots
+   ═══════════════════════════════════════════════════════ */
+
+.widget {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-500);
+  background: var(--surface-card);
+  color: var(--text-default-body);
+  border-radius: var(--br-200);
+  padding: var(--s-800);
+  font-family: var(--font);
+  container-type: inline-size;
+  container-name: bw;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-500);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-200);
+  min-width: 0;
+}
+
+.field label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-default-heading);
+  letter-spacing: 0.1px;
+}
+
+.required {
+  color: var(--accent);
+}
+
+.field input,
+.field select,
+.timezoneSelect {
+  width: 100%;
+  background: var(--surface-default-secondary);
+  border: 1px solid var(--divider);
+  border-radius: var(--br-100);
+  padding: var(--s-400) var(--s-500);
+  font-family: var(--font);
+  font-size: 15px;
+  color: var(--text-default-heading);
+  outline: none;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.field select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3e%3cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right var(--s-300) center;
+  padding-right: var(--s-900);
+  cursor: pointer;
+}
+
+.field input::placeholder,
+.timezoneSelect::placeholder {
+  color: var(--text-default-placeholder);
+}
+
+.field input:focus,
+.field select:focus,
+.timezoneSelect:focus {
+  border-color: var(--accent);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(236, 78, 11, 0.12);
+}
+
+/* ── Calendar label ───────────────────────────────── */
+
+.scheduleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-200);
+}
+
+.calendarLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-default-heading);
+}
+
+/* ── Layout: calendar + side panel ────────────────── */
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+  gap: var(--s-400);
+  align-items: stretch;
+}
+
+/* ── Calendar ─────────────────────────────────────── */
+
+.calendar {
+  border: 1px solid var(--divider);
+  border-radius: var(--br-100);
+  padding: var(--s-300);
+  background: var(--white);
+}
+
+.calendarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface-default-secondary);
+  border-radius: var(--br-100);
+  padding: 6px var(--s-300);
+  margin-bottom: var(--s-200);
+}
+
+.monthLabel {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-default-heading);
+}
+
+.monthNav {
+  background: none;
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text-default-heading);
+  cursor: pointer;
+  padding: var(--s-100) var(--s-200);
+  border-radius: var(--br-100);
+  transition: background 0.15s;
+}
+
+.monthNav:hover:not(:disabled) {
+  background: var(--surface-inset);
+}
+
+.monthNav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.weekdayRow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--s-100);
+  margin-bottom: var(--s-100);
+}
+
+.weekday {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-default-caption);
+  font-weight: 500;
+  padding: 6px 0;
+  letter-spacing: 0.3px;
+}
+
+.daysGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--s-100);
+}
+
+.dayEmpty {
+  aspect-ratio: 1;
+}
+
+.day {
+  aspect-ratio: 1;
+  background: none;
+  border: none;
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--text-default-heading);
+  cursor: pointer;
+  border-radius: var(--br-100);
+  transition: background 0.15s, color 0.15s;
+  padding: 0;
+}
+
+.day:hover:not(:disabled) {
+  background: var(--accent-subtle);
+}
+
+.dayAvailable {
+  color: var(--text-default-heading);
+  font-weight: 500;
+}
+
+.dayDisabled {
+  color: var(--grey-200);
+  cursor: not-allowed;
+}
+
+.daySelected {
+  background: var(--accent) !important;
+  color: var(--white) !important;
+}
+
+/* ── Side panel (timezone + slots) ────────────────── */
+
+.sidePanel {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+}
+
+.timezoneSelect {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3e%3cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.slotsWrapper {
+  position: absolute;
+  inset: 0;
+  min-width: 0;
+  overflow: hidden auto;
+  scrollbar-width: none;
+}
+
+.slotsWrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.slotsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.slot {
+  background: var(--white);
+  border: 1px solid var(--accent);
+  border-radius: var(--br-100);
+  padding: 6px var(--s-200);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  min-width: 0;
+}
+
+.slot:hover {
+  background: var(--accent);
+  color: var(--white);
+}
+
+.slotActive {
+  background: var(--accent);
+  color: var(--white);
+}
+
+.slotsEmpty,
+.slotsError {
+  font-size: 13px;
+  color: var(--text-default-caption);
+  padding: var(--s-400) 0;
+  text-align: center;
+}
+
+.slotsError {
+  color: var(--red-400);
+}
+
+/* ── Submit + errors ──────────────────────────────── */
+
+.error {
+  font-size: 13px;
+  color: var(--red-400);
+  background: var(--red-100);
+  border-radius: var(--br-100);
+  padding: 10px 14px;
+}
+
+.submit {
+  width: 100%;
+  padding: var(--s-400);
+  background: var(--accent);
+  color: var(--white);
+  font-family: var(--font);
+  font-size: 15px;
+  border: none;
+  border-radius: var(--br-100);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, opacity 0.15s;
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Success ──────────────────────────────────────── */
+
+.success {
+  background: var(--white);
+  color: var(--text-default-body);
+  border-radius: var(--br-200);
+  padding: 80px var(--s-800);
+  text-align: center;
+  font-family: var(--font);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-400);
+}
+
+.successIcon {
+  font-size: 64px !important;
+  color: var(--accent);
+}
+
+.successTitle {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-default-heading);
+}
+
+.successText {
+  font-size: 15px;
+  color: var(--text-default-body);
+  margin: 0;
+  max-width: 320px;
+}
+
+/* ── Responsive ───────────────────────────────────── */
+
+/* Stack calendar + slots whenever the widget itself is narrower than the
+   side-by-side threshold. Uses container query so it responds to the widget's
+   actual width, independent of how wide the viewport is. */
+@container bw (max-width: 420px) {
+  .calendarGrid {
+    grid-template-columns: 1fr;
+  }
+  .sidePanel {
+    position: static;
+  }
+  .slotsWrapper {
+    position: static;
+    min-height: 160px;
+  }
+  .slotsGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .fieldRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .widget {
+    padding: var(--s-500);
+  }
+}

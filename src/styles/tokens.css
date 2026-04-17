@@ -56,6 +56,7 @@
 
   --text-default-heading: #1a1a1a;
   --text-default-body: #4d4d4d;
+  --text-default-subtle: rgba(0, 0, 0, 0.4);
   --text-default-placeholder: #7f7f7f;
   --text-primary-default: #ec4e0b;
   --text-success-default: #00b64c;
@@ -90,10 +91,23 @@
   --s-500: 20px;
   --s-600: 24px;
   --s-800: 32px;
+  --s-900: 36px;
 
   --br-100: 4px;
   --br-200: 8px;
   --bw-25: 1px;
+
+  /** BookingWidget aliases (light). */
+  --accent: var(--surface-primary-default);
+  --accent-hover: var(--surface-primary-default-hover);
+  --accent-subtle: var(--surface-primary-default-subtle);
+  --surface-card: var(--surface-default);
+  --surface-default-secondary: var(--surface-page-secondary);
+  --surface-inset: var(--grey-50);
+  --divider: var(--border-default-secondary);
+  --text-default-caption: var(--text-default-placeholder);
+  --red-400: var(--text-error-default);
+  --red-100: var(--surface-error-default-subtle);
 }
 
 /**
@@ -104,6 +118,7 @@
 
   --text-default-heading: #f2f2f2;
   --text-default-body: #a8a8a8;
+  --text-default-subtle: rgba(255, 255, 255, 0.4);
   --text-default-placeholder: #737373;
   --text-primary-default: #ff7a3d;
   --text-success-default: #34d399;

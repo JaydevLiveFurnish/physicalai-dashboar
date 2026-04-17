@@ -4,10 +4,11 @@ import { allKitchenBatchSelections, KITCHEN_PARAMETER_GROUPS } from "@/kitchen/p
 import type { KitchenParamKey } from "@/kitchen/params";
 import { getBatchCombinationStats } from "@/kitchen/batchCombinatorics";
 import { runBatchJob } from "@/lib/mockApi";
-import { KITCHEN_LIMITS, remaining, tryConsume } from "@/lib/kitchenLimits";
+import { KITCHEN_LIMITS, remaining } from "@/lib/kitchenLimits";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { CenterModal } from "@/components/ui/CenterModal";
+import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
 
 const BATCH_GENERATE_COUNT = 500;
 
@@ -132,7 +133,7 @@ export type BatchGenerationPageProps = {
 
 export function BatchGenerationPage({ embedded = false }: BatchGenerationPageProps) {
   const [selections, setSelections] = useState<Record<KitchenParamKey, string[]>>(initialSelections);
-  const [limitMessage, setLimitMessage] = useState<string | null>(null);
+  const [limitMessage] = useState<string | null>(null);
   const [previewDetail, setPreviewDetail] = useState<{ id: string; index: number; ready: boolean } | null>(null);
   const parameterOptions = useMemo(() => {
     const optionsByParam = new Map<KitchenParamKey, readonly string[]>();
@@ -153,6 +154,7 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
 
   const [simProgress, setSimProgress] = useState(0);
   const [simActive, setSimActive] = useState(false);
+  const [talkToTeamOpen, setTalkToTeamOpen] = useState(false);
 
   const comboStats = useMemo(() => getBatchCombinationStats(selections), [selections]);
   const { raw: rawCount, valid: validCombinations } = comboStats;
@@ -210,17 +212,6 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
   const showVariationOutput = generationSucceeded && (simActive || generationComplete);
   const showEmptyState = !queueing && !showVariationOutput && !mutation.isSuccess;
 
-  const runBatch = () => {
-    setLimitMessage(null);
-    if (!tryConsume("batchRuns")) {
-      setLimitMessage("No batch runs remaining in this preview session.");
-      return;
-    }
-    mutation.reset();
-    setSimProgress(0);
-    setSimActive(false);
-    mutation.mutate();
-  };
 
   const headerBlock =
     embedded ? null : (
@@ -264,7 +255,7 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
             variant="primary"
             className="h-9 min-h-0 w-full justify-center px-[var(--s-400)] py-[var(--s-200)] text-[13px] font-semibold"
             disabled={queueing || batchLeft === 0 || validCombinations === 0}
-            onClick={runBatch}
+            onClick={() => setTalkToTeamOpen(true)}
           >
             {queueing ? "Queueing…" : "Generate batch"}
           </Button>
@@ -484,6 +475,7 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
       </div>
 
       {previewModal}
+      <TalkToTeamModal open={talkToTeamOpen} onClose={() => setTalkToTeamOpen(false)} />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { Fragment, useRef } from "react";
 import { Button } from "@/components/ui/Button";
+import BookingWidget from "@/components/contact/BookingWidget";
 import { useTalkToTeamFlow } from "./useTalkToTeamFlow";
 
 type Flow = ReturnType<typeof useTalkToTeamFlow>;
@@ -270,19 +271,11 @@ function ConfirmSummary({ flow }: { flow: Flow }) {
   );
 }
 
-/** Two-column: narrative left rail + focused form column. */
-export function TalkToTeamOverlaySplit({ flow, onClose }: { flow: Flow; onClose: () => void }) {
-  if (flow.step === 3) {
-    return (
-      <div className="px-[var(--s-500)] pb-[var(--s-500)] pt-[var(--s-400)]">
-        <SuccessBody flow={flow} onClose={onClose} />
-      </div>
-    );
-  }
-
+/** Two-column: narrative left rail + BookingWidget form column. */
+export function TalkToTeamOverlaySplit({ flow: _flow, onClose: _onClose }: { flow: Flow; onClose: () => void }) {
   return (
-    <div className="flex min-h-[min(72vh,640px)] flex-col md:flex-row">
-      <aside className="flex min-h-0 flex-col border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-500)] py-[var(--s-600)] md:w-[min(46%,400px)] md:max-w-[420px] md:justify-center md:border-b-0 md:border-r md:pl-[var(--s-600)] md:pr-[var(--s-500)]">
+    <div className="flex h-[min(78vh,800px)] flex-col md:flex-row">
+      <aside className="flex min-h-0 shrink-0 flex-col justify-start border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-800)] py-[var(--s-800)] md:w-[min(46%,400px)] md:max-w-[420px] md:border-b-0 md:border-r">
         <h2 className="text-[clamp(1.5rem,3vw,2.125rem)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--text-default-heading)]">
           Book a demo with our experts
         </h2>
@@ -296,44 +289,8 @@ export function TalkToTeamOverlaySplit({ flow, onClose }: { flow: Flow; onClose:
         </ul>
       </aside>
 
-      <div className="flex flex-1 flex-col border-t border-[var(--border-default-secondary)] md:border-t-0">
-        <div className="px-[var(--s-500)] pb-[var(--s-400)] pt-[var(--s-500)] md:pl-[var(--s-600)] md:pr-[var(--s-600)]">
-          <FormProgressSteps step={flow.step} />
-        </div>
-        <div className="flex flex-1 flex-col px-[var(--s-500)] pb-[var(--s-600)] pt-[var(--s-200)] md:pl-[var(--s-600)] md:pr-[var(--s-600)]">
-          {flow.step === 0 ? (
-            <form className="flex flex-1 flex-col" onSubmit={flow.handleSubmit}>
-              <DetailsFields flow={flow} />
-              <div className="mt-auto">
-                <FormFooter primaryLabel="Pick a time" primaryFullWidth withDivider={false} />
-              </div>
-            </form>
-          ) : null}
-
-          {flow.step === 1 ? (
-            <form className="flex flex-1 flex-col" onSubmit={flow.handleSubmit}>
-              <ScheduleFields flow={flow} />
-              <div className="mt-auto">
-                <FormFooter
-                  primaryLabel="Next: Confirm"
-                  showBack
-                  onBack={() => flow.setStep(0)}
-                  primaryFullWidth
-                  withDivider={false}
-                />
-              </div>
-            </form>
-          ) : null}
-
-          {flow.step === 2 ? (
-            <form className="flex flex-1 flex-col" onSubmit={flow.handleSubmit}>
-              <ConfirmSummary flow={flow} />
-              <div className="mt-auto">
-                <FormFooter primaryLabel="Submit request" showBack onBack={() => flow.setStep(1)} withDivider={false} />
-              </div>
-            </form>
-          ) : null}
-        </div>
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-[var(--surface-card)] border-t border-[var(--border-default-secondary)] md:border-t-0 [&>div]:my-auto [&>form]:flex-1 [&>form]:rounded-none [&>form]:pt-[var(--s-800)] [&>form]:pr-[calc(var(--s-800)+var(--s-500))]">
+        <BookingWidget />
       </div>
     </div>
   );

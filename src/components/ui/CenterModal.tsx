@@ -80,7 +80,7 @@ export function CenterModal({
             aria-modal="true"
             aria-labelledby={titleId}
             onClick={(e) => e.stopPropagation()}
-            className={`relative w-full ${maxW} rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] shadow-2xl ${txOverlayPanel} ${
+            className={`relative w-full ${maxW} overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] shadow-2xl ${txOverlayPanel} ${
               show ? "translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-[0.98] opacity-0"
             } ${show ? "" : "pointer-events-none"}`}
           >

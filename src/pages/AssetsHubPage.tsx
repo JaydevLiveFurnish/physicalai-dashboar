@@ -4,6 +4,7 @@ import { AssetCardLockOverlay } from "@/components/assets/AssetCardLockOverlay";
 import { MaterialAssetDetail } from "@/components/assets/MaterialAssetDetail";
 import { PropAssetDetail } from "@/components/assets/PropAssetDetail";
 import { ExportAccessModal } from "@/components/access/ExportAccessModal";
+import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
 import { fetchAssets, fetchMaterialById, fetchMaterials, fetchPropById } from "@/lib/mockApi";
 import { hasPreviewModel } from "@/lib/assetPreview";
 import { assetKindPill } from "@/lib/prismSurfaces";
@@ -20,6 +21,7 @@ export function AssetsHubPage() {
   const { accessTier } = useAuth();
   const fullExport = canUseFeature(accessTier, "full_export");
   const [exportModalOpen, setExportModalOpen] = useState(false);
+  const [talkToTeamOpen, setTalkToTeamOpen] = useState(false);
 
   const propsList = useQuery({ queryKey: ["assets", "all-hub"], queryFn: () => fetchAssets({}) });
   const materialsList = useQuery({ queryKey: ["materials", "all-hub"], queryFn: () => fetchMaterials({}) });
@@ -110,31 +112,29 @@ export function AssetsHubPage() {
             <button
               key={`${item.kind}-${item.id}`}
               type="button"
-              disabled={!canOpen}
-              title={
-                canOpen ? undefined : "3D preview not available yet — publish a GLB in /public/assets/3d to unlock"
+              onClick={
+                canOpen
+                  ? () => setSelected({ kind: item.kind, id: item.id })
+                  : () => setTalkToTeamOpen(true)
               }
-              onClick={canOpen ? () => setSelected({ kind: item.kind, id: item.id }) : undefined}
-              className={`flex w-full min-w-0 flex-col overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] text-left shadow-sm disabled:cursor-not-allowed disabled:hover:shadow-sm disabled:active:scale-100 ${
-                canOpen ? "transition-[box-shadow,transform] duration-250 ease-out hover:shadow-md active:scale-[0.99]" : ""
+              className={`asset-card-ring relative flex w-full min-w-0 flex-col overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] text-left shadow-sm hover:-translate-y-1 hover:border-[rgba(236,78,11,0.3)] active:scale-[0.99] ${
+                canOpen ? "" : "cursor-pointer"
               }`}
             >
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[var(--surface-page-secondary)]">
+              <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden border-b border-[var(--border-default-secondary)]">
                 <span
-                  className={`absolute left-[var(--s-300)] top-[var(--s-300)] z-[1] rounded-br100 px-[var(--s-200)] py-[3px] text-[10px] font-bold leading-tight tracking-wide ${
+                  className={`absolute left-[var(--s-300)] top-[var(--s-300)] z-[1] rounded-[4px] px-[var(--s-200)] py-[1px] text-[10px] font-semibold leading-tight tracking-[0.5px] ${
                     item.kind === "prop" ? assetKindPill.prop : assetKindPill.material
                   }`}
                 >
                   {item.kind === "prop" ? "Prop" : "Material"}
                 </span>
-                {item.thumb ? <img src={item.thumb} alt="" className="h-full w-full object-cover object-center" /> : null}
+                {item.thumb ? <img src={item.thumb} alt="" className="h-full w-full object-contain p-[12px]" /> : null}
                 {!canOpen ? <AssetCardLockOverlay /> : null}
               </div>
-              <div className="space-y-[var(--s-200)] px-[var(--s-300)] pb-[var(--s-400)] pt-[var(--s-400)]">
-                <span className="block text-[16px] font-semibold leading-snug text-[var(--text-default-heading)]">{item.name}</span>
-                <p className="text-[13px] leading-[18px] text-[var(--text-default-body)]">{item.subtitle}</p>
-                <p className="text-[13px] text-[var(--text-default-body)]">{item.detail}</p>
-                <p className="text-[12px] text-[var(--text-default-placeholder)]">{item.meta}</p>
+              <div className="px-[var(--s-500)] py-[var(--s-400)]">
+                <div className="line-clamp-2 text-[14px] font-semibold leading-[1.3] text-[var(--text-default-heading)]">{item.name}</div>
+                <div className="mt-[var(--s-100)] text-[12px] font-normal text-[var(--text-default-subtle)]">{item.subtitle}</div>
               </div>
             </button>
           );
@@ -172,6 +172,7 @@ export function AssetsHubPage() {
       </CenterModal>
 
       <ExportAccessModal open={exportModalOpen} onClose={() => setExportModalOpen(false)} />
+      <TalkToTeamModal open={talkToTeamOpen} onClose={() => setTalkToTeamOpen(false)} />
     </>
   );
 }

@@ -216,7 +216,7 @@ export function HomePage() {
           </StaggerFadeGroup>
         </section>
 
-        <section className="space-y-[var(--s-300)] px-[var(--s-100)] sm:px-0" aria-labelledby="home-mat-heading">
+        {/* <section className="space-y-[var(--s-300)] px-[var(--s-100)] sm:px-0" aria-labelledby="home-mat-heading">
           <div className={homeSectionHeaderRow}>
             <h2 id="home-mat-heading" className={homeSectionTitle}>
               Materials
@@ -253,7 +253,7 @@ export function HomePage() {
               </button>
             ))}
           </StaggerFadeGroup>
-        </section>
+        </section> */}
       </StaggerFadeGroup>
 
       <CenterModal

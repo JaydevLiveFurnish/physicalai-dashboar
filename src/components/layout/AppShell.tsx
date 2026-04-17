@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { usePresence } from "@/hooks/usePresence";
 import { txOverlayBackdrop } from "./motion";
-import { AskImagineProvider } from "@/components/assistant/AskImagineDock";
 import { AppTopBar } from "./AppTopBar";
 import { mainOffsetFromSidebarClass } from "./sidebarLayout";
 import { PageTransition } from "./PageTransition";
@@ -19,6 +18,9 @@ export function AppShell() {
   const location = useLocation();
   const contentWidthClass = "mx-auto w-full max-w-[1250px]";
   const kitchenWorkspaceFill = KITCHEN_WORKSPACE_FILL_PATH.test(location.pathname);
+  const simReadyHeroFill = location.pathname === "/simready";
+  /** Outlet grows to fill main so full-bleed heroes (SimReady) and kitchen workspaces get real height */
+  const mainOutletFill = kitchenWorkspaceFill || simReadyHeroFill;
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { mounted: backdropMounted, show: backdropShow } = usePresence(mobileNavOpen);
 
@@ -45,7 +47,6 @@ export function AppShell() {
   }, [backdropMounted]);
 
   return (
-    <AskImagineProvider>
     <div className="flex h-[100dvh] flex-col overflow-hidden bg-[var(--surface-page)]">
       <Sidebar mobileOpen={mobileNavOpen} onClose={() => setMobileNavOpen(false)} />
 
@@ -66,14 +67,16 @@ export function AppShell() {
         <main
           className={cn(
             "w-full max-w-none min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-y-contain px-[var(--s-300)] pb-[max(var(--s-500),env(safe-area-inset-bottom))] pt-[calc(3.5rem+env(safe-area-inset-top)+var(--s-400))] sm:px-[var(--s-400)] md:px-[var(--s-600)] md:pb-[var(--s-500)] md:pt-[max(var(--s-500),env(safe-area-inset-top))] [-webkit-overflow-scrolling:touch]",
-            kitchenWorkspaceFill && "flex flex-col md:overflow-hidden",
+            mainOutletFill && "flex flex-col",
+            kitchenWorkspaceFill && "md:overflow-hidden",
+            simReadyHeroFill && "pb-0 md:pt-0",
           )}
         >
-          <PageTransition className={kitchenWorkspaceFill ? "flex min-h-0 w-full flex-1 flex-col" : undefined}>
+          <PageTransition className={mainOutletFill ? "flex min-h-0 w-full flex-1 flex-col" : undefined}>
             <div
               className={cn(
                 contentWidthClass,
-                kitchenWorkspaceFill && "flex min-h-0 flex-1 flex-col",
+                mainOutletFill && "flex min-h-0 flex-1 flex-col",
               )}
             >
               <Outlet />
@@ -82,6 +85,5 @@ export function AppShell() {
         </main>
       </div>
     </div>
-    </AskImagineProvider>
   );
 }

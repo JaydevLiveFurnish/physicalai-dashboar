@@ -138,15 +138,17 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
 
   const [simProgress, setSimProgress] = useState(0);
   const [simActive, setSimActive] = useState(false);
+  const [hasStartedBatchRun, setHasStartedBatchRun] = useState(false);
 
   const jobs = useQuery({
     queryKey: ["jobs"],
     queryFn: fetchJobs,
     refetchInterval: 4000,
+    enabled: hasStartedBatchRun,
   });
 
   const comboStats = useMemo(() => getBatchCombinationStats(selections), [selections]);
-  const { raw: rawCount, valid: validCombinations, invalid: invalidCombinations } = comboStats;
+  const { raw: rawCount, valid: validCombinations } = comboStats;
   const generateCap = Math.min(BATCH_GENERATE_COUNT, Math.max(0, validCombinations));
 
   const mutation = useMutation({
@@ -155,6 +157,9 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
         environmentId: "env-kitchen-v2",
         selections: selections as unknown as Record<string, string[]>,
       }),
+    onMutate: () => {
+      setHasStartedBatchRun(true);
+    },
     onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: ["jobs"] });
       if (data.validCombinations > 0 && data.status !== "failed") {
@@ -175,6 +180,7 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
     }, 45);
     return () => window.clearTimeout(id);
   }, [simActive, simProgress]);
+
 
   const toggleValue = (key: KitchenParamKey, value: string) => {
     setSelections((prev) => {
@@ -199,6 +205,7 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
     mutation.data.status !== "failed" &&
     mutation.data.validCombinations > 0;
   const showVariationOutput = generationSucceeded && (simActive || generationComplete);
+  const showEmptyState = !queueing && !showVariationOutput && !mutation.isSuccess;
 
   const runBatch = () => {
     setLimitMessage(null);
@@ -229,7 +236,7 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
       className="shrink-0 border-t border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-300)] py-[var(--s-300)] shadow-[0_-4px_16px_rgba(0,0,0,0.04)]"
       aria-label="Combination statistics and batch actions"
     >
-      <div className="grid gap-[var(--s-200)] sm:grid-cols-3">
+      <div className="grid gap-[var(--s-200)] sm:grid-cols-2">
         <div className="rounded-br100 border border-[var(--border-default-secondary)] bg-[color-mix(in_srgb,var(--papaya-500)_6%,var(--surface-page-secondary))] px-[var(--s-300)] py-[var(--s-200)]">
           <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-[var(--text-default-placeholder)]">
             Valid combinations
@@ -246,24 +253,13 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
             {rawCount.toLocaleString()}
           </p>
         </div>
-        <div className="rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-200)]">
-          <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-[var(--text-default-placeholder)]">
-            Invalid combos
-          </p>
-          <p className="mt-[4px] font-mono text-[15px] font-semibold leading-tight tabular-nums text-[var(--text-default-body)] sm:text-[16px]">
-            − {invalidCombinations.toLocaleString()}
-            <span className="ml-[6px] text-[10px] font-sans font-medium text-[var(--text-default-placeholder)]">
-              invalid
-            </span>
-          </p>
-        </div>
       </div>
 
       <div className="mt-[var(--s-300)] border-t border-[var(--border-default-secondary)] pt-[var(--s-300)]">
         <div className="flex flex-col gap-[4px]">
           <Button
             variant="primary"
-            className="h-9 min-h-0 w-full max-w-none justify-center px-[var(--s-400)] py-[var(--s-200)] text-[13px] font-semibold sm:max-w-[220px]"
+            className="h-9 min-h-0 w-full justify-center px-[var(--s-400)] py-[var(--s-200)] text-[13px] font-semibold"
             disabled={queueing || batchLeft === 0 || validCombinations === 0}
             onClick={runBatch}
           >
@@ -313,7 +309,7 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
   );
 
   const outputMain = (
-    <div className="min-h-0 flex-1 space-y-[var(--s-400)] overflow-y-auto px-[var(--s-400)] py-[var(--s-400)] [-webkit-overflow-scrolling:touch]">
+    <div className="min-h-0 flex flex-1 flex-col gap-[var(--s-400)] overflow-y-auto px-[var(--s-400)] py-[var(--s-400)] [-webkit-overflow-scrolling:touch]">
       {queueing ? (
         <div className="rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)] p-[var(--s-500)]">
           <p className="text-[14px] font-semibold text-[var(--text-default-heading)]">Queueing batch job</p>
@@ -361,8 +357,8 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
         </>
       ) : null}
 
-      {!queueing && !showVariationOutput && !mutation.isSuccess ? (
-        <div className="flex min-h-[min(240px,40vh)] flex-col items-center justify-center gap-[var(--s-300)] rounded-br200 border border-dashed border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-400)] py-[var(--s-500)] text-center">
+      {showEmptyState ? (
+        <div className="flex min-h-full flex-1 flex-col items-center justify-center gap-[var(--s-300)] rounded-br200 border border-dashed border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-400)] py-[var(--s-500)] text-center">
           <span className="material-symbols-outlined text-[40px] text-[var(--text-default-placeholder)]" aria-hidden>
             grid_view
           </span>
@@ -376,53 +372,55 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
         </div>
       ) : null}
 
-      <section aria-labelledby="job-queue-heading" className="space-y-[var(--s-300)] border-t border-[var(--border-default-secondary)] pt-[var(--s-400)]">
-        <h2 id="job-queue-heading" className="text-[15px] font-semibold text-[var(--text-default-heading)]">
-          Job queue
-        </h2>
-        {jobs.isError ? (
-          <ErrorPanel message="Could not load the job queue." onRetry={() => jobs.refetch()} />
-        ) : jobs.isLoading ? (
-          <div className="space-y-[var(--s-300)]" aria-busy="true" aria-live="polite">
-            <p className="text-[12px] text-[var(--text-default-body)]">Loading queue…</p>
-            <Skeleton className="h-20 w-full" />
-            <Skeleton className="h-20 w-full" />
-          </div>
-        ) : jobs.data?.length === 0 ? (
-          <div className="rounded-br200 border border-dashed border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-400)] py-[var(--s-500)] text-center">
-            <span
-              className="material-symbols-outlined mx-auto mb-[var(--s-200)] block text-[28px] text-[var(--text-default-placeholder)]"
-              aria-hidden
-            >
-              inventory_2
-            </span>
-            <p className="text-[14px] font-medium text-[var(--text-default-heading)]">No jobs yet</p>
-            <p className="mt-[var(--s-200)] text-[13px] leading-[20px] text-[var(--text-default-body)]">
-              Queued runs appear here with status and progress.
-            </p>
-          </div>
-        ) : (
-          <ul className="space-y-[var(--s-200)] text-[13px]">
-            {jobs.data?.map((j) => (
-              <li key={j.id} className="border-b border-[var(--border-default-secondary)] pb-[var(--s-200)] last:border-0">
-                <div className="flex justify-between gap-[var(--s-200)]">
-                  <span className="font-mono text-[12px]">{j.id}</span>
-                  <span className="capitalize">{j.status}</span>
-                </div>
-                <div className="mt-[var(--s-100)] h-1 w-full overflow-hidden rounded-full bg-[var(--grey-100)]">
-                  <div
-                    className={`h-full ${j.status === "failed" ? "bg-[var(--text-error-default)]" : "bg-[var(--text-primary-default)]"}`}
-                    style={{ width: `${j.progress}%` }}
-                  />
-                </div>
-                {j.errorCode ? (
-                  <p className="mt-[var(--s-100)] text-[12px] text-[var(--text-error-default)]">{j.errorCode}</p>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      {hasStartedBatchRun ? (
+        <section aria-labelledby="job-queue-heading" className="space-y-[var(--s-300)] border-t border-[var(--border-default-secondary)] pt-[var(--s-400)]">
+          <h2 id="job-queue-heading" className="text-[15px] font-semibold text-[var(--text-default-heading)]">
+            Job queue
+          </h2>
+          {jobs.isError ? (
+            <ErrorPanel message="Could not load the job queue." onRetry={() => jobs.refetch()} />
+          ) : jobs.isLoading ? (
+            <div className="space-y-[var(--s-300)]" aria-busy="true" aria-live="polite">
+              <p className="text-[12px] text-[var(--text-default-body)]">Loading queue…</p>
+              <Skeleton className="h-20 w-full" />
+              <Skeleton className="h-20 w-full" />
+            </div>
+          ) : jobs.data?.length === 0 ? (
+            <div className="rounded-br200 border border-dashed border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-400)] py-[var(--s-500)] text-center">
+              <span
+                className="material-symbols-outlined mx-auto mb-[var(--s-200)] block text-[28px] text-[var(--text-default-placeholder)]"
+                aria-hidden
+              >
+                inventory_2
+              </span>
+              <p className="text-[14px] font-medium text-[var(--text-default-heading)]">No jobs yet</p>
+              <p className="mt-[var(--s-200)] text-[13px] leading-[20px] text-[var(--text-default-body)]">
+                Queued runs appear here with status and progress.
+              </p>
+            </div>
+          ) : (
+            <ul className="space-y-[var(--s-200)] text-[13px]">
+              {jobs.data?.map((j) => (
+                <li key={j.id} className="border-b border-[var(--border-default-secondary)] pb-[var(--s-200)] last:border-0">
+                  <div className="flex justify-between gap-[var(--s-200)]">
+                    <span className="font-mono text-[12px]">{j.id}</span>
+                    <span className="capitalize">{j.status}</span>
+                  </div>
+                  <div className="mt-[var(--s-100)] h-1 w-full overflow-hidden rounded-full bg-[var(--grey-100)]">
+                    <div
+                      className={`h-full ${j.status === "failed" ? "bg-[var(--text-error-default)]" : "bg-[var(--text-primary-default)]"}`}
+                      style={{ width: `${j.progress}%` }}
+                    />
+                  </div>
+                  {j.errorCode ? (
+                    <p className="mt-[var(--s-100)] text-[12px] text-[var(--text-error-default)]">{j.errorCode}</p>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ) : null}
     </div>
   );
 
@@ -481,3 +479,12 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
     </div>
   );
 }
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,6 @@
 import { Link, NavLink, Navigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 import { useState } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { KitchenConfigureWorkspace } from "@/components/kitchen/KitchenConfigureWorkspace";
@@ -88,32 +89,39 @@ const VARIATION_CARDS = Array.from({ length: 16 }).map((_, idx) => ({
 function WorkspaceNav({
   environmentSlug,
   tabList,
+  end,
 }: {
   environmentSlug: string;
   tabList: { id: WorkspaceTab; label: string }[];
+  end?: ReactNode;
 }) {
   return (
-    <nav className="border-b border-[var(--border-default-secondary)]" aria-label="Environment sections">
-      <ul className="flex flex-wrap gap-[var(--s-200)]">
-        {tabList.map((tab) => (
-          <li key={tab.id}>
-            <NavLink
-              to={`/environments/${environmentSlug}/${tab.id}`}
-              className={({ isActive }) =>
-                [
-                  "inline-flex items-center border-b-2 px-[var(--s-200)] py-[var(--s-200)] text-[13px] transition-colors",
-                  isActive
-                    ? "border-[var(--papaya-500)] font-semibold text-[var(--text-primary-default)]"
-                    : "border-transparent font-medium text-[var(--text-default-body)] hover:text-[var(--text-default-heading)]",
-                ].join(" ")
-              }
-            >
-              {tab.label}
-            </NavLink>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <div className="flex flex-col gap-[var(--s-200)] border-b border-[var(--border-default-secondary)] sm:flex-row sm:items-center sm:justify-between sm:gap-[var(--s-400)]">
+      <nav className="min-w-0 flex-1" aria-label="Environment sections">
+        <ul className="flex flex-wrap gap-[var(--s-200)]">
+          {tabList.map((tab) => (
+            <li key={tab.id}>
+              <NavLink
+                to={`/environments/${environmentSlug}/${tab.id}`}
+                className={({ isActive }) =>
+                  [
+                    "inline-flex items-center border-b-2 px-[var(--s-200)] py-[var(--s-200)] text-[13px] transition-colors",
+                    isActive
+                      ? "border-[var(--papaya-500)] font-semibold text-[var(--text-primary-default)]"
+                      : "border-transparent font-medium text-[var(--text-default-body)] hover:text-[var(--text-default-heading)]",
+                  ].join(" ")
+                }
+              >
+                {tab.label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      {end ? (
+        <div className="flex shrink-0 flex-wrap items-center justify-end gap-[var(--s-200)] pb-[var(--s-200)] sm:pb-0">{end}</div>
+      ) : null}
+    </div>
   );
 }
 
@@ -439,6 +447,29 @@ export function EnvironmentWorkspacePage() {
 
   const isKitchen = meta.slug === "kitchen";
   const kitchenWorkspaceFill = isKitchen && (activeSection === "configure" || activeSection === "batch");
+  const [bookDemoOpen, setBookDemoOpen] = useState(false);
+
+  const kitchenTabActions =
+    isKitchen ? (
+      <>
+        <Button
+          variant="secondary"
+          type="button"
+          className="whitespace-nowrap px-[var(--s-300)] py-[var(--s-200)] text-[13px]"
+          onClick={() => setBookDemoOpen(true)}
+        >
+          Add from library
+        </Button>
+        <Button
+          variant="secondary"
+          type="button"
+          className="whitespace-nowrap px-[var(--s-300)] py-[var(--s-200)] text-[13px]"
+          onClick={() => setBookDemoOpen(true)}
+        >
+          Upload
+        </Button>
+      </>
+    ) : undefined;
 
   return (
     <>
@@ -492,7 +523,7 @@ export function EnvironmentWorkspacePage() {
           </>
         )}
 
-        <WorkspaceNav environmentSlug={meta.slug} tabList={tabList} />
+        <WorkspaceNav environmentSlug={meta.slug} tabList={tabList} end={kitchenTabActions} />
 
         <div
           className={
@@ -504,6 +535,8 @@ export function EnvironmentWorkspacePage() {
           <WorkspacePanel section={activeSection} environmentSlug={meta.slug} />
         </div>
       </div>
+
+      {isKitchen ? <TalkToTeamModal open={bookDemoOpen} onClose={() => setBookDemoOpen(false)} context="general" /> : null}
     </>
   );
 }

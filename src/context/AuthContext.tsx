@@ -105,7 +105,7 @@ function apiUserToAuthUser(apiUser: ApiUser): AuthUser {
     email: apiUser.email ?? "",
     name: apiUser.username || fullName || apiUser.email || "User",
     orgLabel: apiUser.company_name || "-",
-    role: apiUser.role,
+    role: apiUser.role || "-",
   };
 }
 

@@ -45,10 +45,6 @@ export type ApiUser = {
 };
 
 export async function fetchCurrentUser(): Promise<ApiUser | null> {
-  const { data } = await api.get("/accounts/users/");
-  if (Array.isArray(data)) return (data[0] as ApiUser) ?? null;
-  if (data && typeof data === "object" && "results" in data && Array.isArray((data as { results: ApiUser[] }).results)) {
-    return (data as { results: ApiUser[] }).results[0] ?? null;
-  }
-  return (data as ApiUser) ?? null;
+  const { data } = await api.get<ApiUser>("/accounts/user-detail/");
+  return data ?? null;
 }

@@ -394,6 +394,7 @@ function transformEntry(entry: CatalogEntry): PropAsset {
     thumbnailUrl: entry.thumb,
     previewUrls: [entry.thumb],
     previewModelUrl: entry.glb,
+    usdUrl: entry.usdz,
     dimensionsMm: {
       w: Math.round(w * 1000),
       h: Math.round(h * 1000),

@@ -230,7 +230,7 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
       className="shrink-0 border-t border-[var(--border-default-secondary)] bg-[var(--surface-default)] px-[var(--s-300)] py-[var(--s-300)] shadow-[0_-4px_16px_rgba(0,0,0,0.04)]"
       aria-label="Combination statistics and batch actions"
     >
-      <div className="grid gap-[var(--s-200)] sm:grid-cols-2">
+      <div className="grid gap-[var(--s-200)] sm:grid-cols-1">
         <div className="rounded-br100 border border-[var(--border-default-secondary)] bg-[color-mix(in_srgb,var(--papaya-500)_6%,var(--surface-page-secondary))] px-[var(--s-300)] py-[var(--s-200)]">
           <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-[var(--text-default-placeholder)]">
             Valid combinations
@@ -239,14 +239,14 @@ export function BatchGenerationPage({ embedded = false }: BatchGenerationPagePro
             {validCombinations.toLocaleString()}
           </p>
         </div>
-        <div className="rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-200)]">
+        {/* <div className="rounded-br100 border border-[var(--border-default-secondary)] bg-[var(--surface-page-secondary)] px-[var(--s-300)] py-[var(--s-200)]">
           <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-[var(--text-default-placeholder)]">
             Cartesian product (raw)
           </p>
           <p className="mt-[4px] font-mono text-[15px] font-semibold leading-tight tabular-nums text-[var(--text-default-body)] sm:text-[16px]">
             {rawCount.toLocaleString()}
           </p>
-        </div>
+        </div> */}
       </div>
 
       <div className="mt-[var(--s-300)] border-t border-[var(--border-default-secondary)] pt-[var(--s-300)]">

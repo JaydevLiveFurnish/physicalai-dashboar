@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { KitchenConfigureWorkspace } from "@/components/kitchen/KitchenConfigureWorkspace";
 import GLBViewer from "@/components/library/GLBViewer";
 import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
 import { Button } from "@/components/ui/Button";
@@ -58,7 +57,7 @@ const ENVIRONMENTS: Record<string, EnvironmentMeta> = {
 const KITCHEN_TABS: { id: WorkspaceTab; label: string }[] = [
   { id: "configure", label: "Configure" },
   { id: "batch", label: "Batch Variations" },
-  { id: "downloads", label: "Downloads" },
+  // { id: "downloads", label: "Downloads" },
 ];
 
 const LEGACY_TABS: { id: WorkspaceTab; label: string }[] = [
@@ -254,7 +253,16 @@ function WorkspacePanel({ section, environmentSlug }: { section: WorkspaceTab; e
   const jobs = useQuery({ queryKey: ["jobs"], queryFn: fetchJobs, enabled: section === "downloads" });
 
   if (section === "configure" && environmentSlug === "kitchen") {
-    return <KitchenConfigureWorkspace />;
+    return (
+      <div className="flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)]">
+        <iframe
+          src="https://kitchen-configurator-stag.imagine.io/"
+          title="Kitchen Configurator"
+          className="h-full w-full flex-1 border-0"
+          allow="fullscreen; xr-spatial-tracking"
+        />
+      </div>
+    );
   }
 
   if (section === "batch" && environmentSlug === "kitchen") {

@@ -39,6 +39,8 @@ export interface PropAsset {
    * Items without a URL are locked in the library until a preview model is published.
    */
   previewModelUrl?: string | null;
+  /** Direct URL to the SimReady USD (usdz) file — powers the Download USD button. */
+  usdUrl?: string | null;
   /** When true, downloads stay gated; interactive preview may still be available when a GLB exists. */
   libraryLocked?: boolean;
   /** When true, the card shows a lock overlay and is not clickable. Drives the library lock UI. */

@@ -79,23 +79,23 @@ export function AssetsHubPage() {
       previewModelUrl: p.previewModelUrl,
       isLocked: p.isLocked ?? false,
     })),
-    ...materials.map((m) => ({
-      id: m.id,
-      kind: "material" as const,
-      name: m.name,
-      subtitle: m.type.charAt(0).toUpperCase() + m.type.slice(1),
-      detail: `us ${m.staticFriction.toFixed(2)} · ud ${m.dynamicFriction.toFixed(2)}`,
-      thumb: m.thumbnailUrl ?? "",
-      meta: `e ${m.restitution.toFixed(2)}`,
-      previewModelUrl: m.previewModelUrl,
-      isLocked: false,
-    })),
+    // ...materials.map((m) => ({
+    //   id: m.id,
+    //   kind: "material" as const,
+    //   name: m.name,
+    //   subtitle: m.type.charAt(0).toUpperCase() + m.type.slice(1),
+    //   detail: `us ${m.staticFriction.toFixed(2)} · ud ${m.dynamicFriction.toFixed(2)}`,
+    //   thumb: m.thumbnailUrl ?? "",
+    //   meta: `e ${m.restitution.toFixed(2)}`,
+    //   previewModelUrl: m.previewModelUrl,
+    //   isLocked: false,
+    // })),
   ];
 
   return (
     <>
     <StaggerFadeGroup staggerMs={100} className="flex flex-col gap-[var(--s-400)]">
-      <AssetLibraryTabs />
+      {/* <AssetLibraryTabs /> */}
 
       <PageHeader
         title="Assets"
@@ -122,13 +122,13 @@ export function AssetsHubPage() {
               }`}
             >
               <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden border-b border-[var(--border-default-secondary)]">
-                <span
+                {/* <span
                   className={`absolute left-[var(--s-300)] top-[var(--s-300)] z-[1] rounded-[4px] px-[var(--s-200)] py-[1px] text-[10px] font-semibold leading-tight tracking-[0.5px] ${
                     item.kind === "prop" ? assetKindPill.prop : assetKindPill.material
                   }`}
                 >
                   {item.kind === "prop" ? "Prop" : "Material"}
-                </span>
+                </span> */}
                 {item.thumb ? <img src={item.thumb} alt="" className="h-full w-full object-contain p-[12px]" /> : null}
                 {!canOpen ? <AssetCardLockOverlay /> : null}
               </div>

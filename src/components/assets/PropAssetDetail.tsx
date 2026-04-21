@@ -1,3 +1,4 @@
+import { useCallback, useState } from "react";
 import { AssetDetailPreviewPane } from "@/components/assets/AssetDetailPreviewPane";
 import { Callout } from "@/components/system/Callout";
 import { Button } from "@/components/ui/Button";
@@ -12,6 +13,36 @@ const txLink =
 
 export function PropAssetDetail({ asset }: { asset: PropAsset }) {
   const inWorkspace = isAssetInWorkspace(asset.id);
+  const [confirmationMsg, setConfirmationMsg] = useState("");
+
+  const handleDownloadUsd = useCallback(async () => {
+    const url = asset.usdUrl;
+    if (!url) {
+      setConfirmationMsg("Download failed. Please try again.");
+      window.setTimeout(() => setConfirmationMsg(""), 5000);
+      return;
+    }
+    setConfirmationMsg("Downloading...");
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Download failed");
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = blobUrl;
+      anchor.download = url.split("/").pop()?.replace(/%20/g, " ") || `${asset.id}.usdz`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      URL.revokeObjectURL(blobUrl);
+      recordAssetDownloaded(asset.id);
+      setConfirmationMsg("Download complete");
+      window.setTimeout(() => setConfirmationMsg(""), 3000);
+    } catch {
+      setConfirmationMsg("Download failed. Please try again.");
+      window.setTimeout(() => setConfirmationMsg(""), 5000);
+    }
+  }, [asset.id, asset.usdUrl]);
 
   const dims = `${asset.dimensionsMm.w} × ${asset.dimensionsMm.h} × ${asset.dimensionsMm.d} mm`;
   return (
@@ -23,11 +54,11 @@ export function PropAssetDetail({ asset }: { asset: PropAsset }) {
       />
 
       <div className="min-w-0 space-y-[var(--s-500)] px-[var(--s-400)] py-[var(--s-400)] sm:px-[var(--s-600)] sm:py-[var(--s-500)] lg:px-[var(--s-600)] lg:py-[var(--s-600)]">
-        {inWorkspace ? (
+        {/* {inWorkspace ? (
           <Callout variant="info" title="In your workspace">
             This asset is already in your workspace.
           </Callout>
-        ) : null}
+        ) : null} */}
 
         <h3 className="text-[34px] font-semibold leading-tight text-[var(--text-default-heading)]">{asset.name}</h3>
 
@@ -72,17 +103,24 @@ export function PropAssetDetail({ asset }: { asset: PropAsset }) {
         </div>
 
         <div className="space-y-[var(--s-300)] pt-[var(--s-200)]" role="group" aria-label="Download options">
+          {confirmationMsg ? (
+            <div
+              role="status"
+              aria-live="polite"
+              className="rounded-br100 border border-[rgba(34,197,94,0.2)] bg-[rgba(34,197,94,0.08)] px-[var(--s-500)] py-[var(--s-400)] text-center text-[13px] leading-[1.5] text-[var(--text-default-heading)]"
+            >
+              {confirmationMsg}
+            </div>
+          ) : null}
           <Button
             variant="primary"
             className={`w-full text-[14px] font-semibold ${txBtn}`}
-            onClick={() => {
-              recordAssetDownloaded(asset.id);
-              alert("Download queued: SimReady USD");
-            }}
+            onClick={handleDownloadUsd}
+            disabled={confirmationMsg === "Downloading..." || !asset.usdUrl}
           >
-            Download USD Scene
+            Download USD
           </Button>
-          <Button
+          {/* <Button
             variant="secondary"
             className={`w-full border-[var(--border-primary-default)] bg-[var(--surface-default)] text-[14px] font-semibold text-[var(--text-primary-default)] hover:bg-[var(--surface-primary-default-subtle)] ${txBtn}`}
             onClick={() => {
@@ -103,7 +141,7 @@ export function PropAssetDetail({ asset }: { asset: PropAsset }) {
             >
               Download Metadata
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

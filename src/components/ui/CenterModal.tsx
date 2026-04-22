@@ -1,4 +1,4 @@
-import { useEffect, useId, type ReactNode } from "react";
+import { useEffect, useId, useRef, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { tx, txOverlayPanel } from "@/components/layout/motion";
 import { usePresence } from "@/hooks/usePresence";
@@ -27,6 +27,14 @@ export function CenterModal({
 }: CenterModalProps) {
   const titleId = useId();
   const { mounted, show } = usePresence(open);
+  const latchedChildrenRef = useRef<ReactNode>(children);
+  const latchedTitleRef = useRef(title);
+  if (open) {
+    latchedChildrenRef.current = children;
+    latchedTitleRef.current = title;
+  }
+  const renderedChildren = open ? children : latchedChildrenRef.current;
+  const renderedTitle = open ? title : latchedTitleRef.current;
 
   useEffect(() => {
     if (!mounted) return;
@@ -90,7 +98,7 @@ export function CenterModal({
                   id={titleId}
                   className="mx-auto max-w-[calc(100%-3rem)] text-[18px] font-semibold leading-tight text-[var(--text-default-heading)]"
                 >
-                  {title}
+                  {renderedTitle}
                 </h2>
                 <button
                   type="button"
@@ -118,7 +126,7 @@ export function CenterModal({
                   : "max-h-[min(78vh,800px)] overflow-y-auto px-[var(--s-500)] py-[var(--s-500)] text-center [&_p]:mx-auto [&_p]:max-w-[min(52ch,100%)] [&_ul]:mx-auto [&_ul]:inline-block [&_ul]:text-left [&_ul]:[text-align:left]"
               }
             >
-              {children}
+              {renderedChildren}
             </div>
           </div>
         </div>

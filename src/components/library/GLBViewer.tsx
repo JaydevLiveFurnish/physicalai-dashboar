@@ -174,6 +174,7 @@ export default function GLBViewer({ glbPath, fallbackImage, className }: GLBView
 
     // ========== Animate Loop ==========
     let animId: number
+    
     function animate() {
       animId = requestAnimationFrame(animate)
       controls.update()

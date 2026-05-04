@@ -1,0 +1,201 @@
+/* ═══════════════════════════════════════════════════════
+   COMPONENT BREAKDOWN ACCORDION
+   ═══════════════════════════════════════════════════════ */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--divider);
+  border-radius: var(--br-100);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--s-200);
+  width: 100%;
+  padding: var(--s-300) var(--s-400);
+  font-family: var(--font);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--text-default-heading);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  text-align: left;
+}
+
+.header:hover {
+  color: var(--accent);
+}
+
+.arrow {
+  font-size: 10px;
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+.arrowOpen {
+  transform: rotate(90deg);
+}
+
+
+/* ── Desktop table ──────────────────────────────── */
+
+.tableWrap {
+  overflow-x: auto;
+  border-top: 1px solid var(--divider);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.colComponent { width: 28%; }
+.colMaterial { width: 28%; }
+.colMass { width: 22%; }
+.colCollider { width: 22%; }
+
+.threeCol .colComponent { width: 36%; }
+.threeCol .colMaterial { width: 36%; }
+.threeCol .colMass { width: 28%; }
+
+.table th {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-body-color);
+  padding: 8px 10px;
+  border-bottom: 2px solid var(--divider);
+  line-height: 1.4;
+  overflow-wrap: break-word;
+}
+
+.thLeft {
+  text-align: left;
+}
+
+.thRight {
+  text-align: right;
+}
+
+.row:nth-child(even) {
+  background: rgba(0, 0, 0, 0.025);
+}
+
+.row td {
+  padding: 6px 10px;
+  vertical-align: middle;
+  color: var(--text-default-heading);
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.tdComponent {
+  font-weight: 500;
+  overflow-wrap: break-word;
+}
+
+.tdMaterial {
+  color: var(--text-body-color);
+  overflow-wrap: break-word;
+}
+
+.tdNum {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: break-word;
+}
+
+.tdCollider {
+  color: var(--text-body-color);
+  overflow-wrap: break-word;
+}
+
+
+/* ── Show all / fewer toggle ────────────────────── */
+
+.showAllBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--s-300) var(--s-400);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  color: #ec4e0b;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--divider);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.showAllBtn:hover {
+  color: #bd3e09;
+}
+
+
+/* ── Mobile cards ───────────────────────────────── */
+
+.cardList {
+  display: none;
+}
+
+.card {
+  padding: var(--s-300) var(--s-400);
+  border-top: 1px solid var(--divider);
+}
+
+.cardTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-default-heading);
+  margin-bottom: var(--s-200);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px var(--s-300);
+  font-size: 12px;
+}
+
+.cardLabel {
+  color: var(--text-body-color);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.cardValue {
+  color: var(--text-default-heading);
+  font-weight: 500;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: break-word;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .tableWrap {
+    display: none;
+  }
+
+  .cardList {
+    display: flex;
+    flex-direction: column;
+  }
+}

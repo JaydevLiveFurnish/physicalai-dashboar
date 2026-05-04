@@ -256,7 +256,7 @@ function WorkspacePanel({ section, environmentSlug }: { section: WorkspaceTab; e
     return (
       <div className="flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden rounded-br200 border border-[var(--border-default-secondary)] bg-[var(--surface-default)]">
         <iframe
-          src="https://kitchen-configurator.imagine.io/"
+          src="https://simready-kitchens.imagine.io/"
           title="Kitchen Configurator"
           className="h-full w-full flex-1 border-0"
           allowFullScreen

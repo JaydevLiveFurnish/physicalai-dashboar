@@ -80,9 +80,20 @@
   --text-body-size: 16px;
   --text-body-lh: 20px;
   --text-small-size: 14px;
+  --text-small-lh: 16px;
+  --text-small-ls: 1px;
   --text-caption-size: 12px;
   --text-caption-lh: 16px;
   --text-caption-ls: 2px;
+
+  /* Headings — mirrors physical-imagine-io scale so SimReady library cards/modal render identically */
+  --text-h1-size: 60px; --text-h1-lh: 72px; --text-h1-ls: -2px;
+  --text-h2-size: 48px; --text-h2-lh: 56px; --text-h2-ls: -2px;
+  --text-h3-size: 40px; --text-h3-lh: 48px; --text-h3-ls: -1px;
+  --text-h4-size: 32px; --text-h4-lh: 40px; --text-h4-ls: -1px;
+  --text-h5-size: 24px; --text-h5-lh: 28px; --text-h5-ls: -0.12px;
+  --text-h6-size: 20px; --text-h6-lh: 24px;
+  --text-body-lg-size: 20px; --text-body-lg-lh: 24px;
 
   --s-100: 4px;
   --s-200: 8px;
@@ -90,12 +101,27 @@
   --s-400: 16px;
   --s-500: 20px;
   --s-600: 24px;
+  --s-700: 28px;
   --s-800: 32px;
   --s-900: 36px;
+  --s-1000: 40px;
+  --s-1100: 48px;
+  --s-1200: 56px;
+  --s-1300: 64px;
+  --s-1400: 72px;
 
   --br-100: 4px;
   --br-200: 8px;
   --bw-25: 1px;
+
+  /* SimReady library aliases (light) */
+  --surface-card-border: var(--border-default-secondary);
+  --text-body-color: rgba(0, 0, 0, 0.6);
+  --text-caption-color: rgba(0, 0, 0, 0.4);
+  --tag-bg: rgba(0, 0, 0, 0.04);
+  --tag-accent-bg: rgba(236, 78, 11, 0.08);
+  --tag-accent-border: rgba(236, 78, 11, 0.2);
+  --filter-panel-bg: rgba(255, 255, 255, 0.92);
 
   /** BookingWidget aliases (light). */
   --accent: var(--surface-primary-default);
@@ -139,4 +165,12 @@
 
   --grey-50: #1a1a1a;
   --grey-100: #2a2a2a;
+
+  --surface-card-border: var(--border-default-secondary);
+  --text-body-color: rgba(255, 255, 255, 0.65);
+  --text-caption-color: rgba(255, 255, 255, 0.5);
+  --tag-bg: rgba(255, 255, 255, 0.05);
+  --tag-accent-bg: rgba(236, 78, 11, 0.12);
+  --tag-accent-border: rgba(236, 78, 11, 0.3);
+  --filter-panel-bg: rgba(13, 13, 13, 0.9);
 }

@@ -1,0 +1,5105 @@
+[
+  {
+    "id": "baking-tray",
+    "name": "Baking Tray",
+    "category": "Cookware",
+    "type": "Prop",
+    "material": "Metal",
+    "dimensions": {
+      "width": 281,
+      "height": 23,
+      "depth": 351,
+      "unit": "mm"
+    },
+    "mass": 0.12,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.3,
+      "restitution": 0.1,
+      "density": 1000,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/baking%20tray/baking_tray.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/baking%20tray/baking_tray.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/baking%20tray/baking_tray.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.281,
+        "height_m": 0.023,
+        "depth_m": 0.351
+      },
+      "overall_mass_kg": 0.12,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Tray",
+          "count": 1,
+          "material": {
+            "name": null,
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.12
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "bowl-soup",
+    "name": "Bowl Soup",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Ceramic",
+    "dimensions": {
+      "width": 196,
+      "height": 94,
+      "depth": 196,
+      "unit": "mm"
+    },
+    "mass": 0.36,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.3,
+      "restitution": 0.1,
+      "density": 2400,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/bowl%20soup/bowl_soup.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/bowl%20soup/bowl_soup.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/bowl%20soup/bowl_soup.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.196,
+        "height_m": 0.196,
+        "depth_m": 0.094
+      },
+      "overall_mass_kg": 0.36,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Bowl soup",
+          "count": 1,
+          "material": {
+            "name": null,
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.36
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "bowl-with-apples",
+    "name": "Bowl With Apples",
+    "category": "Food",
+    "type": "Prop",
+    "material": "Ceramic",
+    "dimensions": {
+      "width": 252,
+      "height": 230,
+      "depth": 269,
+      "unit": "mm"
+    },
+    "mass": 2.57,
+    "physics": {
+      "staticFriction": 0.15,
+      "dynamicFriction": 0.1,
+      "restitution": 0.9,
+      "density": 2500,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/bowl_with_apples/bowl_with_apples.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/bowl_with_apples/bowl_with_apple.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/bowl_with_apples/bowl_with_apple.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.252,
+        "height_m": 0.252,
+        "depth_m": 0.157
+      },
+      "overall_mass_kg": 2.57,
+      "part_count": 17,
+      "parts": [
+        {
+          "label": "Apple",
+          "count": 16,
+          "material": {
+            "name": "apple",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.4,
+            "restitution": 0.1,
+            "density": 850
+          },
+          "mass": {
+            "total_kg": 1.75,
+            "min_kg": 0.07,
+            "max_kg": 0.13,
+            "single_kg": null
+          },
+          "collider_types": [
+            "convexHull"
+          ]
+        },
+        {
+          "label": "Bowl",
+          "count": 1,
+          "material": {
+            "name": "bowl",
+            "static_friction": 0.15,
+            "dynamic_friction": 0.1,
+            "restitution": 0.9,
+            "density": 2500
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.82
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "bowl-with-lemon",
+    "name": "Bowl With Lemon",
+    "category": "Food",
+    "type": "Prop",
+    "material": "Ceramic",
+    "dimensions": {
+      "width": 263,
+      "height": 131,
+      "depth": 263,
+      "unit": "mm"
+    },
+    "mass": 1.65,
+    "physics": {
+      "staticFriction": 0.45,
+      "dynamicFriction": 0.3,
+      "restitution": 0.5,
+      "density": 2000,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/bowl_with_lemon/bowl_with_lemon.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/bowl_with_lemon/bowl_with_lemon.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/bowl_with_lemon/bowl_with_lemon.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.263,
+        "height_m": 0.263,
+        "depth_m": 0.106
+      },
+      "overall_mass_kg": 1.65,
+      "part_count": 18,
+      "parts": [
+        {
+          "label": "Bowl",
+          "count": 1,
+          "material": {
+            "name": "bowl",
+            "static_friction": 0.45,
+            "dynamic_friction": 0.3,
+            "restitution": 0.5,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.48
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Lemon",
+          "count": 17,
+          "material": {
+            "name": "lemon",
+            "static_friction": 0.6,
+            "dynamic_friction": 0.4,
+            "restitution": 0.3,
+            "density": 1000
+          },
+          "mass": {
+            "total_kg": 1.17,
+            "min_kg": 0.05,
+            "max_kg": 0.09,
+            "single_kg": null
+          },
+          "collider_types": [
+            "convexHull"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "bowl-with-orange",
+    "name": "Bowl With Orange",
+    "category": "Food",
+    "type": "Prop",
+    "material": "Ceramic",
+    "dimensions": {
+      "width": 257,
+      "height": 209,
+      "depth": 296,
+      "unit": "mm"
+    },
+    "mass": 5.13,
+    "physics": {
+      "staticFriction": 0.6,
+      "dynamicFriction": 0.4,
+      "restitution": 0.2,
+      "density": 5000,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/bowl_with_orange/bowl_with_orange.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/bowl_with_orange/bowl_with_orange.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/bowl_with_orange/bowl_with_orange.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.257,
+        "height_m": 0.257,
+        "depth_m": 0.142
+      },
+      "overall_mass_kg": 5.13,
+      "part_count": 7,
+      "parts": [
+        {
+          "label": "Bowl",
+          "count": 1,
+          "material": {
+            "name": "bowl",
+            "static_friction": 0.6,
+            "dynamic_friction": 0.4,
+            "restitution": 0.2,
+            "density": 5000
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 3.73
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Orange",
+          "count": 6,
+          "material": {
+            "name": "orange",
+            "static_friction": 0.7,
+            "dynamic_friction": 0.5,
+            "restitution": 0.4,
+            "density": 1000
+          },
+          "mass": {
+            "total_kg": 1.4,
+            "min_kg": 0.16,
+            "max_kg": 0.43,
+            "single_kg": null
+          },
+          "collider_types": [
+            "convexHull"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "bread-basket",
+    "name": "Bread Basket",
+    "category": "Food",
+    "type": "Prop",
+    "material": "Wicker",
+    "dimensions": {
+      "width": 501,
+      "height": 169,
+      "depth": 460,
+      "unit": "mm"
+    },
+    "mass": 1.59,
+    "physics": {
+      "staticFriction": 0.4,
+      "dynamicFriction": 0.3,
+      "restitution": 0.1,
+      "density": 200,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/bread_basket/bread_basket.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/bread_basket/bread_basket.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/bread_basket/bread_basket.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.501,
+        "height_m": 0.46,
+        "depth_m": 0.129
+      },
+      "overall_mass_kg": 1.59,
+      "part_count": 11,
+      "parts": [
+        {
+          "label": "Bread",
+          "count": 10,
+          "material": {
+            "name": "bread",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.45,
+            "restitution": 0.1,
+            "density": 250
+          },
+          "mass": {
+            "total_kg": 1.14,
+            "min_kg": 0.03,
+            "max_kg": 0.17,
+            "single_kg": null
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Basket",
+          "count": 1,
+          "material": {
+            "name": "weave",
+            "static_friction": 0.4,
+            "dynamic_friction": 0.3,
+            "restitution": 0.1,
+            "density": 200
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.45
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "bread-loaf",
+    "name": "Bread Loaf",
+    "category": "Food",
+    "type": "Prop",
+    "material": "Bread",
+    "dimensions": {
+      "width": 320,
+      "height": 131,
+      "depth": 320,
+      "unit": "mm"
+    },
+    "mass": 0.7,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.45,
+      "restitution": 0.1,
+      "density": 250,
+      "collision": "convexHull"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/bread_loaf/bread_loaf.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/bread_loaf/bread_loaf.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/bread_loaf/bread_loaf.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.32,
+        "height_m": 0.32,
+        "depth_m": 0.085
+      },
+      "overall_mass_kg": 0.7,
+      "part_count": 7,
+      "parts": [
+        {
+          "label": "Bread",
+          "count": 6,
+          "material": {
+            "name": "bread",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.45,
+            "restitution": 0.1,
+            "density": 250
+          },
+          "mass": {
+            "total_kg": 0.28,
+            "min_kg": 0.02,
+            "max_kg": 0.16,
+            "single_kg": null
+          },
+          "collider_types": [
+            "convexHull"
+          ]
+        },
+        {
+          "label": "Tray",
+          "count": 1,
+          "material": {
+            "name": "wood",
+            "static_friction": 0.45,
+            "dynamic_friction": 0.3,
+            "restitution": 0.5,
+            "density": 650
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.42
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "cereal-bowl",
+    "name": "Cereal Bowl",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Ceramic",
+    "dimensions": {
+      "width": 165,
+      "height": 63,
+      "depth": 165,
+      "unit": "mm"
+    },
+    "mass": 0.21,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.3,
+      "restitution": 0.1,
+      "density": 2400,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/cereal%20bowl/cereal_bowl.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/cereal%20bowl/cereal_bowl.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/cereal%20bowl/cereal_bowl.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.165,
+        "height_m": 0.165,
+        "depth_m": 0.063
+      },
+      "overall_mass_kg": 0.21,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Bowl_cereal",
+          "count": 1,
+          "material": {
+            "name": "bowl_cereal",
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.21
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "chair",
+    "name": "Chair",
+    "category": "Decor",
+    "type": "Prop",
+    "material": "Wood",
+    "dimensions": {
+      "width": 564,
+      "height": 1031,
+      "depth": 575,
+      "unit": "mm"
+    },
+    "mass": 8.5,
+    "physics": {
+      "staticFriction": 0.45,
+      "dynamicFriction": 0.3,
+      "restitution": 0.5,
+      "density": 650,
+      "collision": "convexHull"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/chair/kitchen_chair.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/chair/kitchen_chair.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/chair/kitchen_chair.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.564,
+        "height_m": 1.142,
+        "depth_m": 1.045
+      },
+      "overall_mass_kg": 4.01,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Chair wood",
+          "count": 1,
+          "material": {
+            "name": "wood",
+            "static_friction": 0.45,
+            "dynamic_friction": 0.3,
+            "restitution": 0.5,
+            "density": 650
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 4.01
+          },
+          "collider_types": [
+            "convexHull",
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "coaster",
+    "name": "Coaster",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Wood",
+    "dimensions": {
+      "width": 126,
+      "height": 45,
+      "depth": 136,
+      "unit": "mm"
+    },
+    "mass": 0.24,
+    "physics": {
+      "staticFriction": 0.45,
+      "dynamicFriction": 0.3,
+      "restitution": 0.5,
+      "density": 650,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/Coaster/coaster.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/Coaster/Coaster.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/Coaster/Coaster.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.126,
+        "height_m": 0.11,
+        "depth_m": 0.048
+      },
+      "overall_mass_kg": 0.24,
+      "part_count": 5,
+      "parts": [
+        {
+          "label": "Base",
+          "count": 1,
+          "material": {
+            "name": "wood",
+            "static_friction": 0.45,
+            "dynamic_friction": 0.3,
+            "restitution": 0.5,
+            "density": 650
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.09
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Plates_1",
+          "count": 1,
+          "material": {
+            "name": "plastic",
+            "static_friction": 0.35,
+            "dynamic_friction": 0.2,
+            "restitution": 0.65,
+            "density": 650
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.04
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Plates_2",
+          "count": 1,
+          "material": {
+            "name": "plastic",
+            "static_friction": 0.35,
+            "dynamic_friction": 0.2,
+            "restitution": 0.65,
+            "density": 650
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.04
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Plates_3",
+          "count": 1,
+          "material": {
+            "name": "plastic",
+            "static_friction": 0.35,
+            "dynamic_friction": 0.2,
+            "restitution": 0.65,
+            "density": 650
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.04
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Plates_4",
+          "count": 1,
+          "material": {
+            "name": "plastic",
+            "static_friction": 0.35,
+            "dynamic_friction": 0.2,
+            "restitution": 0.65,
+            "density": 650
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.04
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "cutting-board",
+    "name": "Cutting Board",
+    "category": "Utensils",
+    "type": "Prop",
+    "material": "Wood",
+    "dimensions": {
+      "width": 283,
+      "height": 20,
+      "depth": 442,
+      "unit": "mm"
+    },
+    "mass": 0.27,
+    "physics": {
+      "staticFriction": 0.45,
+      "dynamicFriction": 0.3,
+      "restitution": 0.5,
+      "density": 650,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/cutting_board/cutting_board.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/cutting_board/cutting_board.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/cutting_board/cutting_board.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.283,
+        "height_m": 0.442,
+        "depth_m": 0.02
+      },
+      "overall_mass_kg": 0.27,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Chopping board",
+          "count": 1,
+          "material": {
+            "name": "cutting_board",
+            "static_friction": 0.45,
+            "dynamic_friction": 0.3,
+            "restitution": 0.5,
+            "density": 650
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.27
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "dinner-plate",
+    "name": "Dinner Plate",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Ceramic",
+    "dimensions": {
+      "width": 229,
+      "height": 16,
+      "depth": 229,
+      "unit": "mm"
+    },
+    "mass": 0.52,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.3,
+      "restitution": 0.1,
+      "density": 2400,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/dinner%20plate/dinner_plate.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/dinner%20plate/dinner_plate.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/dinner%20plate/dinner_plate.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.229,
+        "height_m": 0.229,
+        "depth_m": 0.016
+      },
+      "overall_mass_kg": 0.52,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Plate",
+          "count": 1,
+          "material": {
+            "name": "plate_salad",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.3,
+            "restitution": 0.1,
+            "density": 2400
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.52
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "dinnerware-set",
+    "name": "Dinnerware Set",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Mixed",
+    "dimensions": {
+      "width": 232,
+      "height": 269,
+      "depth": 30,
+      "unit": "mm"
+    },
+    "mass": 0.58,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.3,
+      "restitution": 0.1,
+      "density": 2400,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/Dinnerware%20set/Dinnerware%20set.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/Dinnerware%20set/Dinnerware%20set.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/Dinnerware%20set/Dinnerware%20set.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.232,
+        "height_m": 0.268,
+        "depth_m": 0.028
+      },
+      "overall_mass_kg": 0.58,
+      "part_count": 4,
+      "parts": [
+        {
+          "label": "Fork",
+          "count": 1,
+          "material": {
+            "name": "metal",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.04
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Plate",
+          "count": 1,
+          "material": {
+            "name": "bone_china",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.3,
+            "restitution": 0.1,
+            "density": 2400
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.36
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Small plate",
+          "count": 1,
+          "material": {
+            "name": "bone_china",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.3,
+            "restitution": 0.1,
+            "density": 2400
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.11
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Spoon",
+          "count": 1,
+          "material": {
+            "name": "metal",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.06
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "egg-carton",
+    "name": "Egg Carton",
+    "category": "Food",
+    "type": "Prop",
+    "material": "Cardboard",
+    "dimensions": {
+      "width": 157,
+      "height": 127,
+      "depth": 193,
+      "unit": "mm"
+    },
+    "mass": 0.31,
+    "physics": {
+      "staticFriction": 0.4,
+      "dynamicFriction": 0.4,
+      "restitution": 0.05,
+      "density": 600,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/egg_carton/egg_carton.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/egg_carton/egg_carton.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/egg_carton/egg_carton.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.157,
+        "height_m": 0.106,
+        "depth_m": 0.07
+      },
+      "overall_mass_kg": 0.31,
+      "part_count": 8,
+      "parts": [
+        {
+          "label": "Egg",
+          "count": 6,
+          "material": {
+            "name": "egg",
+            "static_friction": 0.3,
+            "dynamic_friction": 0.2,
+            "restitution": 0.15,
+            "density": 1000
+          },
+          "mass": {
+            "total_kg": 0.2,
+            "min_kg": 0.03,
+            "max_kg": 0.03,
+            "single_kg": null
+          },
+          "collider_types": [
+            "convexHull"
+          ]
+        },
+        {
+          "label": "Egg tray",
+          "count": 2,
+          "material": {
+            "name": "cardboard",
+            "static_friction": 0.4,
+            "dynamic_friction": 0.4,
+            "restitution": 0.05,
+            "density": 600
+          },
+          "mass": {
+            "total_kg": 0.11,
+            "min_kg": 0.01,
+            "max_kg": 0.1,
+            "single_kg": null
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "floor-plant",
+    "name": "Floor Plant",
+    "category": "Decor",
+    "type": "Prop",
+    "material": "Mixed",
+    "dimensions": {
+      "width": 338,
+      "height": 303,
+      "depth": 875,
+      "unit": "mm"
+    },
+    "mass": 9.38,
+    "physics": {
+      "staticFriction": 0.6,
+      "dynamicFriction": 0.4,
+      "restitution": 0.2,
+      "density": 1200,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/Floor_plant/Floor_plant.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/Floor_plant/Floor_plant.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/Floor_plant/Floor_plant.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.331,
+        "height_m": 0.299,
+        "depth_m": 0.874
+      },
+      "overall_mass_kg": 9.38,
+      "part_count": 2,
+      "parts": [
+        {
+          "label": "Frame",
+          "count": 1,
+          "material": {
+            "name": "metal",
+            "static_friction": 0.6,
+            "dynamic_friction": 0.5,
+            "restitution": 0.1,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 2.5
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Soil",
+          "count": 1,
+          "material": {
+            "name": "soil",
+            "static_friction": 0.6,
+            "dynamic_friction": 0.4,
+            "restitution": 0.2,
+            "density": 1200
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 6.88
+          },
+          "collider_types": [
+            "convexDecomposition",
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "fork",
+    "name": "Fork",
+    "category": "Utensils",
+    "type": "Prop",
+    "material": "Stainless Steel",
+    "dimensions": {
+      "width": 22,
+      "height": 21,
+      "depth": 192,
+      "unit": "mm"
+    },
+    "mass": 0.01,
+    "physics": {
+      "staticFriction": 0.74,
+      "dynamicFriction": 0.57,
+      "restitution": 0.6,
+      "density": 7850,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/fork/fork.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/fork/fork.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/fork/fork.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.022,
+        "height_m": 0.02,
+        "depth_m": 0.192
+      },
+      "overall_mass_kg": 0,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Fork_1",
+          "count": 1,
+          "material": {
+            "name": null,
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "glass-tumbler",
+    "name": "Glass Tumbler",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Glass",
+    "dimensions": {
+      "width": 66,
+      "height": 130,
+      "depth": 66,
+      "unit": "mm"
+    },
+    "mass": 0.16,
+    "physics": {
+      "staticFriction": 0.94,
+      "dynamicFriction": 0.4,
+      "restitution": 0.9,
+      "density": 2500,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/glass_tumbler/glass_tumbler.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/glass_tumbler/glass_tumbler.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/glass_tumbler/glass_tumbler.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.066,
+        "height_m": 0.13,
+        "depth_m": 0.066
+      },
+      "overall_mass_kg": 0.16,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Glass",
+          "count": 1,
+          "material": {
+            "name": "OmniGlass",
+            "static_friction": 0.94,
+            "dynamic_friction": 0.4,
+            "restitution": 0.9,
+            "density": 2500
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.16
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "glass-wine",
+    "name": "Glass Wine",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Glass",
+    "dimensions": {
+      "width": 79,
+      "height": 190,
+      "depth": 79,
+      "unit": "mm"
+    },
+    "mass": 0.17,
+    "physics": {
+      "staticFriction": 0.94,
+      "dynamicFriction": 0.4,
+      "restitution": 0.9,
+      "density": 2500,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/glass_wine/glass_wine.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/glass_wine/glass_wine.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/glass_wine/glass_wine.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.079,
+        "height_m": 0.19,
+        "depth_m": 0.079
+      },
+      "overall_mass_kg": 0.17,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Wine glass",
+          "count": 1,
+          "material": {
+            "name": "OmniGlass",
+            "static_friction": 0.94,
+            "dynamic_friction": 0.4,
+            "restitution": 0.9,
+            "density": 2500
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.17
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "knife-set",
+    "name": "Knife Set",
+    "category": "Utensils",
+    "type": "Prop",
+    "material": "Mixed",
+    "dimensions": {
+      "width": 144,
+      "height": 279,
+      "depth": 455,
+      "unit": "mm"
+    },
+    "mass": 1.28,
+    "physics": {
+      "staticFriction": 0.74,
+      "dynamicFriction": 0.57,
+      "restitution": 0.6,
+      "density": 7850,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/knife%20set/knife%20set.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/knife%20set/knife%20set.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/knife%20set/knife%20set.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.144,
+        "height_m": 0.322,
+        "depth_m": 0.371
+      },
+      "overall_mass_kg": 1.28,
+      "part_count": 9,
+      "parts": [
+        {
+          "label": "Case",
+          "count": 1,
+          "material": {
+            "name": "wood",
+            "static_friction": 0.45,
+            "dynamic_friction": 0.3,
+            "restitution": 0.5,
+            "density": 650
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.43
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Knife 1",
+          "count": 1,
+          "material": {
+            "name": "steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.08
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Knife 2",
+          "count": 1,
+          "material": {
+            "name": "steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.18
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Knife 3",
+          "count": 1,
+          "material": {
+            "name": "steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.18
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Knife 4",
+          "count": 1,
+          "material": {
+            "name": "steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.09
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Knife 5",
+          "count": 1,
+          "material": {
+            "name": "steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.09
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Knife 6",
+          "count": 1,
+          "material": {
+            "name": "steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.09
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Knife 7",
+          "count": 1,
+          "material": {
+            "name": "steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.06
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Knife 8",
+          "count": 1,
+          "material": {
+            "name": "steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.06
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "ladle",
+    "name": "Ladle",
+    "category": "Utensils",
+    "type": "Prop",
+    "material": "Stainless Steel",
+    "dimensions": {
+      "width": 95,
+      "height": 73,
+      "depth": 340,
+      "unit": "mm"
+    },
+    "mass": 0.03,
+    "physics": {
+      "staticFriction": 0.74,
+      "dynamicFriction": 0.57,
+      "restitution": 0.6,
+      "density": 7850,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/ladle/ladle.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/ladle/ladle.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/ladle/ladle.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.095,
+        "height_m": 0.34,
+        "depth_m": 0.073
+      },
+      "overall_mass_kg": 0.03,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Ladle",
+          "count": 1,
+          "material": {
+            "name": null,
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.03
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "mug-coffee",
+    "name": "Mug Coffee",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Ceramic",
+    "dimensions": {
+      "width": 122,
+      "height": 95,
+      "depth": 85,
+      "unit": "mm"
+    },
+    "mass": 0.1,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.3,
+      "restitution": 0.1,
+      "density": 2400,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/mug%20coffee/mug_coffee.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/mug%20coffee/mug_coffee.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/mug%20coffee/mug_coffee.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.122,
+        "height_m": 0.085,
+        "depth_m": 0.095
+      },
+      "overall_mass_kg": 0.1,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Coffee_mug",
+          "count": 1,
+          "material": {
+            "name": null,
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.1
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "mug-set",
+    "name": "Mug Set",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Bone China",
+    "dimensions": {
+      "width": 491,
+      "height": 223,
+      "depth": 223,
+      "unit": "mm"
+    },
+    "mass": 3.16,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.3,
+      "restitution": 0.1,
+      "density": 2400,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/Mug_Set/mug%20set.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/Mug_Set/Mug_Set.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/Mug_Set/Mug_Set.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.292,
+        "height_m": 0.254,
+        "depth_m": 0.102
+      },
+      "overall_mass_kg": 1.65,
+      "part_count": 2,
+      "parts": [
+        {
+          "label": "Cup ",
+          "count": 2,
+          "material": {
+            "name": "bone_china",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.3,
+            "restitution": 0.1,
+            "density": 2400
+          },
+          "mass": {
+            "total_kg": 1.65,
+            "min_kg": 0.82,
+            "max_kg": 0.82,
+            "single_kg": null
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "pan-sauce",
+    "name": "Pan Sauce",
+    "category": "Cookware",
+    "type": "Prop",
+    "material": "Brass",
+    "dimensions": {
+      "width": 244,
+      "height": 242,
+      "depth": 430,
+      "unit": "mm"
+    },
+    "mass": 5.03,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.4,
+      "restitution": 0.35,
+      "density": 8500,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/pan_sauce/pan_sauce.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/pan_sauce/pan_sauce.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/pan_sauce/pan_sauce.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.245,
+        "height_m": 0.514,
+        "depth_m": 0.203
+      },
+      "overall_mass_kg": 5.03,
+      "part_count": 2,
+      "parts": [
+        {
+          "label": "Pan",
+          "count": 1,
+          "material": {
+            "name": "brass",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 8500
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 4.87
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Lid",
+          "count": 1,
+          "material": {
+            "name": "OmniGlass",
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.16
+          },
+          "collider_types": [
+            "convexHull",
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "paper-towel-roll",
+    "name": "Paper Towel Roll",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Paper",
+    "dimensions": {
+      "width": 159,
+      "height": 376,
+      "depth": 253,
+      "unit": "mm"
+    },
+    "mass": 5.68,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.3,
+      "restitution": 0.05,
+      "density": 800,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/paper_towel_roll/paper_towel_roll.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/paper_towel_roll/paper_towel_roll.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/paper_towel_roll/paper_towel_roll.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.159,
+        "height_m": 0.159,
+        "depth_m": 0.297
+      },
+      "overall_mass_kg": 5.68,
+      "part_count": 2,
+      "parts": [
+        {
+          "label": "Paper",
+          "count": 1,
+          "material": {
+            "name": "paper_towel",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.3,
+            "restitution": 0.05,
+            "density": 800
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.29
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Roll holder",
+          "count": 1,
+          "material": {
+            "name": "roll_holder",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 8500
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 5.39
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "pot-large",
+    "name": "Pot Large",
+    "category": "Cookware",
+    "type": "Prop",
+    "material": "Stainless Steel",
+    "dimensions": {
+      "width": 349,
+      "height": 186,
+      "depth": 387,
+      "unit": "mm"
+    },
+    "mass": 0.57,
+    "physics": {
+      "staticFriction": 0.74,
+      "dynamicFriction": 0.57,
+      "restitution": 0.6,
+      "density": 7850,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/pot_large/pot_large.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/pot_large/pot_large.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/pot_large/pot_large.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.349,
+        "height_m": 0.258,
+        "depth_m": 0.184
+      },
+      "overall_mass_kg": 0.57,
+      "part_count": 2,
+      "parts": [
+        {
+          "label": "Pot",
+          "count": 1,
+          "material": {
+            "name": "pot_lid",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.41
+          },
+          "collider_types": [
+            "convexHull",
+            "sdf"
+          ]
+        },
+        {
+          "label": "Lid",
+          "count": 1,
+          "material": {
+            "name": "pot_lid",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.15
+          },
+          "collider_types": [
+            "sdf",
+            "convexHull"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "pot-small",
+    "name": "Pot Small",
+    "category": "Cookware",
+    "type": "Prop",
+    "material": "Stainless Steel",
+    "dimensions": {
+      "width": 310,
+      "height": 146,
+      "depth": 343,
+      "unit": "mm"
+    },
+    "mass": 0.4,
+    "physics": {
+      "staticFriction": 0.74,
+      "dynamicFriction": 0.57,
+      "restitution": 0.6,
+      "density": 7850,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/pot_small/pot_large.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/pot_small/pot_small.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/pot_small/pot_small.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.31,
+        "height_m": 0.23,
+        "depth_m": 0.163
+      },
+      "overall_mass_kg": 0.4,
+      "part_count": 2,
+      "parts": [
+        {
+          "label": "Pot",
+          "count": 1,
+          "material": {
+            "name": "pot_body",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.29
+          },
+          "collider_types": [
+            "convexHull",
+            "sdf"
+          ]
+        },
+        {
+          "label": "Lid",
+          "count": 1,
+          "material": {
+            "name": "pot_body",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.11
+          },
+          "collider_types": [
+            "sdf",
+            "convexHull"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "salad-plate",
+    "name": "Salad Plate",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Bone China",
+    "dimensions": {
+      "width": 203,
+      "height": 16,
+      "depth": 203,
+      "unit": "mm"
+    },
+    "mass": 0.4,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.3,
+      "restitution": 0.1,
+      "density": 2400,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/salad%20plate/salad_plate.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/salad%20plate/salad_plate.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/salad%20plate/salad_plate.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.203,
+        "height_m": 0.203,
+        "depth_m": 0.016
+      },
+      "overall_mass_kg": 0,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Plate",
+          "count": 1,
+          "material": {
+            "name": null,
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": null
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "salt-and-pepper-shaker",
+    "name": "Salt And Pepper Shaker",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Ceramic",
+    "dimensions": {
+      "width": 123,
+      "height": 77,
+      "depth": 51,
+      "unit": "mm"
+    },
+    "mass": 0.02,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.3,
+      "restitution": 0.1,
+      "density": 2400,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/salt_and_pepper_shaker/salt_and_pepper_shaker.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/salt_and_pepper_shaker/salt_and_pepper_shaker.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/salt_and_pepper_shaker/salt_and_pepper_shaker.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.123,
+        "height_m": 0.051,
+        "depth_m": 0.076
+      },
+      "overall_mass_kg": 0.02,
+      "part_count": 2,
+      "parts": [
+        {
+          "label": "Pepper shaker",
+          "count": 1,
+          "material": {
+            "name": "paper_shaker",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.3,
+            "restitution": 0.1,
+            "density": 2400
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.01
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Salt shaker",
+          "count": 1,
+          "material": {
+            "name": "salt_shaker",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.3,
+            "restitution": 0.1,
+            "density": 2400
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.01
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "sandwich-loaf",
+    "name": "Sandwich Loaf",
+    "category": "Food",
+    "type": "Prop",
+    "material": "Bread",
+    "dimensions": {
+      "width": 137,
+      "height": 141,
+      "depth": 243,
+      "unit": "mm"
+    },
+    "mass": 0.5,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.45,
+      "restitution": 0.1,
+      "density": 250,
+      "collision": "convexHull"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/sandwich_loaf/sandwich%20loaf%20with%20tray.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/sandwich_loaf/sandwich%20loaf%20with%20tray.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/sandwich_loaf/sandwich_loaf.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "serving-board",
+    "name": "Serving Board",
+    "category": "Utensils",
+    "type": "Prop",
+    "material": "Wood",
+    "dimensions": {
+      "width": 557,
+      "height": 28,
+      "depth": 501,
+      "unit": "mm"
+    },
+    "mass": 0.47,
+    "physics": {
+      "staticFriction": 0.45,
+      "dynamicFriction": 0.3,
+      "restitution": 0.5,
+      "density": 650,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/serving_board/serving%20board.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/serving_board/serving_board.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/serving_board/serving_board.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.557,
+        "height_m": 0.501,
+        "depth_m": 0.028
+      },
+      "overall_mass_kg": 0.47,
+      "part_count": 2,
+      "parts": [
+        {
+          "label": "Serving board 1",
+          "count": 1,
+          "material": {
+            "name": "wood",
+            "static_friction": 0.45,
+            "dynamic_friction": 0.3,
+            "restitution": 0.5,
+            "density": 650
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.19
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Serving board 2",
+          "count": 1,
+          "material": {
+            "name": "wood",
+            "static_friction": 0.45,
+            "dynamic_friction": 0.3,
+            "restitution": 0.5,
+            "density": 650
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.28
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "small-plant-set",
+    "name": "Small Plant Set",
+    "category": "Decor",
+    "type": "Prop",
+    "material": "Mixed",
+    "dimensions": {
+      "width": 336,
+      "height": 131,
+      "depth": 137,
+      "unit": "mm"
+    },
+    "mass": 1.46,
+    "physics": {
+      "staticFriction": 0.6,
+      "dynamicFriction": 0.4,
+      "restitution": 0.2,
+      "density": 1200,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/Small_Plant_Set/Small_Plant_Set.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/Small_Plant_Set/Small_Plant_Set.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/Small_Plant_Set/Small_Plant_Set.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.325,
+        "height_m": 0.111,
+        "depth_m": 0.135
+      },
+      "overall_mass_kg": 1.46,
+      "part_count": 3,
+      "parts": [
+        {
+          "label": "Plant 1 leaf",
+          "count": 1,
+          "material": {
+            "name": "plant",
+            "static_friction": 0.6,
+            "dynamic_friction": 0.4,
+            "restitution": 0.2,
+            "density": 1200
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.48
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Plant 2 leaf",
+          "count": 1,
+          "material": {
+            "name": "plant",
+            "static_friction": 0.6,
+            "dynamic_friction": 0.4,
+            "restitution": 0.2,
+            "density": 1200
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.47
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Plant 3 leaf",
+          "count": 1,
+          "material": {
+            "name": "plant",
+            "static_friction": 0.6,
+            "dynamic_friction": 0.4,
+            "restitution": 0.2,
+            "density": 1200
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.52
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "spatula",
+    "name": "Spatula",
+    "category": "Utensils",
+    "type": "Prop",
+    "material": "Silicone",
+    "dimensions": {
+      "width": 133,
+      "height": 10,
+      "depth": 412,
+      "unit": "mm"
+    },
+    "mass": 0.11,
+    "physics": {
+      "staticFriction": 0.45,
+      "dynamicFriction": 0.3,
+      "restitution": 0.5,
+      "density": 650,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/spatula/spatula.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/spatula/spatula.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/spatula/spatula.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.133,
+        "height_m": 0.412,
+        "depth_m": 0.01
+      },
+      "overall_mass_kg": 0.11,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Spatula",
+          "count": 1,
+          "material": {
+            "name": "spatula",
+            "static_friction": 0.45,
+            "dynamic_friction": 0.3,
+            "restitution": 0.5,
+            "density": 650
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.11
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "spice-jar",
+    "name": "Spice Jar",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Glass",
+    "dimensions": {
+      "width": 208,
+      "height": 333,
+      "depth": 369,
+      "unit": "mm"
+    },
+    "mass": 2.46,
+    "physics": {
+      "staticFriction": 0,
+      "dynamicFriction": 0.2,
+      "restitution": 0.65,
+      "density": 1175,
+      "collision": "convexHull"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/spice_jar/spice_jar.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/spice_jar/spice_jar.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/spice_jar/spice_jar.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.208,
+        "height_m": 0.208,
+        "depth_m": 0.274
+      },
+      "overall_mass_kg": 2.46,
+      "part_count": 13,
+      "parts": [
+        {
+          "label": "Jar",
+          "count": 12,
+          "material": {
+            "name": "plastic",
+            "static_friction": 0,
+            "dynamic_friction": 0.2,
+            "restitution": 0.65,
+            "density": 1175
+          },
+          "mass": {
+            "total_kg": 1.15,
+            "min_kg": 0.08,
+            "max_kg": 0.11,
+            "single_kg": null
+          },
+          "collider_types": [
+            "convexHull"
+          ]
+        },
+        {
+          "label": "Jar organizer",
+          "count": 1,
+          "material": {
+            "name": "Material",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 1.32
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "spoon",
+    "name": "Spoon",
+    "category": "Utensils",
+    "type": "Prop",
+    "material": "Stainless Steel",
+    "dimensions": {
+      "width": 44,
+      "height": 22,
+      "depth": 192,
+      "unit": "mm"
+    },
+    "mass": 0.01,
+    "physics": {
+      "staticFriction": 0.74,
+      "dynamicFriction": 0.57,
+      "restitution": 0.6,
+      "density": 7850,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/spoon/spoon.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/spoon/spoon.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/spoon/spoon.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.044,
+        "height_m": 0.022,
+        "depth_m": 0.192
+      },
+      "overall_mass_kg": 0.01,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Spoon_1",
+          "count": 1,
+          "material": {
+            "name": null,
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.01
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "table-knife",
+    "name": "Table Knife",
+    "category": "Utensils",
+    "type": "Prop",
+    "material": "Stainless Steel",
+    "dimensions": {
+      "width": 20,
+      "height": 8,
+      "depth": 194,
+      "unit": "mm"
+    },
+    "mass": 0.01,
+    "physics": {
+      "staticFriction": 0.74,
+      "dynamicFriction": 0.57,
+      "restitution": 0.6,
+      "density": 7850,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/table%20knife/table_knife.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/table%20knife/table_knife.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/table%20knife/table_knife.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.02,
+        "height_m": 0.008,
+        "depth_m": 0.194
+      },
+      "overall_mass_kg": 0.01,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Knife",
+          "count": 1,
+          "material": {
+            "name": null,
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.01
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "tea-cup",
+    "name": "Tea Cup",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Bone China",
+    "dimensions": {
+      "width": 143,
+      "height": 70,
+      "depth": 143,
+      "unit": "mm"
+    },
+    "mass": 0.26,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.3,
+      "restitution": 0.1,
+      "density": 2400,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/tea_cup/tea_cup.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/tea_cup/tea_cup.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/tea_cup/tea_cup.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.143,
+        "height_m": 0.071,
+        "depth_m": 0.143
+      },
+      "overall_mass_kg": 0.26,
+      "part_count": 2,
+      "parts": [
+        {
+          "label": "Cup",
+          "count": 1,
+          "material": {
+            "name": "bone_china",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.3,
+            "restitution": 0.1,
+            "density": 2400
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.11
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Plate",
+          "count": 1,
+          "material": {
+            "name": "bone_china",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.3,
+            "restitution": 0.1,
+            "density": 2400
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.15
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "toaster",
+    "name": "Toaster",
+    "category": "Appliances",
+    "type": "Prop",
+    "material": "Stainless Steel",
+    "dimensions": {
+      "width": 149,
+      "height": 318,
+      "depth": 197,
+      "unit": "mm"
+    },
+    "mass": 0.56,
+    "physics": {
+      "staticFriction": 0.74,
+      "dynamicFriction": 0.57,
+      "restitution": 0.6,
+      "density": 7850,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/toaster/toster.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/toaster/toaster.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/toaster/toaster.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.148,
+        "height_m": 0.317,
+        "depth_m": 0.196
+      },
+      "overall_mass_kg": 0.56,
+      "part_count": 3,
+      "parts": [
+        {
+          "label": "Toaster base",
+          "count": 1,
+          "material": {
+            "name": "opaque_silver_toaster",
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.52
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Controller",
+          "count": 1,
+          "material": {
+            "name": "opaque_silver_toaster",
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.01
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Lever",
+          "count": 1,
+          "material": {
+            "name": "opaque_silver_toaster",
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.03
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 7
+  },
+  {
+    "id": "tongs",
+    "name": "Tongs",
+    "category": "Utensils",
+    "type": "Prop",
+    "material": "Stainless Steel",
+    "dimensions": {
+      "width": 77,
+      "height": 61,
+      "depth": 342,
+      "unit": "mm"
+    },
+    "mass": 0.33,
+    "physics": {
+      "staticFriction": 0.74,
+      "dynamicFriction": 0.57,
+      "restitution": 0.6,
+      "density": 7850,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/tongs/tongs.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/tongs/tongs.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/tongs/tongs.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.077,
+        "height_m": 0.061,
+        "depth_m": 0.342
+      },
+      "overall_mass_kg": 0.33,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Tongs",
+          "count": 1,
+          "material": {
+            "name": "tongs",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.33
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "utensil-organizer",
+    "name": "Utensil Organizer",
+    "category": "Utensils",
+    "type": "Prop",
+    "material": "Mixed",
+    "dimensions": {
+      "width": 342,
+      "height": 562,
+      "depth": 423,
+      "unit": "mm"
+    },
+    "mass": 2.99,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.3,
+      "restitution": 0.1,
+      "density": 2400,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/utensil_organizer/utensil_organizer.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/utensil_organizer/utensil_organizer.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/utensil_organizer/utensil_organizer.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.232,
+        "height_m": 0.223,
+        "depth_m": 0.399
+      },
+      "overall_mass_kg": 2.99,
+      "part_count": 4,
+      "parts": [
+        {
+          "label": "Pot",
+          "count": 1,
+          "material": {
+            "name": "bone_china",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.3,
+            "restitution": 0.1,
+            "density": 2400
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 2.74
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Wooden spoon",
+          "count": 3,
+          "material": {
+            "name": "wood",
+            "static_friction": 0.45,
+            "dynamic_friction": 0.3,
+            "restitution": 0.5,
+            "density": 650
+          },
+          "mass": {
+            "total_kg": 0.25,
+            "min_kg": 0.03,
+            "max_kg": 0.12,
+            "single_kg": null
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "water-bottle",
+    "name": "Water Bottle",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Plastic",
+    "dimensions": {
+      "width": 84,
+      "height": 280,
+      "depth": 321,
+      "unit": "mm"
+    },
+    "mass": 0.4,
+    "physics": {
+      "staticFriction": 0.35,
+      "dynamicFriction": 0.2,
+      "restitution": 0.65,
+      "density": 1175,
+      "collision": "convexHull"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/water_bottle/water_bottle.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/water_bottle/water_bottle.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/water_bottle/water_bottle.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.084,
+        "height_m": 0.255,
+        "depth_m": 0.084
+      },
+      "overall_mass_kg": 0,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Bottle",
+          "count": 1,
+          "material": {
+            "name": "plasric",
+            "static_friction": 0.35,
+            "dynamic_friction": 0.2,
+            "restitution": 0.65,
+            "density": 1175
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": null
+          },
+          "collider_types": [
+            "convexHull"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "whisk",
+    "name": "Whisk",
+    "category": "Utensils",
+    "type": "Prop",
+    "material": "Stainless Steel",
+    "dimensions": {
+      "width": 69,
+      "height": 70,
+      "depth": 292,
+      "unit": "mm"
+    },
+    "mass": 0.41,
+    "physics": {
+      "staticFriction": 0.74,
+      "dynamicFriction": 0.57,
+      "restitution": 0.6,
+      "density": 7850,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/whisk/whisk.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/whisk/whisk.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/whisk/whisk.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.069,
+        "height_m": 0.07,
+        "depth_m": 0.292
+      },
+      "overall_mass_kg": 0.41,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Whisk",
+          "count": 1,
+          "material": {
+            "name": "steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.41
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "wine-bottle",
+    "name": "Wine Bottle",
+    "category": "Tableware",
+    "type": "Prop",
+    "material": "Glass",
+    "dimensions": {
+      "width": 78,
+      "height": 297,
+      "depth": 79,
+      "unit": "mm"
+    },
+    "mass": 0.95,
+    "physics": {
+      "staticFriction": 0.94,
+      "dynamicFriction": 0.4,
+      "restitution": 0.9,
+      "density": 2500,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/assets/wine%20bottle/wine%20bottle.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/assets/wine%20bottle/wine%20bottle.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/assets/wine%20bottle/wine%20bottle.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.078,
+        "height_m": 0.079,
+        "depth_m": 0.297
+      },
+      "overall_mass_kg": 0.95,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Bottle",
+          "count": 1,
+          "material": {
+            "name": "glass",
+            "static_friction": 0.94,
+            "dynamic_friction": 0.4,
+            "restitution": 0.9,
+            "density": 2500
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.95
+          },
+          "collider_types": [
+            "sdf",
+            "convexHull"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "chimney",
+    "name": "Chimney",
+    "category": "Appliances",
+    "type": "Appliance",
+    "material": "Stainless Steel",
+    "dimensions": {
+      "width": 742,
+      "height": 1843,
+      "depth": 1949,
+      "unit": "mm"
+    },
+    "mass": 19.96,
+    "physics": {
+      "staticFriction": 0.74,
+      "dynamicFriction": 0.57,
+      "restitution": 0.6,
+      "density": 7850,
+      "collision": "convexHull"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20appliances/chimney/chimney.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20appliances/chimney/chimney.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20appliances/chimney/chimney.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.742,
+        "height_m": 1.241,
+        "depth_m": 0.534
+      },
+      "overall_mass_kg": 20,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Group",
+          "count": 1,
+          "material": {
+            "name": null,
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 20
+          },
+          "collider_types": []
+        }
+      ]
+    },
+    "displayOrder": 200
+  },
+  {
+    "id": "dishwasher-2",
+    "name": "Dishwasher 2",
+    "category": "Appliances",
+    "type": "Appliance",
+    "material": "Stainless Steel",
+    "dimensions": {
+      "width": 684,
+      "height": 1687,
+      "depth": 1266,
+      "unit": "mm"
+    },
+    "mass": 61.24,
+    "physics": {
+      "staticFriction": 0.74,
+      "dynamicFriction": 0.57,
+      "restitution": 0.6,
+      "density": 7850,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20appliances/dishwasher%202/dishwasher%202.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20appliances/dishwasher%202/dishwasher%202.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20appliances/dishwasher%202/dishwasher%202.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.607,
+        "height_m": 0.863,
+        "depth_m": 0.609
+      },
+      "overall_mass_kg": 61.2,
+      "part_count": 5,
+      "parts": [
+        {
+          "label": "Dishwasher",
+          "count": 1,
+          "material": {
+            "name": "white_stainless_steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 45.3
+          },
+          "collider_types": [
+            "boundingCube",
+            "sdf"
+          ]
+        },
+        {
+          "label": "Dishwasher door",
+          "count": 1,
+          "material": {
+            "name": "door_screen_switch",
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 9.6
+          },
+          "collider_types": [
+            "convexHull",
+            "sdf"
+          ]
+        },
+        {
+          "label": "Dishwasher rack",
+          "count": 3,
+          "material": {
+            "name": "white_stainless_steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": 6.29,
+            "min_kg": 1.39,
+            "max_kg": 2.94,
+            "single_kg": null
+          },
+          "collider_types": [
+            "sdf",
+            "convexHull"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 4
+  },
+  {
+    "id": "faucet-1",
+    "name": "Faucet 1",
+    "category": "Appliances",
+    "type": "Appliance",
+    "material": "Brass",
+    "dimensions": {
+      "width": 98,
+      "height": 296,
+      "depth": 178,
+      "unit": "mm"
+    },
+    "mass": 0.62,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.4,
+      "restitution": 0.35,
+      "density": 8500,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20appliances/faucet%201/faucet%201.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20appliances/faucet%201/faucet_1.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20appliances/faucet%201/faucet_1.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.098,
+        "height_m": 0.296,
+        "depth_m": 0.178
+      },
+      "overall_mass_kg": 0.62,
+      "part_count": 4,
+      "parts": [
+        {
+          "label": "Faucet",
+          "count": 4,
+          "material": {
+            "name": "brass",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 8500
+          },
+          "mass": {
+            "total_kg": 0.62,
+            "min_kg": 0.06,
+            "max_kg": 0.34,
+            "single_kg": null
+          },
+          "collider_types": [
+            "sdf",
+            "convexHull"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 6
+  },
+  {
+    "id": "oven",
+    "name": "Oven",
+    "category": "Appliances",
+    "type": "Appliance",
+    "material": "Steel",
+    "dimensions": {
+      "width": 557,
+      "height": 872,
+      "depth": 843,
+      "unit": "mm"
+    },
+    "mass": 45.16,
+    "physics": {
+      "staticFriction": 0.5,
+      "dynamicFriction": 0.3,
+      "restitution": 1,
+      "density": 7850,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20appliances/oven/oven.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20appliances/oven/oven.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20appliances/oven/oven.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.557,
+        "height_m": 0.51,
+        "depth_m": 0.606
+      },
+      "overall_mass_kg": 45.2,
+      "part_count": 9,
+      "parts": [
+        {
+          "label": "Oven base",
+          "count": 1,
+          "material": {
+            "name": "metal",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.3,
+            "restitution": 1,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 37.8
+          },
+          "collider_types": [
+            "convexHull",
+            "sdf"
+          ]
+        },
+        {
+          "label": "Oven button",
+          "count": 4,
+          "material": {
+            "name": "ceramic_glass",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.6,
+            "restitution": 0.35,
+            "density": 8500
+          },
+          "mass": {
+            "total_kg": 0.07,
+            "min_kg": 0.02,
+            "max_kg": 0.02,
+            "single_kg": null
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Oven door",
+          "count": 1,
+          "material": {
+            "name": "bolt",
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 3.6
+          },
+          "collider_types": [
+            "convexHull",
+            "sdf"
+          ]
+        },
+        {
+          "label": "Oven grill",
+          "count": 3,
+          "material": {
+            "name": "metal",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.3,
+            "restitution": 1,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": 3.68,
+            "min_kg": 1.23,
+            "max_kg": 1.23,
+            "single_kg": null
+          },
+          "collider_types": [
+            "convexHull"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 2
+  },
+  {
+    "id": "refrigerator",
+    "name": "Refrigerator",
+    "category": "Appliances",
+    "type": "Appliance",
+    "material": "Steel",
+    "dimensions": {
+      "width": 942,
+      "height": 1853,
+      "depth": 1864,
+      "unit": "mm"
+    },
+    "mass": 83.36,
+    "physics": {
+      "staticFriction": 0.6,
+      "dynamicFriction": 0.4,
+      "restitution": 0.3,
+      "density": 7850,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20appliances/refrigerator/refrigerator.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20appliances/refrigerator/refrigerator.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20appliances/refrigerator/refrigerator.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.914,
+        "height_m": 1.732,
+        "depth_m": 0.772
+      },
+      "overall_mass_kg": 83.4,
+      "part_count": 13,
+      "parts": [
+        {
+          "label": "Refrigerator",
+          "count": 1,
+          "material": {
+            "name": "carbon_steel_back",
+            "static_friction": 0.6,
+            "dynamic_friction": 0.4,
+            "restitution": 0.3,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 71.5
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Refrigerator door (variant 1)",
+          "count": 1,
+          "material": {
+            "name": "door1_storage_box",
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 2.92
+          },
+          "collider_types": [
+            "sdf",
+            "boundingCube"
+          ]
+        },
+        {
+          "label": "Refrigerator door (variant 2)",
+          "count": 1,
+          "material": {
+            "name": "door2_magnet_strip",
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 2.14
+          },
+          "collider_types": [
+            "sdf",
+            "boundingCube"
+          ]
+        },
+        {
+          "label": "Refrigerator bottom drawer",
+          "count": 1,
+          "material": {
+            "name": "door_plastic",
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 1.06
+          },
+          "collider_types": [
+            "boundingCube"
+          ]
+        },
+        {
+          "label": "Refrigerator shelf (variant 1)",
+          "count": 4,
+          "material": {
+            "name": "racks",
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": 0.5,
+            "min_kg": 0.13,
+            "max_kg": 0.13,
+            "single_kg": null
+          },
+          "collider_types": [
+            "convexHull"
+          ]
+        },
+        {
+          "label": "Refrigerator shelf (variant 2)",
+          "count": 1,
+          "material": {
+            "name": "glass_shelves",
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 2.93
+          },
+          "collider_types": [
+            "boundingCube",
+            "sdf"
+          ]
+        },
+        {
+          "label": "Refrigerator shelf (variant 3)",
+          "count": 1,
+          "material": {
+            "name": "shelve_borders",
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 2.19
+          },
+          "collider_types": [
+            "sdf",
+            "convexHull"
+          ]
+        },
+        {
+          "label": "Refrigerator storage box",
+          "count": 3,
+          "material": {
+            "name": "storage_box",
+            "static_friction": null,
+            "dynamic_friction": null,
+            "restitution": null,
+            "density": null
+          },
+          "mass": {
+            "total_kg": 0.14,
+            "min_kg": 0.04,
+            "max_kg": 0.06,
+            "single_kg": null
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 1
+  },
+  {
+    "id": "single-sink",
+    "name": "Single Sink",
+    "category": "Appliances",
+    "type": "Appliance",
+    "material": "Stainless Steel",
+    "dimensions": {
+      "width": 584,
+      "height": 147,
+      "depth": 457,
+      "unit": "mm"
+    },
+    "mass": 1,
+    "physics": {
+      "staticFriction": 0.74,
+      "dynamicFriction": 0.57,
+      "restitution": 0.6,
+      "density": 7850,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20appliances/single%20sink/single_sink.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20appliances/single%20sink/single_sink.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20appliances/single%20sink/single_sink.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.584,
+        "height_m": 0.151,
+        "depth_m": 0.457
+      },
+      "overall_mass_kg": 1,
+      "part_count": 1,
+      "parts": [
+        {
+          "label": "Sink drain",
+          "count": 1,
+          "material": {
+            "name": "single_sink",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 7850
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 1
+          },
+          "collider_types": [
+            "convexHull",
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 5
+  },
+  {
+    "id": "stove-oven",
+    "name": "Stove Oven",
+    "category": "Appliances",
+    "type": "Appliance",
+    "material": "Stainless Steel",
+    "dimensions": {
+      "width": 736,
+      "height": 1244,
+      "depth": 1424,
+      "unit": "mm"
+    },
+    "mass": 9.51,
+    "physics": {
+      "staticFriction": 0.74,
+      "dynamicFriction": 0.57,
+      "restitution": 0.6,
+      "density": 785,
+      "collision": "sdf"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20appliances/stove%20oven/stove_oven.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20appliances/stove%20oven/stove_oven.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20appliances/stove%20oven/stove_oven.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.736,
+        "height_m": 0.894,
+        "depth_m": 0.692
+      },
+      "overall_mass_kg": 9.51,
+      "part_count": 11,
+      "parts": [
+        {
+          "label": "Stove oven",
+          "count": 1,
+          "material": {
+            "name": "stainless_steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 785
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 5.82
+          },
+          "collider_types": [
+            "sdf",
+            "boundingCube"
+          ]
+        },
+        {
+          "label": "Oven door",
+          "count": 1,
+          "material": {
+            "name": "stainless_steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 785
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 3.04
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexHull",
+            "sdf"
+          ]
+        },
+        {
+          "label": "Grill",
+          "count": 3,
+          "material": {
+            "name": "black_stainless_steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 785
+          },
+          "mass": {
+            "total_kg": 0.59,
+            "min_kg": 0.2,
+            "max_kg": 0.2,
+            "single_kg": null
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        },
+        {
+          "label": "Knob",
+          "count": 6,
+          "material": {
+            "name": "stainless_steel",
+            "static_friction": 0.74,
+            "dynamic_friction": 0.57,
+            "restitution": 0.6,
+            "density": 785
+          },
+          "mass": {
+            "total_kg": 0.06,
+            "min_kg": 0.01,
+            "max_kg": 0.01,
+            "single_kg": null
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 3
+  },
+  {
+    "id": "stove-set",
+    "name": "Stove Set",
+    "category": "Appliances",
+    "type": "Appliance",
+    "material": "Ceramic",
+    "dimensions": {
+      "width": 741,
+      "height": 522,
+      "depth": 539,
+      "unit": "mm"
+    },
+    "mass": 4.97,
+    "physics": {
+      "staticFriction": 0.6,
+      "dynamicFriction": 0.7,
+      "restitution": 0.2,
+      "density": 2500,
+      "collision": "boundingCube"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20appliances/stove%20set/stove_set.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20appliances/stove%20set/stove_set.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20appliances/stove%20set/stove_set.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.741,
+        "height_m": 0.025,
+        "depth_m": 0.529
+      },
+      "overall_mass_kg": 4.97,
+      "part_count": 5,
+      "parts": [
+        {
+          "label": "Stove",
+          "count": 1,
+          "material": {
+            "name": "ceramic_glass",
+            "static_friction": 0.6,
+            "dynamic_friction": 0.7,
+            "restitution": 0.2,
+            "density": 2500
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 4.88
+          },
+          "collider_types": [
+            "boundingCube"
+          ]
+        },
+        {
+          "label": "Gas switch",
+          "count": 4,
+          "material": {
+            "name": "brass",
+            "static_friction": 0.5,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 8500
+          },
+          "mass": {
+            "total_kg": 0.1,
+            "min_kg": 0.02,
+            "max_kg": 0.02,
+            "single_kg": null
+          },
+          "collider_types": [
+            "sdf"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "base-cabinet-double-door",
+    "name": "Base Cabinet Double Door",
+    "category": "Cabinetry",
+    "type": "Cabinet",
+    "material": "Walnut",
+    "dimensions": {
+      "width": 610,
+      "height": 641,
+      "depth": 894,
+      "unit": "mm"
+    },
+    "mass": 14.67,
+    "physics": {
+      "staticFriction": 0.55,
+      "dynamicFriction": 0.4,
+      "restitution": 0.35,
+      "density": 650,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_double_door/base_cabinet_double_door.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_double_door/base_cabinet_double_door.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_double_door/base_cabinet_double_door.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.61,
+        "height_m": 0.894,
+        "depth_m": 0.641
+      },
+      "overall_mass_kg": 14.7,
+      "part_count": 3,
+      "parts": [
+        {
+          "label": "Cabinet base",
+          "count": 1,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 13
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Door",
+          "count": 2,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": 1.63,
+            "min_kg": 0.82,
+            "max_kg": 0.82,
+            "single_kg": null
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "base-cabinet-double-door-and-drawer",
+    "name": "Base Cabinet Double Door And Drawer",
+    "category": "Cabinetry",
+    "type": "Cabinet",
+    "material": "Walnut",
+    "dimensions": {
+      "width": 610,
+      "height": 641,
+      "depth": 894,
+      "unit": "mm"
+    },
+    "mass": 14.26,
+    "physics": {
+      "staticFriction": 0.55,
+      "dynamicFriction": 0.4,
+      "restitution": 0.35,
+      "density": 650,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_double_door_and_drawer/base_cabinet_double_door_and_drawer.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_double_door_and_drawer/base_cabinet_double_door_and_drawer.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_double_door_and_drawer/base_cabinet_double_door_and_drawer.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.61,
+        "height_m": 0.894,
+        "depth_m": 0.641
+      },
+      "overall_mass_kg": 14.3,
+      "part_count": 4,
+      "parts": [
+        {
+          "label": "Cabinet base",
+          "count": 1,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 10.9
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Door",
+          "count": 2,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": 1.28,
+            "min_kg": 0.64,
+            "max_kg": 0.64,
+            "single_kg": null
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Drawer",
+          "count": 1,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 2.07
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "base-cabinet-double-door-and-two-drawer",
+    "name": "Base Cabinet Double Door And Two Drawer",
+    "category": "Cabinetry",
+    "type": "Cabinet",
+    "material": "Walnut",
+    "dimensions": {
+      "width": 610,
+      "height": 641,
+      "depth": 894,
+      "unit": "mm"
+    },
+    "mass": 24.55,
+    "physics": {
+      "staticFriction": 0.55,
+      "dynamicFriction": 0.4,
+      "restitution": 0.35,
+      "density": 650,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_double_door_and_two_drawer/base_cabinet_double_door_and_two_drawer.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_double_door_and_two_drawer/base_cabinet_double_door_and_two_drawer.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_double_door_and_two_drawer/base_cabinet_double_door_and_two_drawer.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.61,
+        "height_m": 0.894,
+        "depth_m": 0.641
+      },
+      "overall_mass_kg": 24.5,
+      "part_count": 5,
+      "parts": [
+        {
+          "label": "Cabinet base",
+          "count": 1,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 10.9
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Door",
+          "count": 2,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": 1.28,
+            "min_kg": 0.64,
+            "max_kg": 0.64,
+            "single_kg": null
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Drawer",
+          "count": 2,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": 12.4,
+            "min_kg": 6.18,
+            "max_kg": 6.18,
+            "single_kg": null
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "base-cabinet-single-door",
+    "name": "Base Cabinet Single Door",
+    "category": "Cabinetry",
+    "type": "Cabinet",
+    "material": "Walnut",
+    "dimensions": {
+      "width": 318,
+      "height": 641,
+      "depth": 894,
+      "unit": "mm"
+    },
+    "mass": 8.95,
+    "physics": {
+      "staticFriction": 0.55,
+      "dynamicFriction": 0.4,
+      "restitution": 0.35,
+      "density": 650,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_single_door/base_cabinet_single_door.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_single_door/base_cabinet_single_door.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_single_door/base_cabinet_single_door.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.318,
+        "height_m": 0.894,
+        "depth_m": 0.641
+      },
+      "overall_mass_kg": 8.95,
+      "part_count": 2,
+      "parts": [
+        {
+          "label": "Cabinet base",
+          "count": 1,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 8.14
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Door",
+          "count": 1,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.81
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "base-cabinet-single-three-drawer",
+    "name": "Base Cabinet Single Three Drawer",
+    "category": "Cabinetry",
+    "type": "Cabinet",
+    "material": "Walnut",
+    "dimensions": {
+      "width": 305,
+      "height": 641,
+      "depth": 894,
+      "unit": "mm"
+    },
+    "mass": 16.7,
+    "physics": {
+      "staticFriction": 0.55,
+      "dynamicFriction": 0.4,
+      "restitution": 0.35,
+      "density": 650,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_single_three_drawer/base_cabinet_single_three_drawer.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_single_three_drawer/base_cabinet_single_three_drawer.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_single_three_drawer/base_cabinet_single_three_drawer.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.305,
+        "height_m": 0.894,
+        "depth_m": 0.641
+      },
+      "overall_mass_kg": 16.7,
+      "part_count": 4,
+      "parts": [
+        {
+          "label": "Cabinet base",
+          "count": 1,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 6.88
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Drawer",
+          "count": 3,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": 9.82,
+            "min_kg": 1.84,
+            "max_kg": 6.14,
+            "single_kg": null
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "base-cabinet-single-two-drawer",
+    "name": "Base Cabinet Single Two Drawer",
+    "category": "Cabinetry",
+    "type": "Cabinet",
+    "material": "Walnut",
+    "dimensions": {
+      "width": 305,
+      "height": 641,
+      "depth": 894,
+      "unit": "mm"
+    },
+    "mass": 11.53,
+    "physics": {
+      "staticFriction": 0.55,
+      "dynamicFriction": 0.4,
+      "restitution": 0.35,
+      "density": 650,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_single_two_drawer/base_cabinet_single_two_drawer.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_single_two_drawer/base_cabinet_single_two_drawer.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/base_cabinet_single_two_drawer/base_cabinet_single_two_drawer.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.305,
+        "height_m": 0.894,
+        "depth_m": 0.641
+      },
+      "overall_mass_kg": 11.5,
+      "part_count": 3,
+      "parts": [
+        {
+          "label": "Cabinet base",
+          "count": 1,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 6.88
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Drawer",
+          "count": 2,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": 4.65,
+            "min_kg": 2.33,
+            "max_kg": 2.33,
+            "single_kg": null
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "oven-cabinet",
+    "name": "Oven Cabinet",
+    "category": "Cabinetry",
+    "type": "Cabinet",
+    "material": "Walnut",
+    "dimensions": {
+      "width": 622,
+      "height": 641,
+      "depth": 894,
+      "unit": "mm"
+    },
+    "mass": 11.54,
+    "physics": {
+      "staticFriction": 0.55,
+      "dynamicFriction": 0.4,
+      "restitution": 0.35,
+      "density": 650,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20cabinets/oven_cabinet/oven_cabinet.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/oven_cabinet/oven_cabinet.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/oven_cabinet/oven_cabinet.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.622,
+        "height_m": 0.894,
+        "depth_m": 0.641
+      },
+      "overall_mass_kg": 11.5,
+      "part_count": 2,
+      "parts": [
+        {
+          "label": "Cabinet base",
+          "count": 1,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 9.47
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Drawer",
+          "count": 1,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 2.07
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "single-door-and-drawer",
+    "name": "Single Door And Drawer",
+    "category": "Cabinetry",
+    "type": "Cabinet",
+    "material": "Walnut",
+    "dimensions": {
+      "width": 305,
+      "height": 641,
+      "depth": 894,
+      "unit": "mm"
+    },
+    "mass": 13.65,
+    "physics": {
+      "staticFriction": 0.55,
+      "dynamicFriction": 0.4,
+      "restitution": 0.35,
+      "density": 650,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20cabinets/single_door_and_drawer/single_door_and_drawer.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/single_door_and_drawer/single_door_and_drawer.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/single_door_and_drawer/single_door_and_drawer.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.305,
+        "height_m": 0.894,
+        "depth_m": 0.641
+      },
+      "overall_mass_kg": 13.7,
+      "part_count": 3,
+      "parts": [
+        {
+          "label": "Cabinet base",
+          "count": 1,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 6.88
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Door",
+          "count": 1,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 0.64
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Drawer",
+          "count": 1,
+          "material": {
+            "name": "Material_Base_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 6.14
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "wall-cabinet-double-door",
+    "name": "Wall Cabinet Double Door",
+    "category": "Cabinetry",
+    "type": "Cabinet",
+    "material": "Walnut",
+    "dimensions": {
+      "width": 762,
+      "height": 335,
+      "depth": 762,
+      "unit": "mm"
+    },
+    "mass": 9.16,
+    "physics": {
+      "staticFriction": 0.55,
+      "dynamicFriction": 0.4,
+      "restitution": 0.35,
+      "density": 650,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20cabinets/wall_cabinet_double_door/wall_cabinet_double_door.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/wall_cabinet_double_door/wall_cabinet_double_door.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/wall_cabinet_double_door/wall_cabinet_double_door.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.762,
+        "height_m": 0.762,
+        "depth_m": 0.335
+      },
+      "overall_mass_kg": 9.16,
+      "part_count": 3,
+      "parts": [
+        {
+          "label": "Cabinet base",
+          "count": 1,
+          "material": {
+            "name": "Material_Wall_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 7.19
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Door",
+          "count": 2,
+          "material": {
+            "name": "Material_Wall_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": 1.97,
+            "min_kg": 0.99,
+            "max_kg": 0.99,
+            "single_kg": null
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "wall-cabinet-single-door",
+    "name": "Wall Cabinet Single Door",
+    "category": "Cabinetry",
+    "type": "Cabinet",
+    "material": "Walnut",
+    "dimensions": {
+      "width": 227,
+      "height": 335,
+      "depth": 762,
+      "unit": "mm"
+    },
+    "mass": 6.18,
+    "physics": {
+      "staticFriction": 0.55,
+      "dynamicFriction": 0.4,
+      "restitution": 0.35,
+      "density": 650,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20cabinets/wall_cabinet_single_door/wall_cabinet_single_door.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/wall_cabinet_single_door/wall_cabinet_single_door.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/wall_cabinet_single_door/wall_cabinet_single_door.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.227,
+        "height_m": 0.762,
+        "depth_m": 0.335
+      },
+      "overall_mass_kg": 6.18,
+      "part_count": 2,
+      "parts": [
+        {
+          "label": "Cabinet base",
+          "count": 1,
+          "material": {
+            "name": "Material_Wall_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 2.96
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Door",
+          "count": 1,
+          "material": {
+            "name": "Material_Wall_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 3.21
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  },
+  {
+    "id": "wall-microwave-cabinet",
+    "name": "Wall Microwave Cabinet",
+    "category": "Cabinetry",
+    "type": "Cabinet",
+    "material": "Walnut",
+    "dimensions": {
+      "width": 762,
+      "height": 509,
+      "depth": 762,
+      "unit": "mm"
+    },
+    "mass": 10.57,
+    "physics": {
+      "staticFriction": 0.55,
+      "dynamicFriction": 0.4,
+      "restitution": 0.35,
+      "density": 650,
+      "collision": "convexDecomposition"
+    },
+    "thumbnail": "https://simready-media.imagine.io/media/public/simready%20cabinets/wall_microwave_cabinet/wall_microwave_cabinet.jpg",
+    "glbPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/wall_microwave_cabinet/wall_microwave_cabinet.glb",
+    "usdPath": "https://simready-media.imagine.io/media/public/simready%20cabinets/wall_microwave_cabinet/wall_microwave_cabinet.usdz",
+    "simreadyStatus": "certified",
+    "license": {
+      "name": "CC BY-NC 4.0",
+      "type": "Open Source",
+      "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "articulated": true,
+    "physicsData": {
+      "dimensions": {
+        "width_m": 0.762,
+        "height_m": 0.762,
+        "depth_m": 0.509
+      },
+      "overall_mass_kg": 10.6,
+      "part_count": 3,
+      "parts": [
+        {
+          "label": "Cabinet base",
+          "count": 1,
+          "material": {
+            "name": "Material_Wall_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": null,
+            "min_kg": null,
+            "max_kg": null,
+            "single_kg": 9.73
+          },
+          "collider_types": [
+            "convexDecomposition"
+          ]
+        },
+        {
+          "label": "Door",
+          "count": 2,
+          "material": {
+            "name": "Material_Wall_Cabinet_Walnut",
+            "static_friction": 0.55,
+            "dynamic_friction": 0.4,
+            "restitution": 0.35,
+            "density": 0
+          },
+          "mass": {
+            "total_kg": 0.84,
+            "min_kg": 0.42,
+            "max_kg": 0.42,
+            "single_kg": null
+          },
+          "collider_types": [
+            "boundingCube",
+            "convexDecomposition"
+          ]
+        }
+      ]
+    },
+    "displayOrder": 100
+  }
+]

@@ -64,6 +64,8 @@ export interface Asset {
   usdPath: string
   simreadyStatus: 'certified' | 'pending'
   articulated?: boolean
+  /** When true, the card shows a lock overlay and the detail modal is gated. */
+  isLocked?: boolean
   displayOrder?: number
   license?: {
     name: string

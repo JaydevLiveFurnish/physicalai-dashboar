@@ -1,12 +1,12 @@
-/** Shown on library cards when no 3D preview model is available yet (flat thumbnail stays visible underneath). */
+/** Shown on library cards when no 3D preview model is available yet — heavy blur lets the thumbnail bleed through behind the lock glyph. */
 export function AssetCardLockOverlay() {
   return (
     <div
-      className="pointer-events-none absolute inset-0 z-[2] flex items-center justify-center bg-[var(--surface-default)]/82 backdrop-blur-[3px] dark:bg-[var(--surface-default)]/72"
+      className="pointer-events-none absolute inset-0 z-[2] flex items-center justify-center bg-white/[0.4] backdrop-blur-[6px] dark:bg-black/[0.4]"
       aria-label="Preview unavailable"
       role="img"
     >
-      <span className="material-symbols-outlined text-[30px] text-[var(--text-default-heading)]" aria-hidden>
+      <span className="material-symbols-outlined text-[28px] text-[var(--text-default-heading)]" aria-hidden>
         lock
       </span>
     </div>

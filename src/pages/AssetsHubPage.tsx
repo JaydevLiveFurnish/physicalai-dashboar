@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import AssetCard from "@/components/library/AssetCard";
 import AssetDetailModal, { type Asset } from "@/components/library/AssetDetailModal";
+import { TalkToTeamModal } from "@/components/contact/TalkToTeamModal";
 import assetsData from "@/data/assets.json";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { StaggerFadeGroup } from "@/components/layout/StaggerFadeGroup";
@@ -32,6 +33,7 @@ const SORTED_ASSETS: Asset[] = (assetsData as Asset[])
 export function AssetsHubPage() {
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
+  const [talkToTeamOpen, setTalkToTeamOpen] = useState(false);
 
   const filtered = useMemo(
     () =>
@@ -40,6 +42,14 @@ export function AssetsHubPage() {
         : SORTED_ASSETS.filter((a) => a.category === activeFilter),
     [activeFilter],
   );
+
+  const handleSelect = (asset: Asset) => {
+    if (asset.isLocked) {
+      setTalkToTeamOpen(true);
+      return;
+    }
+    setSelectedAsset(asset);
+  };
 
   return (
     <>
@@ -77,13 +87,14 @@ export function AssetsHubPage() {
         ) : (
           <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(min(100%,220px),1fr))] gap-[var(--s-500)]">
             {filtered.map((asset, i) => (
-              <AssetCard key={asset.id} asset={asset} index={i} onSelect={setSelectedAsset} />
+              <AssetCard key={asset.id} asset={asset} index={i} onSelect={handleSelect} />
             ))}
           </div>
         )}
       </StaggerFadeGroup>
 
       <AssetDetailModal asset={selectedAsset} onClose={() => setSelectedAsset(null)} />
+      <TalkToTeamModal open={talkToTeamOpen} onClose={() => setTalkToTeamOpen(false)} />
     </>
   );
 }

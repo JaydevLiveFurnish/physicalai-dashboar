@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useInView } from '@/lib/useInView'
 import type { Asset } from '@/components/library/AssetDetailModal'
+import { AssetCardLockOverlay } from '@/components/assets/AssetCardLockOverlay'
 import styles from './AssetCard.module.css'
 
 export default function AssetCard({
@@ -47,6 +48,7 @@ export default function AssetCard({
             </svg>
           </div>
         )}
+        {asset.isLocked && <AssetCardLockOverlay />}
       </div>
       <div className={styles.cardBody}>
         <div className={styles.cardName}>{asset.name}</div>

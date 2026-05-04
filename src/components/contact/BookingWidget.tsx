@@ -438,7 +438,7 @@ export default function BookingWidget() {
       <div className={styles.scheduleBlock}>
         <div className={styles.calendarLabel}>
           Choose a date and time within your desired timezone
-          <span className={styles.required}>*</span>
+          <span className={styles.required} style={{ marginLeft: "2px" }}>*</span>
         </div>
 
         <select
